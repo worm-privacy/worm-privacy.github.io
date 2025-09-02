@@ -15,7 +15,7 @@ export function Resources() {
       icon: FileText,
       title: "EIP-7503 Specification",
       description: "Private Proof-of-Burn standard",
-      link: "https://eip7503.org",
+      link: "https://eips.ethereum.org/EIPS/eip-7503",
       color: "text-blue-400",
     },
     {
@@ -29,7 +29,7 @@ export function Resources() {
       icon: Twitter,
       title: "Project Updates",
       description: "Latest news and announcements",
-      link: "https://x.com/WormPrivacy",
+      link: "https://x.com/EIP7503",
       color: "text-cyan-400",
     },
   ]
@@ -56,7 +56,11 @@ export function Resources() {
               </CardHeader>
               <CardContent className="text-center">
                 <p className="text-gray-400 text-sm mb-4">{resource.description}</p>
-                <a href={`${resource.link}`}>
+                <a 
+                  target="_blank" 
+                  rel="nopener noreferrer" 
+                  href={`${resource.link}`}
+                >
                   <Button
                     variant="outline"
                     size="sm"
