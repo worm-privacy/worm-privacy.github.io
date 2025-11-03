@@ -1,0 +1,48 @@
+const config = {
+  endOfLine: 'lf',
+  semi: true,
+  singleQuote: true,
+  tabWidth: 2,
+  trailingComma: 'es5',
+  importOrder: [
+    '^(react/(.*)$)|^(react$)',
+    '^(next/(.*)$)|^(next$)',
+    '<THIRD_PARTY_MODULES>',
+    '',
+    '^types$',
+    '^@/types/(.*)$',
+    '^@/config/(.*)$',
+    '^@/lib/(.*)$',
+    '^@/hooks/(.*)$',
+    '^@/ui/(.*)$',
+    '^@/components/(.*)$',
+    '^@/styles/(.*)$',
+    '^@/app/(.*)$',
+    '',
+    '^[./]',
+    '',
+    '<TYPES>^[./]',
+    '<TYPES>^react',
+    '<TYPES>^next',
+    '<TYPES>^@/',
+    '<TYPES>',
+  ],
+  printWidth: 120,
+  importOrderParserPlugins: ['typescript', 'jsx', 'decorators-legacy'],
+  importOrderTypeScriptVersion: '5.1.6',
+  tailwindStylesheet: './src/assets/styles/globals.css',
+  tailwindFunctions: ['clsx'],
+  tailwindPreserveWhitespace: true,
+  plugins: ['@ianvs/prettier-plugin-sort-imports', 'prettier-plugin-organize-imports', 'prettier-plugin-tailwindcss'],
+  overrides: [
+    {
+      files: '*.svg',
+      options: {
+        parser: 'html',
+        htmlWhitespaceSensitivity: 'ignore',
+      },
+    },
+  ],
+};
+
+export default config;

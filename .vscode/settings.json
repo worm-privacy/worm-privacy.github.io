@@ -1,0 +1,27 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.addMissingImports.ts": "explicit",
+    "source.removeUnusedImports": "explicit"
+  },
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "tailwindCSS.experimental.classRegex": [
+    "cva\\(([^)]*)\\)",
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*)[\"'`]"],
+    "(?:class|className)\\s*[:=]\\s*[\"'`]([^\"'`]*)[\"'`]",
+    "(?:class|className)\\s*[:=]\\s*{[^}]*[\"'`]([^\"'`]*)[\"'`]",
+    "clsx\\(([^)]*)\\)",
+    ["clsx\\(([^)]*)\\)", "[\"'`]([^\"'`]*)[\"'`]"],
+    "cn\\(([^)]*)\\)",
+    ["cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*)[\"'`]"]
+  ],
+
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "cSpell.words": ["orbitron", "satoshi", "Tokenomics"]
+}

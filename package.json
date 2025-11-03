@@ -6,21 +6,49 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint .",
+    "prettier": "prettier -w --ignore-path .gitignore \"**/*.+(js|jsx|ts|tsx|json|css)\" --plugin prettier-plugin-tailwindcss",
+    "prettier:format": "npm run prettier -- --list-different",
+    "prettier:apply": "npm run prettier -- --write",
+    "lint:fix": "eslint --fix .",
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-progress": "^1.1.7",
+    "@radix-ui/react-scroll-area": "^1.2.10",
+    "@radix-ui/react-slot": "^1.2.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "dotenv": "^17.2.3",
+    "framer-motion": "^12.23.24",
+    "motion": "^12.23.24",
+    "next": "16.0.1",
+    "prettier": "^3.6.2",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "next": "16.0.1"
+    "react-inlinesvg": "^4.2.0",
+    "react-use-measure": "^2.1.7",
+    "resize-observer-polyfill": "^1.5.1",
+    "swiper": "^12.0.3",
+    "tailwind-merge": "^3.3.1",
+    "vaul": "^1.1.2",
+    "zod": "^4.1.12",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
-    "eslint-config-next": "16.0.1"
+    "eslint-config-next": "16.0.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier-plugin-organize-imports": "^4.3.0",
+    "prettier-plugin-tailwindcss": "^0.7.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

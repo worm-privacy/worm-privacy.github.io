@@ -1,0 +1,90 @@
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --surface: oklch(0.1342 0.0172 262.17);
+  --surface: #010204;
+  --surface-1: #05080f;
+  --surface-2: #090c15;
+  --card: oklch(1 0 0);
+
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+
+  --teal-400: #19d8c6;
+  --teal-500: #00bfa9;
+  --teal-600: #008f83;
+
+  --helix-green-50: #e6fff4;
+  --helix-green-100: #c9ffe7;
+  --helix-green-200: #96fad1;
+  --helix-green-300: #5fefba;
+  --helix-green-400: #2ddf9f;
+  --helix-green-500: #00c871;
+  --helix-green-600: #00a65c;
+  --helix-green-700: #00864b;
+  --helix-green-800: #00683b;
+  --helix-green-900: #005a33;
+
+  --gray-50: #e2e8f0;
+  --gray-100: #e2e8f0;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1f2937;
+  --gray-900: #0f172a;
+
+  --tints-green: #0c1720;
+  --tints-blue: #0b0f24;
+  --tints-magenta: #120a16;
+
+  --phase-blue-50: #eef1ff;
+  --phase-blue-100: #dde2ff;
+  --phase-blue-200: #bac2ff;
+  --phase-blue-300: #939ef9;
+  --phase-blue-400: #6e7af0;
+  --phase-blue-500: #4856e2;
+  --phase-blue-600: #3847d0;
+  --phase-blue-700: #2d3ab5;
+  --phase-blue-800: #2733a8;
+  --phase-blue-900: #1f2b98;
+
+  --infra-magenta-50: #ffe6f6;
+  --infra-magenta-100: #ffcbef;
+  --infra-magenta-200: #ffa1e1;
+  --infra-magenta-300: #ff78d1;
+  --infra-magenta-400: #ff47c0;
+  --infra-magenta-500: #ff1fb3;
+  --infra-magenta-600: #e00098;
+  --infra-magenta-700: #c00086;
+  --infra-magenta-800: #a00073;
+  --infra-magenta-900: #7e0756;
+
+  --indigo-400: #8a7bff;
+  --indigo-500: #6c5ff6;
+  --indigo-600: #5445e0;
+
+  --orange-400: #ffb547;
+  --orange-500: #ff9800;
+  --orange-600: #cc7700;
+
+  --brand: var(--color-green-500);
+
+  /* base is 9px */
+  --radius: 0.5625rem;
+}

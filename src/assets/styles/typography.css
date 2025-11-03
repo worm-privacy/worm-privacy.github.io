@@ -1,0 +1,261 @@
+:root {
+  --satoshi-display: 5.625rem;
+  --satoshi-display--line-height: 6.125rem;
+  --satoshi-display--letter-spacing: 0em;
+  --satoshi-display--font-weight: Bold;
+
+  --satoshi-h1: 3rem;
+  --satoshi-h1--line-height: 4.125rem;
+  --satoshi-h1--letter-spacing: 0em;
+  --satoshi-h1--font-weight: Bold;
+
+  --satoshi-h2: 2rem;
+  --satoshi-h2--line-height: 2.375rem;
+  --satoshi-h2--letter-spacing: 0em;
+  --satoshi-h2--font-weight: Medium;
+
+  --satoshi-h3: 1.5rem;
+  --satoshi-h3--line-height: 1.625rem;
+  --satoshi-h3--letter-spacing: 0em;
+  --satoshi-h3--font-weight: Bold;
+
+  --satoshi-h4: 1.125rem;
+  --satoshi-h4--line-height: 1.625rem;
+  --satoshi-h4--letter-spacing: 0em;
+  --satoshi-h4--font-weight: Bold;
+
+  --satoshi-body-1: 1.125rem;
+  --satoshi-body-1--line-height: 1.625rem;
+  --satoshi-body-1--letter-spacing: 0em;
+  --satoshi-body-1--font-weight: 400;
+
+  --satoshi-body-2: 1rem;
+  --satoshi-body-2--line-height: 1.125rem;
+  --satoshi-body-2--letter-spacing: 0em;
+  --satoshi-body-2--font-weight: Regular;
+
+  --satoshi-body-3: 0.875rem;
+  --satoshi-body-3--line-height: 1.025rem;
+  --satoshi-body-3--letter-spacing: 0em;
+  --satoshi-body-3--font-weight: Regular;
+
+  --satoshi-caption-1: 0.75rem;
+  --satoshi-caption-1--line-height: 0.875rem;
+  --satoshi-caption-1--letter-spacing: 0em;
+  --satoshi-caption-1--font-weight: Light;
+
+  --satoshi-caption-2: 0.875rem;
+  --satoshi-caption-2--line-height: 1.025rem;
+  --satoshi-caption-2--letter-spacing: 0em;
+  --satoshi-caption-2--font-weight: Light;
+
+  --satoshi-btn-1: 1.125rem;
+  --satoshi-btn-1--line-height: 1.625rem;
+  --satoshi-btn-1--letter-spacing: 0em;
+  --satoshi-btn-1--font-weight: Medium;
+
+  --satoshi-btn-2: 1rem;
+  --satoshi-btn-2--line-height: 1.125rem;
+  --satoshi-btn-2--letter-spacing: 0em;
+  --satoshi-btn-2--font-weight: Medium;
+
+  --satoshi-btn-3: 0.875rem;
+  --satoshi-btn-3--line-height: 1rem;
+  --satoshi-btn-3--letter-spacing: 0em;
+  --satoshi-btn-3--font-weight: Medium;
+
+  --orbitron-h1: 5.625rem;
+  --orbitron-h1--line-height: 6.125rem;
+  --orbitron-h1--letter-spacing: 0em;
+  --orbitron-h1--font-weight: Bold;
+
+  --orbitron-h2: 3rem;
+  --orbitron-h2--line-height: 3.375rem;
+  --orbitron-h2--letter-spacing: 0em;
+  --orbitron-h2--font-weight: Bold;
+
+  --orbitron-h3: 2rem;
+  --orbitron-h3--line-height: 2.375rem;
+  --orbitron-h3--letter-spacing: 0em;
+  --orbitron-h3--font-weight: Bold;
+
+  --orbitron-h4: 1.5rem;
+  --orbitron-h4--line-height: 1.625rem;
+  --orbitron-h4--letter-spacing: 0em;
+  --orbitron-h4--font-weight: Bold;
+
+  --orbitron-h5: 1.125rem;
+  --orbitron-h5--line-height: 1.325rem;
+  --orbitron-h5--letter-spacing: 0em;
+  --orbitron-h5--font-weight: Medium;
+
+  --orbitron-body-1: 1rem;
+  --orbitron-body-1--line-height: 1.325rem;
+  --orbitron-body-1--letter-spacing: 0em;
+  --orbitron-body-1--font-weight: Semibold;
+
+  --orbitron-body-2: 0.875rem;
+  --orbitron-body-2--line-height: 1rem;
+  --orbitron-body-2--letter-spacing: 0em;
+  --orbitron-body-2--font-weight: Bold;
+
+  --orbitron-body-3: 0.75rem;
+  --orbitron-body-3--line-height: 0.875rem;
+  --orbitron-body-3--letter-spacing: 0em;
+  --orbitron-body-3--font-weight: Regular;
+}
+
+*[class*='satoshi-'] {
+  font-family: var(--satoshi);
+}
+
+*[class*='orbitron-'] {
+  font-family: var(--orbitron);
+}
+
+.satoshi-display {
+  font-weight: var(--satoshi-display--font-weight);
+  font-size: var(--satoshi-display);
+  letter-spacing: var(--satoshi-display--letter-spacing);
+  line-height: var(--satoshi-display--line-height);
+}
+
+.satoshi-h1 {
+  font-weight: var(--satoshi-h1--font-weight);
+  font-size: var(--satoshi-h1);
+  letter-spacing: var(--satoshi-h1--letter-spacing);
+  line-height: var(--satoshi-h1--line-height);
+}
+
+.satoshi-h2 {
+  font-weight: var(--satoshi-h2--font-weight);
+  font-size: var(--satoshi-h2);
+  letter-spacing: var(--satoshi-h2--letter-spacing);
+  line-height: var(--satoshi-h2--line-height);
+}
+
+.satoshi-h3 {
+  font-weight: var(--satoshi-h3--font-weight);
+  font-size: var(--satoshi-h3);
+  letter-spacing: var(--satoshi-h3--letter-spacing);
+  line-height: var(--satoshi-h3--line-height);
+}
+
+.satoshi-h4 {
+  font-weight: var(--satoshi-h4--font-weight);
+  font-size: var(--satoshi-h4);
+  letter-spacing: var(--satoshi-h4--letter-spacing);
+  line-height: var(--satoshi-h4--line-height);
+}
+
+.satoshi-body-1 {
+  font-weight: var(--satoshi-body-1--font-weight);
+  font-size: var(--satoshi-body-1);
+  letter-spacing: var(--satoshi-body-1--letter-spacing);
+  line-height: var(--satoshi-body-1--line-height);
+}
+
+.satoshi-body-2 {
+  font-weight: var(--satoshi-body-2--font-weight);
+  font-size: var(--satoshi-body-2);
+  letter-spacing: var(--satoshi-body-2--letter-spacing);
+  line-height: var(--satoshi-body-2--line-height);
+}
+
+.satoshi-body-3 {
+  font-weight: var(--satoshi-body-3--font-weight);
+  font-size: var(--satoshi-body-3);
+  letter-spacing: var(--satoshi-body-3--letter-spacing);
+  line-height: var(--satoshi-body-3--line-height);
+}
+
+.satoshi-caption-1 {
+  font-weight: var(--satoshi-caption-1--font-weight);
+  font-size: var(--satoshi-caption-1);
+  letter-spacing: var(--satoshi-caption-1--letter-spacing);
+  line-height: var(--satoshi-caption-1--line-height);
+}
+
+.satoshi-caption-2 {
+  font-weight: var(--satoshi-caption-2--font-weight);
+  font-size: var(--satoshi-caption-2);
+  letter-spacing: var(--satoshi-caption-2--letter-spacing);
+  line-height: var(--satoshi-caption-2--line-height);
+}
+
+.satoshi-btn-1 {
+  font-weight: var(--satoshi-btn-1--font-weight);
+  font-size: var(--satoshi-btn-1);
+  letter-spacing: var(--satoshi-btn-1--letter-spacing);
+  line-height: var(--satoshi-btn-1--line-height);
+}
+
+.satoshi-btn-2 {
+  font-weight: var(--satoshi-btn-2--font-weight);
+  font-size: var(--satoshi-btn-2);
+  letter-spacing: var(--satoshi-btn-2--letter-spacing);
+  line-height: var(--satoshi-btn-2--line-height);
+}
+
+.satoshi-btn-3 {
+  font-weight: var(--satoshi-btn-3--font-weight);
+  font-size: var(--satoshi-btn-3);
+  letter-spacing: var(--satoshi-btn-3--letter-spacing);
+  line-height: var(--satoshi-btn-3--line-height);
+}
+
+.orbitron-h1 {
+  font-weight: var(--orbitron-h1--font-weight);
+  font-size: var(--orbitron-h1);
+  letter-spacing: var(--orbitron-h1--letter-spacing);
+  line-height: var(--orbitron-h1--line-height);
+}
+
+.orbitron-h2 {
+  font-weight: var(--orbitron-h2--font-weight);
+  font-size: var(--orbitron-h2);
+  letter-spacing: var(--orbitron-h2--letter-spacing);
+  line-height: var(--orbitron-h2--line-height);
+}
+
+.orbitron-h3 {
+  font-weight: var(--orbitron-h3--font-weight);
+  font-size: var(--orbitron-h3);
+  letter-spacing: var(--orbitron-h3--letter-spacing);
+  line-height: var(--orbitron-h3--line-height);
+}
+
+.orbitron-h4 {
+  font-weight: var(--orbitron-h4--font-weight);
+  font-size: var(--orbitron-h4);
+  letter-spacing: var(--orbitron-h4--letter-spacing);
+  line-height: var(--orbitron-h4--line-height);
+}
+
+.orbitron-h5 {
+  font-weight: var(--orbitron-h5--font-weight);
+  font-size: var(--orbitron-h5);
+  letter-spacing: var(--orbitron-h5--letter-spacing);
+  line-height: var(--orbitron-h5--line-height);
+}
+
+.orbitron-body-1 {
+  font-weight: var(--orbitron-body-1--font-weight);
+  font-size: var(--orbitron-body-1);
+  letter-spacing: var(--orbitron-body-1--letter-spacing);
+  line-height: var(--orbitron-body-1--line-height);
+}
+
+.orbitron-body-2 {
+  font-weight: var(--orbitron-body-2--font-weight);
+  font-size: var(--orbitron-body-2);
+  letter-spacing: var(--orbitron-body-2--letter-spacing);
+  line-height: var(--orbitron-body-2--line-height);
+}
+
+.orbitron-body-3 {
+  font-weight: var(--orbitron-body-3--font-weight);
+  font-size: var(--orbitron-body-3);
+  letter-spacing: var(--orbitron-body-3--letter-spacing);
+  line-height: var(--orbitron-body-3--line-height);
+}

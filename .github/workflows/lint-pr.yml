@@ -1,0 +1,21 @@
+name: Lint Pull Requests
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+    branches: [main, dev]
+    # Adjust the branches as needed
+
+jobs:
+  lint-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR Branch
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Lint Pull Request Title
+        uses: amannn/action-semantic-pull-request@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.LINTPR_TOKEN }}
