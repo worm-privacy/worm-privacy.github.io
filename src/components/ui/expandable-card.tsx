@@ -14,7 +14,7 @@ type ExpandableCardProps = HTMLMotionProps<'div'> & {
     order: number;
     title: string;
     description: string;
-    color: 'green' | 'blue' | 'magenta';
+    color: string;
     action?: ReactNode;
   }[];
 };
@@ -54,7 +54,7 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="absolute h-full w-full bg-linear-to-t from-black/40 to-transparent"
+                    className={`absolute h-full w-full `}
                   />
                 )}
               </AnimatePresence>
@@ -66,17 +66,28 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
                     exit={{ opacity: 0 }}
                     className={`text-${content.color}-400 absolute flex h-full w-full flex-col justify-between p-6`}
                   >
-                    <p className="orbitron-h1 absolute top-6 left-1/2 w-max -translate-x-1/2">{content.order}</p>
-                    <p className="orbitron-h2 absolute bottom-0 left-1/2 w-max origin-center -translate-x-1/2 -rotate-90">
+                    <p className="orbitron-h1 absolute top-6 left-6 w-max">{content.order}</p>
+                    <p
+                      className="orbitron-h2 absolute bottom-0 left-0 w-max origin-center -rotate-90"
+                      style={{
+                        transform: 'translate(50%, -150%)',
+                      }}
+                    >
                       {content.title}
                     </p>
-                    <p className="satoshi-h3 text-white">{content.description}</p>
+                    <motion.p
+                      initial={{ opacity: 0, bottom: -10 }}
+                      animate={{ opacity: 1, bottom: 32 }}
+                      exit={{ opacity: 0, width: 0, bottom: -10 }}
+                      transition={{ delay: 0.2 }}
+                      className="satoshi-h3 absolute right-4 bottom-8 left-32 text-gray-400"
+                    >
+                      {content.description}
+                    </motion.p>
                   </motion.div>
                 )}
               </AnimatePresence>
-              <div
-                className={`text-${content.color}-400 relative size-full rounded-xl border border-green-400/12 bg-surface`}
-              >
+              <div className={`text-${content.color}-400 relative size-full rounded-xl border border-green-400/12`}>
                 <p className="orbitron-h1 absolute top-6 left-6 w-max">{content.order}</p>
                 <p
                   className="orbitron-h2 absolute bottom-0 left-0 w-fit min-w-max origin-center -rotate-90"
@@ -86,7 +97,6 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
                 >
                   {content.title}
                 </p>
-                <p className="satoshi-h3 text-white">{content.description}</p>
               </div>
             </motion.div>
           ))}

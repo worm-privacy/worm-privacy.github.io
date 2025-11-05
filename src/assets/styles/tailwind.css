@@ -4,16 +4,16 @@
   --font-orbitron: var(--orbitron);
   --font-satoshi: var(--satoshi);
 
-  --color-green-50: var(--helix-green-50);
-  --color-green-100: var(--helix-green-100);
-  --color-green-200: var(--helix-green-200);
-  --color-green-300: var(--helix-green-300);
-  --color-green-400: var(--helix-green-400);
-  --color-green-500: var(--helix-green-500);
-  --color-green-600: var(--helix-green-600);
-  --color-green-700: var(--helix-green-700);
-  --color-green-800: var(--helix-green-800);
-  --color-green-900: var(--helix-green-900);
+  --color-green-50: var(--green-50);
+  --color-green-100: var(--green-100);
+  --color-green-200: var(--green-200);
+  --color-green-300: var(--green-300);
+  --color-green-400: var(--green-400);
+  --color-green-500: var(--green-500);
+  --color-green-600: var(--green-600);
+  --color-green-700: var(--green-700);
+  --color-green-800: var(--green-800);
+  --color-green-900: var(--green-900);
 
   --color-gray-50: var(--gray-50);
   --color-gray-100: var(--gray-100);
@@ -26,27 +26,27 @@
   --color-gray-800: var(--gray-800);
   --color-gray-900: var(--gray-900);
 
-  --color-blue-50: var(--phase-blue-50);
-  --color-blue-100: var(--phase-blue-100);
-  --color-blue-200: var(--phase-blue-200);
-  --color-blue-300: var(--phase-blue-300);
-  --color-blue-400: var(--phase-blue-400);
-  --color-blue-500: var(--phase-blue-500);
-  --color-blue-600: var(--phase-blue-600);
-  --color-blue-700: var(--phase-blue-700);
-  --color-blue-800: var(--phase-blue-800);
-  --color-blue-900: var(--phase-blue-900);
+  --color-blue-50: var(--blue-50);
+  --color-blue-100: var(--blue-100);
+  --color-blue-200: var(--blue-200);
+  --color-blue-300: var(--blue-300);
+  --color-blue-400: var(--blue-400);
+  --color-blue-500: var(--blue-500);
+  --color-blue-600: var(--blue-600);
+  --color-blue-700: var(--blue-700);
+  --color-blue-800: var(--blue-800);
+  --color-blue-900: var(--blue-900);
 
-  --color-magenta-50: var(--infra-magenta-50);
-  --color-magenta-100: var(--infra-magenta-100);
-  --color-magenta-200: var(--infra-magenta-200);
-  --color-magenta-300: var(--infra-magenta-300);
-  --color-magenta-400: var(--infra-magenta-400);
-  --color-magenta-500: var(--infra-magenta-500);
-  --color-magenta-600: var(--infra-magenta-600);
-  --color-magenta-700: var(--infra-magenta-700);
-  --color-magenta-800: var(--infra-magenta-800);
-  --color-magenta-900: var(--infra-magenta-900);
+  --color-magenta-50: var(--magenta-50);
+  --color-magenta-100: var(--magenta-100);
+  --color-magenta-200: var(--magenta-200);
+  --color-magenta-300: var(--magenta-300);
+  --color-magenta-400: var(--magenta-400);
+  --color-magenta-500: var(--magenta-500);
+  --color-magenta-600: var(--magenta-600);
+  --color-magenta-700: var(--magenta-700);
+  --color-magenta-800: var(--magenta-800);
+  --color-magenta-900: var(--magenta-900);
 
   --color-indigo-400: var(--indigo-400);
   --color-indigo-500: var(--indigo-500);

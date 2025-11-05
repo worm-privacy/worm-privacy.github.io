@@ -8,19 +8,19 @@ export function HowItWorks() {
       order: 1,
       title: 'ETH burns',
       description: 'ETH is sent to normal looking addresses, no one can claim you were using WORM!',
-      color: 'blue' as const,
+      color: 'blue',
     },
     {
       order: 2,
       title: 'Get BETH',
       description: 'You prove your burn through zkSNARKs, the protocol gives you BETH in exchange!',
-      color: 'magenta' as const,
+      color: 'magenta',
     },
     {
       order: 3,
       title: 'Mint WORM',
       description: 'Consume your BETH across WORM epochs, and earn WORM!',
-      color: 'green' as const,
+      color: 'green',
       action: <Button>Get Now!</Button>,
     },
   ];
