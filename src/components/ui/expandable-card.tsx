@@ -30,7 +30,7 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
         duration: 0.3,
         delay: 0.5,
       }}
-      className={cn('relative w-full max-w-6xl px-5', className)}
+      className={cn('relative w-full max-w-6xl bg-surface-1 px-5', className)}
       {...props}
     >
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }} className="w-full">

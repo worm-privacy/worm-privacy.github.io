@@ -5,7 +5,12 @@ import { Button } from '@/ui';
 
 export function Footer() {
   return (
-    <footer className="container mx-auto flex max-w-8xl flex-col gap-6 px-4 py-6 md:px-20 lg:px-40">
+    <footer
+      className="container mx-auto flex max-w-8xl flex-col gap-6 px-4 py-6 md:px-20 lg:px-40"
+      style={{
+        background: 'radial-gradient(62.7% 92.25% at 50.87% 100%, rgba(7, 9, 21, 0.6) 50.73%, rgba(7, 9, 21, 0) 100%)',
+      }}
+    >
       <div className="col-span-2 flex w-full items-center justify-between">
         <span className="flex flex-col items-start gap-2">
           <span className="flex items-center justify-start gap-2">
@@ -19,7 +24,7 @@ export function Footer() {
       </div>
 
       <nav className="flex w-full flex-col items-center justify-between md:flex-row">
-        <ul className="flex items-center justify-between gap-3 md:gap-4">
+        <ul className="flex items-center justify-between gap-6 md:gap-7">
           <li>
             <Button asChild variant="link">
               <Link href="/docs">Documentation</Link>

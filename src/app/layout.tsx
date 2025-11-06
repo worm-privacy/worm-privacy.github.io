@@ -34,13 +34,13 @@ export default function RootLayout({
         }}
       >
         <div
-          className="pointer-events-none fixed top-0 left-0 z-10 h-full w-full animate-scan-line"
+          className="pointer-events-none fixed top-0 left-0 -z-10 h-full w-full animate-scan-line ease-scan-line"
           style={
             {
               // background:
               //   'linear-gradient(to bottom, rgba(0, 255, 0, 0.05) 0%, rgba(0, 0, 0, 0.1) 10%, rgba(0, 255, 0, 0.05) 100%)',
-              '--duration': '6',
-              background: 'linear-gradient(360deg, rgba(72, 86, 226, 0.35) -171.31%, rgba(72, 86, 226, 0) 100%)',
+              '--duration': '4',
+              background: 'linear-gradient(360deg, rgba(72, 86, 226, 0.7) -171.31%, rgba(72, 86, 226, 0) 100%)',
             } as CSSProperties
           }
         />

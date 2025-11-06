@@ -7,7 +7,7 @@ export function NetworkStats() {
         <h1 className="orbitron-h2 text-green-400">Network Sats</h1>
         <h3 className="orbitron-h4 text-gray-400">WORM is live on Sepolia testnet!</h3>
       </span>
-      <div className="flex flex-col gap-8 p-8">
+      <div className="flex flex-col gap-8 bg-surface-1 p-8">
         <h4 className="orbitron-h5 text-gray-400">Epoch 325</h4>
 
         <div className="flex flex-1 flex-col items-center justify-center gap-4">

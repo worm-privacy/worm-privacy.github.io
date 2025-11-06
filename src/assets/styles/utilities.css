@@ -1,8 +1,27 @@
 @layer utilities {
   .corner-only {
     --s: 2rem;
+    /* mask:
+      conic-gradient(#000 0 0) content-box,
+      conic-gradient(at var(--s) var(--s), #0000 75%, #000 0) 0 0 / calc(100% - var(--s)) calc(100% - var(--s)); */
+
     mask:
       conic-gradient(#000 0 0) content-box,
       conic-gradient(at var(--s) var(--s), #0000 75%, #000 0) 0 0 / calc(100% - var(--s)) calc(100% - var(--s));
+  }
+
+  .noise-effect {
+    font-size: 10vw;
+    font-weight: bold;
+    text-align: center;
+    font-family: 'Montserrat';
+    color: transparent;
+    background:
+      repeating-radial-gradient(rgba(0, 0, 0, 0.25) 0 0.0001%, var(--green-300) 0 0.0002%) 30% 10% / 40vw 40vw,
+      repeating-conic-gradient(rgba(0, 0, 0, 0.25) 0 0.0001%, var(--green-300) 0 0.0002%) 70% 70% / 60vw 60vw;
+    background-clip: text;
+    -webkit-background-clip: text;
+    background-blend-mode: difference;
+    margin: 90px 0px;
   }
 }

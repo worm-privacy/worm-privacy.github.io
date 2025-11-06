@@ -99,7 +99,9 @@
 
   --spacing-8xl: 90rem;
 
-  --animate-scan-line: scan-line calc(var(--duration) * 1s) infinite linear;
+  --ease-scan-line: cubic-bezier(0.18, 0.62, 0.42, 0.93);
+
+  --animate-scan-line: scan-line calc(var(--duration) * 1s) infinite ease;
 
   @keyframes scan-line {
     0% {

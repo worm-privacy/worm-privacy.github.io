@@ -63,7 +63,7 @@ function RoadmapSection() {
 
 function RoadmapStep({ title, status, deadline, description }: Roadmap) {
   return (
-    <li className="flex w-full items-center justify-between rounded-lg border border-green-400/12 p-8">
+    <li className="flex w-full items-center justify-between rounded-lg border border-green-400/12 bg-surface-1 p-8">
       <span className="flex items-center justify-start gap-6">
         {status === 'active' ? (
           <Svg src="/assets/icons/check.svg" />
@@ -71,8 +71,8 @@ function RoadmapStep({ title, status, deadline, description }: Roadmap) {
           <Svg src="/assets/icons/checks.svg" />
         ) : null}
         <h4
-          className={cn('text-green-500', {
-            'text-green-500/36': status === 'passed',
+          className={cn('text-green-400', {
+            'text-green-400/36': status === 'passed',
           })}
         >
           {title}
