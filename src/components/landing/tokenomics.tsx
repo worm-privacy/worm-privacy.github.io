@@ -1,5 +1,8 @@
+'use client';
+
 import Svg from 'react-inlinesvg';
 
+import { useIsMobile } from '@/hooks';
 import { cn } from '@/lib';
 import { Button, ScrollArea } from '@/ui';
 import {
@@ -39,14 +42,21 @@ const TOKENOMICS: Tokenomics[] = [
 ];
 
 export function TokenomicsSection() {
+  const isMobile = useIsMobile();
   return (
-    <section className="container mx-auto flex max-w-184 flex-col gap-10 pb-32">
-      <h1 className="orbitron-h2 text-green-400">Tokenomics</h1>
+    <section className="container mx-auto flex max-w-184 flex-col gap-10 px-4 py-12 md:px-0 md:pt-0 md:pb-32">
+      <h1
+        className={cn('orbitron-h2 text-green-400', {
+          'orbitron-h3': isMobile,
+        })}
+      >
+        Tokenomics
+      </h1>
 
-      <div className="grid w-full grid-cols-[18.125rem_1fr] gap-6">
+      <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-[18.125rem_1fr]">
         <div className="size-full bg-white"></div>
         <div className="flex w-full flex-col gap-6">
-          <div className="relative flex size-full min-h-32.5 w-full flex-col gap-2 pl-8">
+          <div className="relative flex size-full h-max w-full flex-col gap-2 pl-8 md:min-h-32.5">
             <p
               className={cn(
                 'orbitron-h4 absolute top-1/2 -left-3.5 size-max origin-center -translate-x-1/2 -translate-y-1/2 -rotate-90 transform text-green-300'
@@ -80,7 +90,7 @@ function TokenomicsDialog({ label, share, color }: Tokenomics['stats'][number] &
         <Button
           variant="ghost"
           className={cn(
-            'satoshi-body-1 relative ml-auto h-full w-full items-baseline justify-start gap-4 bg-gray-400/12 px-4 py-3 pl-5.25 text-left whitespace-break-spaces text-white',
+            'satoshi-body1 relative ml-auto h-full w-full items-baseline justify-start gap-4 bg-gray-400/12 px-4 py-3 pl-5.25 text-left whitespace-break-spaces text-white',
             `after:absolute after:top-0 after:bottom-0 after:-left-7.25 after:h-full after:w-5.75 after:rounded-sm after:bg-${color}-400 after:content-[""]`
           )}
         >
@@ -98,14 +108,14 @@ function TokenomicsDialog({ label, share, color }: Tokenomics['stats'][number] &
           <DialogTitle>20% of Premine</DialogTitle>
           <DialogDescription>Team/ Founders</DialogDescription>
         </DialogHeader>
-        <div className="satoshi-body-2 max-h-61.5 px-8 pt-2 pb-6 text-white">
+        <div className="satoshi-body2 max-h-61.5 px-8 pt-2 pb-6 text-white">
           <ScrollArea className="h-full">
             <div className="grid grid-cols-2 gap-6 pb-4">
               <p>
-                Vesting: <span className="orbitron-body-2">16</span> <span className="text-gray-400">Month</span>
+                Vesting: <span className="orbitron-body2">16</span> <span className="text-gray-400">Month</span>
               </p>
               <p>
-                Cliff time: <span className="orbitron-body-2">6</span>
+                Cliff time: <span className="orbitron-body2">6</span>
                 <span className="text-gray-400"> Month</span>
               </p>
             </div>

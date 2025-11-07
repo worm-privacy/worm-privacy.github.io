@@ -1,8 +1,19 @@
+'use client';
+
+import { useIsMobile } from '@/hooks';
+import { cn } from '@/lib';
+
 export function SloganSection() {
+  const isMobile = useIsMobile();
+
   return (
-    <section className="container mx-auto flex max-w-232.5 flex-col items-center justify-center gap-6 pb-32">
+    <section className="container mx-auto flex max-w-232.5 flex-col items-center justify-center gap-4 px-4 py-12 md:gap-6 md:pb-32">
       <div className="flex w-full items-center justify-center rounded-2xl border border-gray-400/24 py-12">
-        <h1 className="orbitron-h2 text-blue-400">
+        <h1
+          className={cn('orbitron-h2  flex flex-col items-center gap-1 text-blue-400 md:flex-row md:gap-0', {
+            'orbitron-h4': isMobile,
+          })}
+        >
           <span>ETH dies,</span> <span className="text-green-400">WORM lives</span>
         </h1>
       </div>

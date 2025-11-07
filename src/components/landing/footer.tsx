@@ -6,7 +6,7 @@ import { Button } from '@/ui';
 export function Footer() {
   return (
     <footer
-      className="container mx-auto flex max-w-8xl flex-col gap-6 px-4 py-6 md:px-20 lg:px-40"
+      className="mx-auto flex max-w-8xl flex-col gap-6 px-4 py-6 md:px-20 lg:container lg:px-40"
       style={{
         background: 'radial-gradient(62.7% 92.25% at 50.87% 100%, rgba(7, 9, 21, 0.6) 50.73%, rgba(7, 9, 21, 0) 100%)',
       }}
@@ -17,7 +17,7 @@ export function Footer() {
             <Svg src="/assets/icons/logo.svg" className="block md:hidden" />
             <Svg src="/assets/icons/typed-logo.svg" />
           </span>
-          <p className="satoshi-body-2 text-gray-400">Privacy first project built on Ethereum</p>
+          <p className="satoshi-body2 text-gray-400">Privacy first project built on Ethereum</p>
         </span>
 
         <Svg src="/assets/icons/logo.svg" className="hidden md:block" />

@@ -1,5 +1,7 @@
-import { useCallback, useEffect, useRef } from 'react';
+'use client';
+
 import type { DependencyList } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 export const useThrottleCallback = <Props = unknown, Result = unknown>(
   callback: (event: Props) => Result,

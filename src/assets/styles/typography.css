@@ -2,107 +2,107 @@
   --satoshi-display: 5.625rem;
   --satoshi-display--line-height: 6.125rem;
   --satoshi-display--letter-spacing: 0em;
-  --satoshi-display--font-weight: Bold;
+  --satoshi-display--font-weight: 700;
 
   --satoshi-h1: 3rem;
   --satoshi-h1--line-height: 4.125rem;
   --satoshi-h1--letter-spacing: 0em;
-  --satoshi-h1--font-weight: Bold;
+  --satoshi-h1--font-weight: 700;
 
   --satoshi-h2: 2rem;
   --satoshi-h2--line-height: 2.375rem;
   --satoshi-h2--letter-spacing: 0em;
-  --satoshi-h2--font-weight: Medium;
+  --satoshi-h2--font-weight: 500;
 
   --satoshi-h3: 1.5rem;
   --satoshi-h3--line-height: 1.625rem;
   --satoshi-h3--letter-spacing: 0em;
-  --satoshi-h3--font-weight: Bold;
+  --satoshi-h3--font-weight: 700;
 
   --satoshi-h4: 1.125rem;
   --satoshi-h4--line-height: 1.625rem;
   --satoshi-h4--letter-spacing: 0em;
-  --satoshi-h4--font-weight: Bold;
+  --satoshi-h4--font-weight: 700;
 
-  --satoshi-body-1: 1.125rem;
-  --satoshi-body-1--line-height: 1.625rem;
-  --satoshi-body-1--letter-spacing: 0em;
-  --satoshi-body-1--font-weight: 400;
+  --satoshi-body1: 1.125rem;
+  --satoshi-body1--line-height: 1.625rem;
+  --satoshi-body1--letter-spacing: 0em;
+  --satoshi-body1--font-weight: 400;
 
-  --satoshi-body-2: 1rem;
-  --satoshi-body-2--line-height: 1.125rem;
-  --satoshi-body-2--letter-spacing: 0em;
-  --satoshi-body-2--font-weight: Regular;
+  --satoshi-body2: 1rem;
+  --satoshi-body2--line-height: 1.125rem;
+  --satoshi-body2--letter-spacing: 0em;
+  --satoshi-body2--font-weight: Regular;
 
-  --satoshi-body-3: 0.875rem;
-  --satoshi-body-3--line-height: 1.025rem;
-  --satoshi-body-3--letter-spacing: 0em;
-  --satoshi-body-3--font-weight: Regular;
+  --satoshi-body3: 0.875rem;
+  --satoshi-body3--line-height: 1.025rem;
+  --satoshi-body3--letter-spacing: 0em;
+  --satoshi-body3--font-weight: Regular;
 
-  --satoshi-caption-1: 0.75rem;
-  --satoshi-caption-1--line-height: 0.875rem;
-  --satoshi-caption-1--letter-spacing: 0em;
-  --satoshi-caption-1--font-weight: Light;
+  --satoshi-caption1: 0.75rem;
+  --satoshi-caption1--line-height: 0.875rem;
+  --satoshi-caption1--letter-spacing: 0em;
+  --satoshi-caption1--font-weight: Light;
 
-  --satoshi-caption-2: 0.875rem;
-  --satoshi-caption-2--line-height: 1.025rem;
-  --satoshi-caption-2--letter-spacing: 0em;
-  --satoshi-caption-2--font-weight: Light;
+  --satoshi-caption2: 0.875rem;
+  --satoshi-caption2--line-height: 1.025rem;
+  --satoshi-caption2--letter-spacing: 0em;
+  --satoshi-caption2--font-weight: Light;
 
-  --satoshi-btn-1: 1.125rem;
-  --satoshi-btn-1--line-height: 1.625rem;
-  --satoshi-btn-1--letter-spacing: 0em;
-  --satoshi-btn-1--font-weight: Medium;
+  --satoshi-btn1: 1.125rem;
+  --satoshi-btn1--line-height: 1.625rem;
+  --satoshi-btn1--letter-spacing: 0em;
+  --satoshi-btn1--font-weight: 500;
 
-  --satoshi-btn-2: 1rem;
-  --satoshi-btn-2--line-height: 1.125rem;
-  --satoshi-btn-2--letter-spacing: 0em;
-  --satoshi-btn-2--font-weight: Medium;
+  --satoshi-btn2: 1rem;
+  --satoshi-btn2--line-height: 1.125rem;
+  --satoshi-btn2--letter-spacing: 0em;
+  --satoshi-btn2--font-weight: 500;
 
-  --satoshi-btn-3: 0.875rem;
-  --satoshi-btn-3--line-height: 1rem;
-  --satoshi-btn-3--letter-spacing: 0em;
-  --satoshi-btn-3--font-weight: Medium;
+  --satoshi-btn3: 0.875rem;
+  --satoshi-btn3--line-height: 1rem;
+  --satoshi-btn3--letter-spacing: 0em;
+  --satoshi-btn3--font-weight: 500;
 
   --orbitron-h1: 5.625rem;
   --orbitron-h1--line-height: 6.125rem;
   --orbitron-h1--letter-spacing: 0em;
-  --orbitron-h1--font-weight: Bold;
+  --orbitron-h1--font-weight: 700;
 
   --orbitron-h2: 3rem;
   --orbitron-h2--line-height: 3.375rem;
   --orbitron-h2--letter-spacing: 0em;
-  --orbitron-h2--font-weight: Bold;
+  --orbitron-h2--font-weight: 700;
 
   --orbitron-h3: 2rem;
   --orbitron-h3--line-height: 2.375rem;
   --orbitron-h3--letter-spacing: 0em;
-  --orbitron-h3--font-weight: Bold;
+  --orbitron-h3--font-weight: 700;
 
   --orbitron-h4: 1.5rem;
   --orbitron-h4--line-height: 1.625rem;
   --orbitron-h4--letter-spacing: 0em;
-  --orbitron-h4--font-weight: Bold;
+  --orbitron-h4--font-weight: 700;
 
   --orbitron-h5: 1.125rem;
   --orbitron-h5--line-height: 1.325rem;
   --orbitron-h5--letter-spacing: 0em;
-  --orbitron-h5--font-weight: Medium;
+  --orbitron-h5--font-weight: 500;
 
-  --orbitron-body-1: 1rem;
-  --orbitron-body-1--line-height: 1.325rem;
-  --orbitron-body-1--letter-spacing: 0em;
-  --orbitron-body-1--font-weight: Semibold;
+  --orbitron-body1: 1rem;
+  --orbitron-body1--line-height: 1.325rem;
+  --orbitron-body1--letter-spacing: 0em;
+  --orbitron-body1--font-weight: Semi700;
 
-  --orbitron-body-2: 0.875rem;
-  --orbitron-body-2--line-height: 1rem;
-  --orbitron-body-2--letter-spacing: 0em;
-  --orbitron-body-2--font-weight: Bold;
+  --orbitron-body2: 0.875rem;
+  --orbitron-body2--line-height: 1rem;
+  --orbitron-body2--letter-spacing: 0em;
+  --orbitron-body2--font-weight: 700;
 
-  --orbitron-body-3: 0.75rem;
-  --orbitron-body-3--line-height: 0.875rem;
-  --orbitron-body-3--letter-spacing: 0em;
-  --orbitron-body-3--font-weight: Regular;
+  --orbitron-body3: 0.75rem;
+  --orbitron-body3--line-height: 0.875rem;
+  --orbitron-body3--letter-spacing: 0em;
+  --orbitron-body3--font-weight: Regular;
 }
 
 *[class*='satoshi-'] {
@@ -148,60 +148,60 @@
   line-height: var(--satoshi-h4--line-height);
 }
 
-.satoshi-body-1 {
-  font-weight: var(--satoshi-body-1--font-weight);
-  font-size: var(--satoshi-body-1);
-  letter-spacing: var(--satoshi-body-1--letter-spacing);
-  line-height: var(--satoshi-body-1--line-height);
+.satoshi-body1 {
+  font-weight: var(--satoshi-body1--font-weight);
+  font-size: var(--satoshi-body1);
+  letter-spacing: var(--satoshi-body1--letter-spacing);
+  line-height: var(--satoshi-body1--line-height);
 }
 
-.satoshi-body-2 {
-  font-weight: var(--satoshi-body-2--font-weight);
-  font-size: var(--satoshi-body-2);
-  letter-spacing: var(--satoshi-body-2--letter-spacing);
-  line-height: var(--satoshi-body-2--line-height);
+.satoshi-body2 {
+  font-weight: var(--satoshi-body2--font-weight);
+  font-size: var(--satoshi-body2);
+  letter-spacing: var(--satoshi-body2--letter-spacing);
+  line-height: var(--satoshi-body2--line-height);
 }
 
-.satoshi-body-3 {
-  font-weight: var(--satoshi-body-3--font-weight);
-  font-size: var(--satoshi-body-3);
-  letter-spacing: var(--satoshi-body-3--letter-spacing);
-  line-height: var(--satoshi-body-3--line-height);
+.satoshi-body3 {
+  font-weight: var(--satoshi-body3--font-weight);
+  font-size: var(--satoshi-body3);
+  letter-spacing: var(--satoshi-body3--letter-spacing);
+  line-height: var(--satoshi-body3--line-height);
 }
 
-.satoshi-caption-1 {
-  font-weight: var(--satoshi-caption-1--font-weight);
-  font-size: var(--satoshi-caption-1);
-  letter-spacing: var(--satoshi-caption-1--letter-spacing);
-  line-height: var(--satoshi-caption-1--line-height);
+.satoshi-caption1 {
+  font-weight: var(--satoshi-caption1--font-weight);
+  font-size: var(--satoshi-caption1);
+  letter-spacing: var(--satoshi-caption1--letter-spacing);
+  line-height: var(--satoshi-caption1--line-height);
 }
 
-.satoshi-caption-2 {
-  font-weight: var(--satoshi-caption-2--font-weight);
-  font-size: var(--satoshi-caption-2);
-  letter-spacing: var(--satoshi-caption-2--letter-spacing);
-  line-height: var(--satoshi-caption-2--line-height);
+.satoshi-caption2 {
+  font-weight: var(--satoshi-caption2--font-weight);
+  font-size: var(--satoshi-caption2);
+  letter-spacing: var(--satoshi-caption2--letter-spacing);
+  line-height: var(--satoshi-caption2--line-height);
 }
 
-.satoshi-btn-1 {
-  font-weight: var(--satoshi-btn-1--font-weight);
-  font-size: var(--satoshi-btn-1);
-  letter-spacing: var(--satoshi-btn-1--letter-spacing);
-  line-height: var(--satoshi-btn-1--line-height);
+.satoshi-btn1 {
+  font-weight: var(--satoshi-btn1--font-weight);
+  font-size: var(--satoshi-btn1);
+  letter-spacing: var(--satoshi-btn1--letter-spacing);
+  line-height: var(--satoshi-btn1--line-height);
 }
 
-.satoshi-btn-2 {
-  font-weight: var(--satoshi-btn-2--font-weight);
-  font-size: var(--satoshi-btn-2);
-  letter-spacing: var(--satoshi-btn-2--letter-spacing);
-  line-height: var(--satoshi-btn-2--line-height);
+.satoshi-btn2 {
+  font-weight: var(--satoshi-btn2--font-weight);
+  font-size: var(--satoshi-btn2);
+  letter-spacing: var(--satoshi-btn2--letter-spacing);
+  line-height: var(--satoshi-btn2--line-height);
 }
 
-.satoshi-btn-3 {
-  font-weight: var(--satoshi-btn-3--font-weight);
-  font-size: var(--satoshi-btn-3);
-  letter-spacing: var(--satoshi-btn-3--letter-spacing);
-  line-height: var(--satoshi-btn-3--line-height);
+.satoshi-btn3 {
+  font-weight: var(--satoshi-btn3--font-weight);
+  font-size: var(--satoshi-btn3);
+  letter-spacing: var(--satoshi-btn3--letter-spacing);
+  line-height: var(--satoshi-btn3--line-height);
 }
 
 .orbitron-h1 {
@@ -239,23 +239,23 @@
   line-height: var(--orbitron-h5--line-height);
 }
 
-.orbitron-body-1 {
-  font-weight: var(--orbitron-body-1--font-weight);
-  font-size: var(--orbitron-body-1);
-  letter-spacing: var(--orbitron-body-1--letter-spacing);
-  line-height: var(--orbitron-body-1--line-height);
+.orbitron-body1 {
+  font-weight: var(--orbitron-body1--font-weight);
+  font-size: var(--orbitron-body1);
+  letter-spacing: var(--orbitron-body1--letter-spacing);
+  line-height: var(--orbitron-body1--line-height);
 }
 
-.orbitron-body-2 {
-  font-weight: var(--orbitron-body-2--font-weight);
-  font-size: var(--orbitron-body-2);
-  letter-spacing: var(--orbitron-body-2--letter-spacing);
-  line-height: var(--orbitron-body-2--line-height);
+.orbitron-body2 {
+  font-weight: var(--orbitron-body2--font-weight);
+  font-size: var(--orbitron-body2);
+  letter-spacing: var(--orbitron-body2--letter-spacing);
+  line-height: var(--orbitron-body2--line-height);
 }
 
-.orbitron-body-3 {
-  font-weight: var(--orbitron-body-3--font-weight);
-  font-size: var(--orbitron-body-3);
-  letter-spacing: var(--orbitron-body-3--letter-spacing);
-  line-height: var(--orbitron-body-3--line-height);
+.orbitron-body3 {
+  font-weight: var(--orbitron-body3--font-weight);
+  font-size: var(--orbitron-body3);
+  letter-spacing: var(--orbitron-body3--letter-spacing);
+  line-height: var(--orbitron-body3--line-height);
 }

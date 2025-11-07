@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-surface ">
       <body
-        className={cn(satoshi.variable, orbitron.variable, 'min-h-screen antialiased')}
+        className={cn(satoshi.variable, orbitron.variable, 'min-h-screen antialiased md:pt-22 lg:px-40')}
         vaul-drawer-wrapper=""
         style={{
           background:

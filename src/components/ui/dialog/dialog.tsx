@@ -170,7 +170,7 @@ function DialogDescription({ className, ...props }: ComponentProps<typeof Dialog
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
-      className={cn('satoshi-body-1 tracking-tight text-gray-400', className)}
+      className={cn('satoshi-body1 tracking-tight text-gray-400', className)}
       {...props}
     />
   );

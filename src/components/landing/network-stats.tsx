@@ -1,25 +1,43 @@
+'use client';
+
+import { useIsMobile } from '@/hooks';
+import { cn } from '@/lib';
 import { Progress } from '@/ui';
 
 export function NetworkStats() {
+  const isMobile = useIsMobile();
+
   return (
-    <section className="container mx-auto flex max-w-184 flex-col gap-8 pb-32">
-      <span className="flex flex-col justify-start">
-        <h1 className="orbitron-h2 text-green-400">Network Sats</h1>
-        <h3 className="orbitron-h4 text-gray-400">WORM is live on Sepolia testnet!</h3>
+    <section className="container mx-auto flex max-w-184 flex-col gap-8 px-4 py-12 md:px-0 md:pt-0 md:pb-32">
+      <span className="flex flex-col justify-start gap-2 md:gap-0">
+        <h1
+          className={cn('orbitron-h2 text-green-400', {
+            'orbitron-h3': isMobile,
+          })}
+        >
+          Network Sats
+        </h1>
+        <h3
+          className={cn('orbitron-h4 text-gray-400', {
+            'orbitron-body2': isMobile,
+          })}
+        >
+          WORM is live on Sepolia testnet!
+        </h3>
       </span>
-      <div className="flex flex-col gap-8 bg-surface-1 p-8">
+      <div className="flex flex-col gap-8 rounded-lg border border-green-400/12 bg-surface1 p-6 md:p-8">
         <h4 className="orbitron-h5 text-gray-400">Epoch 325</h4>
 
         <div className="flex flex-1 flex-col items-center justify-center gap-4">
           <div className="flex w-full flex-1 flex-col gap-1">
-            <p className="orbitron-body-3 flex items-center gap-1">
+            <p className="orbitron-body3 flex items-center gap-1">
               <span className="text-white">10,321,342‍</span>
               <span className="text-blue-400">BETH</span>
             </p>
             <Progress value={33} label="6 mins remaining" />
-            <p className="satoshi-body-2 flex items-center gap-1">
+            <p className="satoshi-body2 flex items-center gap-1">
               <span className="text-gray-400">Current epoch reward:</span>
-              <span className="orbitron-body-3 text-green-400">49.43 WORM</span>
+              <span className="orbitron-body3 text-green-400">49.43 WORM</span>
             </p>
           </div>
 
@@ -28,29 +46,97 @@ export function NetworkStats() {
           </p>
         </div>
       </div>
-      <div className="grid grid-cols-2 grid-rows-2 gap-6">
+      <div className="grid grid-cols-1 grid-rows-4 gap-6 md:grid-cols-2 md:grid-rows-2">
         <div className="flex flex-col items-start gap-0.5">
-          <p className="satoshi-h4 text-gray-400">Total WORM minted</p>
-          <p className="orbitron-h4 text-white">
-            21,000,000 <span className="satoshi-body-1 text-green-500">WORM</span>
+          <p
+            className={cn('satoshi-h4 text-gray-400', {
+              'satoshi-h4': isMobile,
+            })}
+          >
+            Total WORM minted
+          </p>
+          <p
+            className={cn('orbitron-h4 text-white', {
+              'orbitron-h5': isMobile,
+            })}
+          >
+            21,000,000{' '}
+            <span
+              className={cn('satoshi-body1 text-green-500', {
+                'satoshi-body2': isMobile,
+              })}
+            >
+              WORM
+            </span>
           </p>
         </div>
         <div className="flex flex-col items-start gap-0.5">
-          <p className="satoshi-h4 text-gray-400">Total ETH burned</p>
-          <p className="orbitron-h4 text-white">
-            21,000,000 <span className="satoshi-body-1 text-blue-400">ETH</span>
+          <p
+            className={cn('satoshi-h4 text-gray-400', {
+              'satoshi-h4': isMobile,
+            })}
+          >
+            Total ETH burned
+          </p>
+          <p
+            className={cn('orbitron-h4 text-white', {
+              'orbitron-h5': isMobile,
+            })}
+          >
+            21,000,000{' '}
+            <span
+              className={cn('satoshi-body1 text-blue-400', {
+                'satoshi-body2': isMobile,
+              })}
+            >
+              ETH
+            </span>
           </p>
         </div>
         <div className="flex flex-col items-start gap-0.5">
-          <p className="satoshi-h4 text-gray-400">Total WORM supply</p>
-          <p className="orbitron-h4 text-white">
-            21,000,000 <span className="satoshi-body-1 text-green-500">WORM</span>
+          <p
+            className={cn('satoshi-h4 text-gray-400', {
+              'satoshi-h4': isMobile,
+            })}
+          >
+            Total WORM supply
+          </p>
+          <p
+            className={cn('orbitron-h4 text-white', {
+              'orbitron-h5': isMobile,
+            })}
+          >
+            21,000,000{' '}
+            <span
+              className={cn('satoshi-body1 text-green-500', {
+                'satoshi-body2': isMobile,
+              })}
+            >
+              WORM
+            </span>
           </p>
         </div>
         <div className="flex flex-col items-start gap-0.5">
-          <p className="satoshi-h4 text-gray-400">Halving time</p>
-          <p className="orbitron-h4 text-white">
-            4 <span className="satoshi-body-1 text-gray-400">Years</span>
+          <p
+            className={cn('satoshi-h4 text-gray-400', {
+              'satoshi-h4': isMobile,
+            })}
+          >
+            Halving time
+          </p>
+          <p
+            className={cn('orbitron-h4 text-white', {
+              'orbitron-h5': isMobile,
+            })}
+          >
+            4{' '}
+            <span
+              className={cn('satoshi-body1 text-gray-400', {
+                'satoshi-body2': isMobile,
+              })}
+            >
+              Years
+            </span>
           </p>
         </div>
       </div>
