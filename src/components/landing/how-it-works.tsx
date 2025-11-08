@@ -24,7 +24,11 @@ export function HowItWorks() {
       title: 'Mint WORM',
       description: 'Consume your BETH across WORM epochs, and earn WORM!',
       color: 'green',
-      action: <Button>Get Now!</Button>,
+      action: (
+        <Button variant="primary" className="w-full">
+          Get Now!
+        </Button>
+      ),
     },
   ];
 

@@ -91,20 +91,21 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
                     >
                       {content.title}
                     </p>
-                    <motion.p
+                    <motion.div
                       initial={{ opacity: 0, bottom: -10 }}
                       animate={{ opacity: 1, bottom: 32 }}
                       exit={{ opacity: 0, width: 0, bottom: -10 }}
                       transition={{ delay: 0.2 }}
                       className={cn(
-                        'satoshi-h3 absolute bottom-6 left-6 text-gray-400 md:right-4 md:bottom-8 md:left-32',
+                        'satoshi-h3 absolute bottom-6 left-6 flex flex-col items-start gap-6 text-gray-400 md:right-4 md:bottom-8 md:left-32',
                         {
                           'satoshi-h4': isMobile,
                         }
                       )}
                     >
-                      {content.description}
-                    </motion.p>
+                      <p>{content.description}</p>
+                      {content.action ? content.action : null}
+                    </motion.div>
                   </motion.div>
                 )}
               </AnimatePresence>
