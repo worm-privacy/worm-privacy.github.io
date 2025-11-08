@@ -1,3 +1,5 @@
+'use client';
+
 import { useIsMobile } from '@/hooks';
 import { cn } from '@/lib';
 import Svg from 'react-inlinesvg';
