@@ -21,7 +21,7 @@ type ExpandableCardProps = HTMLMotionProps<'div'> & {
 };
 
 export function ExpandableCard({ className, contents, ...props }: ExpandableCardProps) {
-  const [activeContent, setActiveContent] = useState<number>(1);
+  const [activeContent, setActiveContent] = useState<number>(3);
 
   const isMobile = useIsMobile();
 
@@ -51,16 +51,17 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
               }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
               onClick={() => setActiveContent(content.order)}
+              onMouseEnter={() => setActiveContent(content.order)}
             >
               <AnimatePresence>
-                {activeContent === content.order && (
+                {/* {activeContent === content.order && (
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     className={`absolute h-full w-full`}
                   />
-                )}
+                )} */}
               </AnimatePresence>
               <AnimatePresence>
                 {activeContent === content.order && (

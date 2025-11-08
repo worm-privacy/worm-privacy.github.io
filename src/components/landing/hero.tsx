@@ -29,13 +29,14 @@ export function HeroSection() {
           </h1>
 
           <div className="flex flex-col items-center justify-center gap-4 md:flex-row md:justify-between">
+            <img src="/beth.gif" className="size-30 rounded-full" />
+
             <h3
               className={cn('satoshi-h1 text-center text-white md:text-left', {
                 'satoshi-h3': isMobile,
               })}
             >
-              Hidden in the
-              <br className="hidden md:block" /> Ashes of ETH
+              Hidden in the Ashes of ETH
             </h3>
           </div>
         </div>
