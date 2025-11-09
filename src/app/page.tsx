@@ -1,17 +1,26 @@
-import { TeamSection } from '@/components/landing';
+import {
+  HeroSection,
+  HowItWorks,
+  NetworkStats,
+  RoadmapSection,
+  SloganSection,
+  TeamSection,
+  TokenomicsSection,
+  WormVSBethSection,
+} from '@/components/landing';
 import { Footer } from '@/components/landing/footer';
 
 export default function Home() {
   return (
     <>
       <main>
-        {/* <HeroSection /> */}
-        {/* <SloganSection /> */}
-        {/* <HowItWorks /> */}
-        {/* <WormVSBethSection /> */}
-        {/* <NetworkStats /> */}
-        {/* <TokenomicsSection /> */}
-        {/* <RoadmapSection /> */}
+        <HeroSection />
+        <SloganSection />
+        <HowItWorks />
+        <WormVSBethSection />
+        <NetworkStats />
+        <TokenomicsSection />
+        <RoadmapSection />
         <TeamSection />
       </main>
       <Footer />
