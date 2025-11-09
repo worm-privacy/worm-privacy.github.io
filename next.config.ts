@@ -5,7 +5,8 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   output: 'export',
-  basePath: process.env.PAGES_BASE_PATH,
+  basePath: 'fontend',
+  assetPrefix: 'frontend',
 };
 
 export default nextConfig;
