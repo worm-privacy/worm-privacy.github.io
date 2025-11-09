@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   },
   output: 'export',
   basePath: process.env.PAGES_BASE_PATH,
-  assetPrefix: 'http://worm.cx/fontend/',
+  assetPrefix: process.env.PAGES_BASE_PATH,
 };
 
 export default nextConfig;
