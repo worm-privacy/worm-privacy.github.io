@@ -2,9 +2,6 @@
 
 import Svg from 'react-inlinesvg';
 
-import { useIsMobile } from '@/hooks';
-import { cn } from '@/lib';
-import { Button, ScrollArea } from '@/ui';
 import {
   Dialog,
   DialogClose,
@@ -13,38 +10,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../ui/dialog/dialog';
-
-type Tokenomics = {
-  title: string;
-  stats: {
-    share: number;
-    label: string;
-  }[];
-};
-
-const TOKENOMICS: Tokenomics[] = [
-  {
-    title: 'Mine-able',
-    stats: [{ share: 1, label: 'Mine-able through Private-Proof-of-Burn mining' }],
-  },
-  {
-    title: 'Premine',
-    stats: [
-      { label: 'Private investors', share: 0.15 },
-      { label: 'Team / Founders', share: 0.2 },
-      { label: 'Advisors', share: 0.05 },
-      { label: 'Community / Ecosystem Rewards', share: 0.25 },
-      { label: 'Foundation / Treasury', share: 0.2 },
-      { label: 'Public Sale', share: 0.15 },
-    ],
-  },
-];
+} from '@/components/ui/dialog/dialog';
+import { useIsMobile } from '@/hooks';
+import { cn } from '@/lib';
+import { Button, ScrollArea } from '@/ui';
+import { TOKENOMICS } from './constant';
+import { TokenomicsContent } from './type';
 
 export function TokenomicsSection() {
   const isMobile = useIsMobile();
   return (
-    <section className="container mx-auto flex max-w-184 flex-col gap-10 px-4 py-12 md:px-0 md:pt-0 md:pb-32">
+    <section className="container mx-auto flex max-w-185 flex-col gap-10 px-4 py-12 md:px-0 md:pt-0 md:pb-32">
       <h1
         className={cn('orbitron-h2 text-green-400', {
           'orbitron-h3': isMobile,
@@ -83,7 +59,7 @@ export function TokenomicsSection() {
   );
 }
 
-function TokenomicsDialog({ label, share, color }: Tokenomics['stats'][number] & { color: 'green' | 'blue' }) {
+function TokenomicsDialog({ label, share, color }: TokenomicsContent['stats'][number] & { color: 'green' | 'blue' }) {
   return (
     <Dialog>
       <DialogTrigger asChild>

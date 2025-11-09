@@ -4,5 +4,6 @@ export * from './how-it-works';
 export * from './network-stats';
 export * from './roadmap';
 export * from './slogan';
+export * from './team';
 export * from './tokenomics';
 export * from './worm-vs-beth';

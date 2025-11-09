@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Svg from 'react-inlinesvg';
 
 import { Button } from '@/ui';
+import { SOCIALS } from './constant';
 
 export function Footer() {
   return (
@@ -43,34 +44,15 @@ export function Footer() {
         </ul>
 
         <ul className="flex items-center justify-between gap-4">
-          <li>
-            <Button asChild size="icon" variant="icon">
-              <Link href="/docs">
-                <Svg src="/assets/icons/x.svg" />
-              </Link>
-            </Button>
-          </li>
-          <li>
-            <Button asChild size="icon" variant="icon">
-              <Link href="/press-kit">
-                <Svg src="/assets/icons/discord.svg" />
-              </Link>
-            </Button>
-          </li>
-          <li>
-            <Button asChild size="icon" variant="icon">
-              <Link href="/mint-worm">
-                <Svg src="/assets/icons/github.svg" />
-              </Link>
-            </Button>
-          </li>
-          <li>
-            <Button asChild size="icon" variant="icon">
-              <Link href="/mint-worm">
-                <Svg src="/assets/icons/telegram.svg" />
-              </Link>
-            </Button>
-          </li>
+          {SOCIALS.map((s) => (
+            <li key={s.link}>
+              <Button asChild size="icon" variant="icon">
+                <Link href={s.link}>
+                  <Svg src={s.logo} />
+                </Link>
+              </Button>
+            </li>
+          ))}
         </ul>
       </nav>
 

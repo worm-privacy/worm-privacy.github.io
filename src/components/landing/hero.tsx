@@ -1,9 +1,10 @@
 'use client';
 
+import Svg from 'react-inlinesvg';
+
 import { useIsMobile } from '@/hooks';
 import { cn } from '@/lib';
-import Svg from 'react-inlinesvg';
-import { Button } from '../ui';
+import { Button } from '@/ui';
 
 export function HeroSection() {
   const isMobile = useIsMobile();
@@ -21,11 +22,11 @@ export function HeroSection() {
         />
         <div className="flex size-full flex-col gap-10 px-8 py-19.5 md:px-16 md:py-20">
           <h1
-            className={cn('orbitron-h1  noise-effect flex items-center-safe justify-center', {
+            className={cn('orbitron-h1 noise flex items-center-safe justify-center', {
               'orbitron-h2': isMobile,
             })}
           >
-            Privacy<sup className="noise-effect text-4xl!">2</sup>
+            Privacy<sup className="noise text-4xl!">2</sup>
           </h1>
 
           <div className="flex flex-col items-center justify-center gap-4 md:flex-row md:justify-between">

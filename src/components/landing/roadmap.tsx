@@ -3,58 +3,14 @@
 import { useIsMobile } from '@/hooks';
 import { cn } from '@/lib';
 import Svg from 'react-inlinesvg';
-
-type Roadmap = {
-  title: string;
-  deadline: string;
-  description: string;
-  status: 'active' | 'passed' | 'not-yet';
-};
-
-const STEPS: Roadmap[] = [
-  {
-    title: 'Launch zk-SNARK burn circuit & WORM',
-    deadline: 'Q1 2026',
-    description: 'Core privacy infrastructure and burn receipt system',
-    status: 'passed',
-  },
-  {
-    title: 'WORM contract deployment with capped minting',
-    deadline: 'Q1 2026',
-    description: 'Scarce asset minting with competitive distribution.',
-    status: 'passed',
-  },
-  {
-    title: 'Lindwurm Testnet',
-    deadline: 'Q1 2026',
-    description: 'Very first testnet of WORM, with a working instance of BETH/WORM.',
-    status: 'active',
-  },
-  {
-    title: 'Shai-Hulud Testnet',
-    deadline: 'Q1 2026',
-    description: 'The second testnet involves and refactored circuit and partial spends.',
-    status: 'not-yet',
-  },
-  {
-    title: 'Protocol Audit / Trusted Setup',
-    deadline: 'Q1 2026',
-    description: 'Auditing of ZK circuits and running a Groth16 trusted setup ceremony.',
-    status: 'not-yet',
-  },
-  {
-    title: 'Mainnet launch',
-    deadline: 'Q1 2026',
-    description: 'Launching BETH/WORM tokens on mainnet.',
-    status: 'not-yet',
-  },
-];
+import { ROADMAP } from './constant';
+import { Roadmap } from './type';
 
 function RoadmapSection() {
   const isMobile = useIsMobile();
 
   return (
-    <section className="container mx-auto flex max-w-184 flex-col gap-6 pb-32">
+    <section className="container mx-auto flex max-w-185 flex-col gap-6 pb-32">
       <h1
         className={cn('orbitron-h2 text-green-400', {
           'orbitron-h3': isMobile,
@@ -64,7 +20,7 @@ function RoadmapSection() {
       </h1>
 
       <ul className="flex flex-col gap-6">
-        {STEPS.map((step) => (
+        {ROADMAP.map((step) => (
           <RoadmapStep key={step.title} {...step} />
         ))}
       </ul>

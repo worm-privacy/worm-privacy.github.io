@@ -19,4 +19,35 @@
     -webkit-background-clip: text;
     background-blend-mode: difference;
   }
+
+  .noise {
+    animation: liner var(--hour) linear infinite;
+    mask: repeating-radial-gradient(
+      circle at center,
+      #fff,
+      var(--lines),
+      #fff,
+      0,
+      #fff0,
+      calc(var(--lines) * 2),
+      #fff0 0
+    );
+
+    /* background-image: linear-gradient(to right in oklch, deeppink, blue); */
+    background: var(--color-green-300);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+@property --lines {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0.0001px;
+}
+
+@keyframes liner {
+  50% {
+    --lines: 0.00012px;
+  }
 }

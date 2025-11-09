@@ -8,7 +8,7 @@ export function NetworkStats() {
   const isMobile = useIsMobile();
 
   return (
-    <section className="container mx-auto flex max-w-184 flex-col gap-8 px-4 py-12 md:px-0 md:pt-0 md:pb-32">
+    <section className="container mx-auto flex max-w-185 flex-col gap-8 px-4 py-12 md:px-0 md:pt-0 md:pb-32">
       <span className="flex flex-col justify-start gap-2 md:gap-0">
         <h1
           className={cn('orbitron-h2 text-green-400', {

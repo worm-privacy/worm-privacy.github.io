@@ -22,10 +22,7 @@ type ExpandableCardProps = HTMLMotionProps<'div'> & {
 
 export function ExpandableCard({ className, contents, ...props }: ExpandableCardProps) {
   const [activeContent, setActiveContent] = useState<number>(3);
-
   const isMobile = useIsMobile();
-
-  console.log({ isMobile });
 
   return (
     <motion.div
