@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog/dialog';
 import { useIsMobile } from '@/hooks';
 import { cn } from '@/lib';
-import { Button, ScrollArea } from '@/ui';
+import { Button, PieChart, ScrollArea } from '@/ui';
 import { TOKENOMICS } from './constant';
 import { TokenomicsContent } from './type';
 
@@ -30,7 +30,9 @@ export function TokenomicsSection() {
       </h1>
 
       <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-[18.125rem_1fr]">
-        <div className="size-full bg-white"></div>
+        <div className="self-center">
+          <PieChart />
+        </div>
         <div className="flex w-full flex-col gap-6">
           <div className="relative flex size-full h-max w-full flex-col gap-2 pl-8 md:min-h-32.5">
             <p
