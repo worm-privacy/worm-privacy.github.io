@@ -44,21 +44,31 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
               initial={{ width: isMobile ? '100%' : '8.5rem', height: isMobile ? '6.75rem' : '37.25rem' }}
               animate={{
                 width: isMobile ? '100%' : activeContent === content.order ? '26.125rem' : '8.5rem',
-                height: isMobile ? (activeContent === content.order ? '12.75rem' : '6.75rem') : '37.25rem',
+                height: isMobile
+                  ? activeContent === content.order
+                    ? content.order === 3
+                      ? '15.5rem'
+                      : '12.75rem'
+                    : '6.75rem'
+                  : '37.25rem',
               }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
               onClick={() => setActiveContent(content.order)}
               onMouseEnter={() => setActiveContent(content.order)}
             >
               <AnimatePresence>
-                {/* {activeContent === content.order && (
+                {activeContent === content.order && (
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className={`absolute h-full w-full`}
+                    className={cn('absolute h-full w-full', {
+                      'bg-linear-to-t from-green-400/12 to-green-400/0': content.color === 'green',
+                      'bg-linear-to-t from-magenta-400/12 to-magenta-400/0': content.color === 'magenta',
+                      'bg-linear-to-t from-blue-400/12 to-blue-400/0': content.color === 'blue',
+                    })}
                   />
-                )} */}
+                )}
               </AnimatePresence>
               <AnimatePresence>
                 {activeContent === content.order && (
@@ -66,7 +76,11 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className={`text-${content.color}-400 absolute flex h-full w-full flex-col justify-between p-6`}
+                    className={cn('absolute flex h-full w-full flex-col justify-between p-6', {
+                      'text-magenta-400': content.color === 'magenta',
+                      'text-green-400': content.color === 'green',
+                      'text-blue-400': content.color === 'blue',
+                    })}
                   >
                     <p
                       className={cn('orbitron-h1 absolute top-8 left-6 w-max', {
@@ -107,7 +121,7 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
                 )}
               </AnimatePresence>
               <div
-                className={`text-${content.color}-400 relative size-full rounded-xl border-y border-green-400/12 md:border`}
+                className={`text-${content.color}-400 relative size-full rounded-none border-y border-green-400/12 md:rounded-xl md:border`}
               >
                 <p
                   className={cn('orbitron-h1 absolute top-8 left-6 w-max', {
@@ -121,6 +135,9 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
                     'orbitron-h2 absolute top-10 left-24 w-max origin-center md:top-auto md:bottom-0 md:left-0 md:-rotate-90',
                     {
                       'orbitron-h3': isMobile,
+                      'text-magenta-400': content.color === 'magenta',
+                      'text-green-400': content.color === 'green',
+                      'text-blue-400': content.color === 'blue',
                     }
                   )}
                   style={{

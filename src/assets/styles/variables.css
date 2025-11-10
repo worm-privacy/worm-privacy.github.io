@@ -67,9 +67,7 @@
   --microcentury: calc(var(--minute) * 52 + 35.7s);
   --nanocentury: 3.156s;
   --scaramucci: calc(var(--day) * 11);
-}
 
-:root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --surface: oklch(0.0837 0.0118 255.89);

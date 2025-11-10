@@ -100,7 +100,7 @@ export function PieChart() {
                   fill={data2.find((d) => d.name === name)?.fill}
                   className={cn('orbitron-body1', { 'orbitron-body2': isMobile })}
                 >
-                  {value}
+                  {value} %
                 </tspan>
                 <tspan dy="1.4rem" x={x} className={cn('satoshi-h4', { 'satoshi-h5': isMobile })}>
                   {`${name.at(0).toUpperCase()}${name.slice(1)}`}
@@ -114,7 +114,7 @@ export function PieChart() {
           startAngle={0}
           labelLine={false}
         >
-          {data3.map((entry, index) => (
+          {data3.map((_, index) => (
             <Cell key={`cell-${index}`} />
           ))}
         </Pie>

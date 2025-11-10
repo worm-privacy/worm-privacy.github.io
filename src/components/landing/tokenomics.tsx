@@ -33,11 +33,11 @@ export function TokenomicsSection() {
         <div className="self-center">
           <PieChart />
         </div>
-        <div className="flex w-full flex-col gap-6">
-          <div className="relative flex size-full h-max w-full flex-col gap-2 pl-8 md:min-h-32.5">
+        <div className="flex w-full flex-col gap-6 px-4 md:px-0">
+          <div className="relative flex size-full h-max w-full flex-col gap-2 pl-14 md:min-h-32.5">
             <p
               className={cn(
-                'orbitron-h4 absolute top-1/2 -left-3.5 size-max origin-center -translate-x-1/2 -translate-y-1/2 -rotate-90 transform text-green-300'
+                'orbitron-h4 absolute top-1/2 left-0 size-max origin-center -translate-x-1/2 -translate-y-1/2 -rotate-90 transform text-green-300'
               )}
             >
               {TOKENOMICS[0].title}
@@ -47,8 +47,8 @@ export function TokenomicsSection() {
             ))}
           </div>
 
-          <div className="relative flex size-full w-full flex-col gap-2 pl-8 [&>button]:h-max!">
-            <p className="orbitron-h4 absolute top-1/2 -left-3.5 size-max origin-center -translate-x-1/2 -translate-y-1/2 -rotate-90 transform text-blue-300">
+          <div className="relative flex size-full w-full flex-col gap-2 pl-14 [&>button]:h-max!">
+            <p className="orbitron-h4 absolute top-1/2 left-0 size-max origin-center -translate-x-1/2 -translate-y-1/2 -rotate-90 transform text-blue-300">
               {TOKENOMICS[1].title}
             </p>
             {TOKENOMICS[1].stats.map((s) => (
@@ -64,18 +64,23 @@ export function TokenomicsSection() {
 function TokenomicsDialog({ label, share, color }: TokenomicsContent['stats'][number] & { color: 'green' | 'blue' }) {
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          className={cn(
-            'satoshi-body1 relative ml-auto h-full w-full items-baseline justify-start gap-4 bg-gray-400/12 px-4 py-3 pl-5.25 text-left whitespace-break-spaces text-white',
-            `after:absolute after:top-0 after:bottom-0 after:-left-7.25 after:h-full after:w-5.75 after:rounded-sm after:bg-${color}-400 after:content-[""]`
-          )}
-        >
-          <span className={`text-${color}-300`}>{`${share * 100}%`}</span>
-          {label}
-        </Button>
-      </DialogTrigger>
+      <div className="relative size-full">
+        <span
+          className={cn('absolute top-0 bottom-0 -left-7.25 h-full w-5.75 rounded-sm', {
+            'bg-blue-400': color === 'blue',
+            'bg-green-400': color === 'green',
+          })}
+        />
+        <DialogTrigger asChild>
+          <Button
+            variant="ghost"
+            className="satoshi-body1 relative ml-auto h-full w-full items-center justify-baseline gap-4 bg-gray-400/12 px-4 py-3 pl-5.25 text-left whitespace-break-spaces text-white"
+          >
+            <span className={`text-${color}-300`}>{`${share * 100}%`}</span>
+            {label}
+          </Button>
+        </DialogTrigger>
+      </div>
       <DialogContent className="max-w-150">
         <DialogClose asChild>
           <Button variant="ghost" className="absolute top-6 right-8 z-10 w-max">

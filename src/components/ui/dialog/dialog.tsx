@@ -96,7 +96,7 @@ function DialogContent({
             forceMount
             data-slot="dialog-content"
             className={cn(
-              'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border bg-background shadow-lg duration-200',
+              'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] rounded-lg border bg-background shadow-lg duration-200',
               'rounded-lg border border-gray-400/32 bg-surface',
               className
             )}
@@ -122,7 +122,7 @@ function DialogContent({
               }}
               transition={transition}
               className={cn(
-                'fixed top-[50%] left-[50%] z-50 grid w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-xl border bg-background shadow-lg',
+                'fixed top-[50%] left-[50%] z-50 grid w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] rounded-xl border bg-background shadow-lg',
                 className
               )}
               {...props}
@@ -140,7 +140,7 @@ function DialogHeader({ className, ...props }: ComponentProps<'div'>) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn('flex flex-col gap-2 px-8 py-6 text-left sm:text-left', className)}
+      className={cn('flex flex-col gap-2 px-8 pt-6 pb-4 text-left sm:text-left', className)}
       {...props}
     />
   );
