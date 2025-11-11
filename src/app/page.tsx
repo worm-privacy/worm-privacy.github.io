@@ -1,4 +1,13 @@
-import { NetworkStats, TeamSection, RoadmapSection, WormVSBethSection, HowItWorks, TokenomicsSection, HeroSection, SloganSection } from '@/components/landing';
+import {
+  HeroSection,
+  HowItWorks,
+  NetworkStats,
+  RoadmapSection,
+  SloganSection,
+  TeamSection,
+  TokenomicsSection,
+  WormVSBethSection,
+} from '@/components/landing';
 import { Footer } from '@/components/landing/footer';
 
 export default function Home() {
