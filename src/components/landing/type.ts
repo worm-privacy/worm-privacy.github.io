@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 export type Roadmap = {
+  order: number;
   title: string;
   deadline: string;
   description: string;

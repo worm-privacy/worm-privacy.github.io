@@ -83,8 +83,10 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
                     })}
                   >
                     <p
-                      className={cn('orbitron-h1 absolute top-8 left-6 w-max', {
+                      className={cn('orbitron-h1 absolute top-8 left-7 w-max', {
                         'orbitron-h2': isMobile,
+                        // 'md:left-8': content.order === activeContent,
+                        'left-10': content.order === 1,
                       })}
                     >
                       {content.order}
@@ -94,6 +96,8 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
                         'orbitron-h2 absolute top-10 left-24 w-max origin-center md:top-auto md:bottom-0 md:left-0 md:-rotate-90',
                         {
                           'orbitron-h3': isMobile,
+                          'md:left-2': content.order === 2,
+                          'md:-left-1': content.order === 3,
                         }
                       )}
                       style={{
@@ -107,10 +111,13 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
                       animate={{ opacity: 1, bottom: 32 }}
                       exit={{ opacity: 0, width: 0, bottom: -10 }}
                       transition={{ delay: 0.2 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
                       className={cn(
-                        'satoshi-h3 absolute bottom-6 left-6 flex flex-col items-start gap-6 text-gray-400 md:right-4 md:bottom-8 md:left-32',
+                        'satoshi-h4 absolute bottom-6 left-6 z-100 flex flex-col items-start gap-6 text-gray-400 md:right-4 md:bottom-8 md:left-32',
                         {
-                          'satoshi-h4': isMobile,
+                          'satoshi-h5': isMobile,
                         }
                       )}
                     >
@@ -124,8 +131,10 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
                 className={`text-${content.color}-400 relative size-full rounded-none border-y border-green-400/12 md:rounded-xl md:border`}
               >
                 <p
-                  className={cn('orbitron-h1 absolute top-8 left-6 w-max', {
+                  className={cn('orbitron-h1 absolute top-8 left-7 w-max', {
                     'orbitron-h2': isMobile,
+                    // 'md:left-8': content.order === activeContent,
+                    'left-10': content.order === 1,
                   })}
                 >
                   {content.order}
@@ -138,6 +147,8 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
                       'text-magenta-400': content.color === 'magenta',
                       'text-green-400': content.color === 'green',
                       'text-blue-400': content.color === 'blue',
+                      'md:left-2': content.order === 2,
+                      'md:-left-1': content.order === 3,
                     }
                   )}
                   style={{

@@ -19,14 +19,52 @@ export function SloganSection() {
       </div>
 
       <div className="grid w-full grid-cols-2 gap-6">
-        <div className="orbitron-h5 corner-only flex h-45.5 flex-col items-center justify-center rounded-base border-2 border-blue-500 text-gray-400">
+        <div
+          className={cn(
+            'orbitron-h5 relative flex h-45.5 flex-col items-center justify-center rounded-base text-gray-400',
+            'before:absolute before:top-0 before:right-0 before:size-5 before:rounded-tr-base before:border-t-2 before:border-r-2 before:border-blue-500 before:content-[""]',
+            'after:absolute after:bottom-0 after:left-0 after:size-5 after:rounded-bl-base after:border-b-2 after:border-l-2 after:border-blue-500 after:content-[""]',
+            {
+              'orbitron-body2': isMobile,
+            }
+          )}
+        >
           <span>Private</span>
-          <h3 className="orbitron-h3 text-green-400">Proof of Burn</h3>
+          <h3
+            className={cn('orbitron-h3 text-green-400', {
+              'orbitron-h5': isMobile,
+            })}
+            style={{
+              textShadow:
+                '0 0 0px rgba(150,250,209,0.5), 0 0 5px rgba(150,250,209,0.5), 0 0 10px rgba(150,250,209,0.5)',
+            }}
+          >
+            Proof of Burn
+          </h3>
           <span>mining</span>
         </div>
-        <div className="orbitron-h5 corner-only flex h-45.5 flex-col items-center justify-center rounded-base border-2 border-blue-500 text-gray-400">
+        <div
+          className={cn(
+            'orbitron-h5 relative flex h-45.5 flex-col items-center justify-center text-gray-400',
+            'before:absolute before:top-0 before:right-0 before:size-5 before:rounded-tr-base before:border-t-2 before:border-r-2 before:border-blue-500 before:content-[""]',
+            'after:absolute after:bottom-0 after:left-0 after:size-5 after:rounded-bl-base after:border-b-2 after:border-l-2 after:border-blue-500 after:content-[""]',
+            {
+              'orbitron-body2': isMobile,
+            }
+          )}
+        >
           <span>Powered by</span>
-          <h3 className="orbitron-h3 text-green-400">zkSNARKs</h3>
+          <h3
+            className={cn('orbitron-h3 text-green-400', {
+              'orbitron-h5': isMobile,
+            })}
+            style={{
+              textShadow:
+                '0 0 0px rgba(150,250,209,0.5), 0 0 5px rgba(150,250,209,0.5), 0 0 10px rgba(150,250,209,0.5)',
+            }}
+          >
+            zkSNARKs
+          </h3>
         </div>
       </div>
     </section>

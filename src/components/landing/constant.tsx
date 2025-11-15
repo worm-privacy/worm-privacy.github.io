@@ -151,36 +151,42 @@ export const HOW_IT_WORKS: HowItWorksContent[] = [
 
 export const ROADMAP: Roadmap[] = [
   {
+    order: 1,
     title: 'Launch zk-SNARK burn circuit & WORM',
     deadline: 'Q1 2026',
     description: 'Core privacy infrastructure and burn receipt system',
     status: 'passed',
   },
   {
+    order: 2,
     title: 'WORM contract deployment with capped minting',
     deadline: 'Q1 2026',
     description: 'Scarce asset minting with competitive distribution.',
     status: 'passed',
   },
   {
+    order: 3,
     title: 'Lindwurm Testnet',
     deadline: 'Q1 2026',
     description: 'Very first testnet of WORM, with a working instance of BETH/WORM.',
     status: 'active',
   },
   {
+    order: 4,
     title: 'Shai-Hulud Testnet',
     deadline: 'Q1 2026',
     description: 'The second testnet involves and refactored circuit and partial spends.',
     status: 'not-yet',
   },
   {
+    order: 5,
     title: 'Protocol Audit / Trusted Setup',
     deadline: 'Q1 2026',
     description: 'Auditing of ZK circuits and running a Groth16 trusted setup ceremony.',
     status: 'not-yet',
   },
   {
+    order: 6,
     title: 'Mainnet launch',
     deadline: 'Q1 2026',
     description: 'Launching BETH/WORM tokens on mainnet.',

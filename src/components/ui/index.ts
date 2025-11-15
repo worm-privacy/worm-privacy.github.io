@@ -1,3 +1,5 @@
+export * from './accordion';
+export * from './animated-testimonials';
 export * from './badge';
 export * from './blur-fade';
 export * from './button';

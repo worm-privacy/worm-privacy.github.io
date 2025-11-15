@@ -15,7 +15,7 @@ export function NetworkStats() {
             'orbitron-h3': isMobile,
           })}
         >
-          Network Sats
+          Network Stats
         </h1>
         <h3
           className={cn('orbitron-h4 text-gray-400', {
@@ -25,14 +25,19 @@ export function NetworkStats() {
           WORM is live on Sepolia testnet!
         </h3>
       </span>
-      <div className="flex flex-col gap-8 rounded-lg border border-green-400/12 bg-surface1 p-6 md:p-8">
+      <div
+        className="flex flex-col gap-8 rounded-lg border border-green-400/12 bg-surface1 p-6 md:p-8"
+        style={{
+          boxShadow: '0px 0px 20px 0px rgba(0, 200, 113, 0.12)',
+        }}
+      >
         <h4 className="orbitron-h5 text-gray-400">Epoch 325</h4>
 
         <div className="flex flex-1 flex-col items-center justify-center gap-4">
           <div className="flex w-full flex-1 flex-col gap-1">
-            <p className="orbitron-body3 flex items-center gap-1">
+            <p className="orbitron-body2 flex items-center gap-1">
               <span className="text-white">10,321,342‍</span>
-              <span className="text-blue-400">BETH</span>
+              <span className="text-magenta-400">BETH</span>
             </p>
             <Progress value={33} label="6 mins remaining" />
             <p className="satoshi-body2 flex items-center gap-1">

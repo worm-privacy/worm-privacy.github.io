@@ -18,6 +18,10 @@ const data3 = [
   { name: 'minable', value: 72.1348, fill: 'transparent' },
   { name: 'pre-mine', value: 27.8652, fill: 'transparent' },
 ];
+const data4 = [
+  { name: 'minable', value: 72.1348, fill: '#05080f' },
+  { name: 'pre-mine', value: 27.8652, fill: '#05080f' },
+];
 
 export function PieChart() {
   const isMobile = useIsMobile();
@@ -38,7 +42,7 @@ export function PieChart() {
         </defs>
 
         <Pie
-          data={[{ value: 1 }]}
+          data={data4}
           dataKey="value"
           cx="50%"
           cy="50%"
@@ -95,14 +99,14 @@ export function PieChart() {
                 fontWeight="bold"
               >
                 <tspan
-                  dy="0"
+                  dy="1em"
                   x={x}
                   fill={data2.find((d) => d.name === name)?.fill}
                   className={cn('orbitron-body1', { 'orbitron-body2': isMobile })}
                 >
                   {value} %
                 </tspan>
-                <tspan dy="1.4rem" x={x} className={cn('satoshi-h4', { 'satoshi-h5': isMobile })}>
+                <tspan dy="-1em" x={x} className={cn('satoshi-h4', { 'satoshi-h5': isMobile })}>
                   {`${name.at(0).toUpperCase()}${name.slice(1)}`}
                 </tspan>
               </text>

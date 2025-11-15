@@ -33,11 +33,14 @@ export function TokenomicsSection() {
         <div className="self-center">
           <PieChart />
         </div>
-        <div className="flex w-full flex-col gap-6 px-4 md:px-0">
-          <div className="relative flex size-full h-max w-full flex-col gap-2 pl-14 md:min-h-32.5">
+        <div className="flex w-full flex-col gap-6">
+          <div className="relative flex size-full h-25 w-full flex-col gap-2 pl-4 md:min-h-32.5 md:pl-14">
             <p
               className={cn(
-                'orbitron-h4 absolute top-1/2 left-0 size-max origin-center -translate-x-1/2 -translate-y-1/2 -rotate-90 transform text-green-300'
+                'orbitron-h4 absolute top-1/2 left-1 size-max origin-center -translate-x-1/2 -translate-y-1/2 -rotate-90 transform text-green-300 md:left-3',
+                {
+                  'orbitron-body2': isMobile,
+                }
               )}
             >
               {TOKENOMICS[0].title}
@@ -47,8 +50,15 @@ export function TokenomicsSection() {
             ))}
           </div>
 
-          <div className="relative flex size-full w-full flex-col gap-2 pl-14 [&>button]:h-max!">
-            <p className="orbitron-h4 absolute top-1/2 left-0 size-max origin-center -translate-x-1/2 -translate-y-1/2 -rotate-90 transform text-blue-300">
+          <div className="relative flex size-full w-full flex-col gap-2 pl-4 md:pl-14 [&>button]:h-max!">
+            <p
+              className={cn(
+                'orbitron-h4 absolute top-1/2 left-1 size-max origin-center -translate-x-1/2 -translate-y-1/2 -rotate-90 transform text-blue-300 md:left-3',
+                {
+                  'orbitron-body2': isMobile,
+                }
+              )}
+            >
               {TOKENOMICS[1].title}
             </p>
             {TOKENOMICS[1].stats.map((s) => (
@@ -64,9 +74,9 @@ export function TokenomicsSection() {
 function TokenomicsDialog({ label, share, color }: TokenomicsContent['stats'][number] & { color: 'green' | 'blue' }) {
   return (
     <Dialog>
-      <div className="relative size-full">
+      <div className="relative size-full pl-7 md:pl-0">
         <span
-          className={cn('absolute top-0 bottom-0 -left-7.25 h-full w-5.75 rounded-sm', {
+          className={cn('absolute top-0 bottom-0 left-0 h-full w-5.75 rounded-sm md:-left-7.25', {
             'bg-blue-400': color === 'blue',
             'bg-green-400': color === 'green',
           })}
@@ -74,9 +84,11 @@ function TokenomicsDialog({ label, share, color }: TokenomicsContent['stats'][nu
         <DialogTrigger asChild>
           <Button
             variant="ghost"
-            className="satoshi-body1 relative ml-auto h-full w-full items-center justify-baseline gap-4 bg-gray-400/12 px-4 py-3 pl-5.25 text-left whitespace-break-spaces text-white"
+            hoverScale={1}
+            tapScale={1}
+            className="satoshi-body1 relative ml-auto h-full w-full items-center justify-baseline gap-4 bg-gray-400/12 px-4 py-3 pl-6 text-left whitespace-break-spaces text-white md:pl-5.25"
           >
-            <span className={`text-${color}-300`}>{`${share * 100}%`}</span>
+            <span className={`orbitron-body2 text-${color}-300`}>{`${share * 100}%`}</span>
             {label}
           </Button>
         </DialogTrigger>

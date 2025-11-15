@@ -1,11 +1,12 @@
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { motion, type HTMLMotionProps } from 'motion/react';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils/index';
 
 const buttonVariants = cva(
-  'relative inline-flex items-center justify-center gap-1 whitespace-nowrap transition-all disabled:pointer-events-none  [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none rounded-base',
+  'relative inline-flex items-center justify-center gap-1 whitespace-nowrap transition-all disabled:pointer-events-none [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none rounded-base cursor-pointer',
   {
     variants: {
       variant: {
@@ -34,19 +35,39 @@ const buttonVariants = cva(
   }
 );
 
-function Button({
-  className,
-  variant,
-  size,
-  asChild = false,
-  ...props
-}: React.ComponentProps<'button'> &
+type ButtonProps = HTMLMotionProps<'button'> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
-  }) {
-  const Comp = asChild ? Slot : 'button';
+    hoverScale?: number;
+    tapScale?: number;
+    loading?: boolean;
+  };
 
-  return <Comp data-slot="button" className={cn(buttonVariants({ variant, size, className }))} {...props} />;
+function Button({
+  hoverScale = 1.025,
+  tapScale = 0.975,
+  className,
+  variant,
+  size = undefined,
+  asChild = false,
+  children,
+  loading = false,
+  ...props
+}: ButtonProps) {
+  const Component = asChild ? Slot : motion.button;
+  return (
+    // @ts-expect-error // need to be fixed
+    <Component
+      data-slot="button"
+      whileTap={{ scale: tapScale }}
+      whileHover={{ scale: hoverScale }}
+      className={cn(buttonVariants({ variant, size }), className)}
+      {...props}
+    >
+      {/* {loading ? <LoaderCircle className="mr-2 size-4 animate-spin" aria-hidden="true" /> : null} */}
+      {children as React.ReactNode}
+    </Component>
+  );
 }
 
-export { Button, buttonVariants };
+export { Button, buttonVariants, type ButtonProps };

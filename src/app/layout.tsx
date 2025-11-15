@@ -26,21 +26,25 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-surface ">
       <body
-        className={cn(satoshi.variable, orbitron.variable, 'min-h-screen antialiased md:pt-22 lg:px-40')}
+        className={cn(satoshi.variable, orbitron.variable, 'min-h-screen bg-transparent antialiased')}
         vaul-drawer-wrapper=""
-        style={{
-          background:
-            'repeating-linear-gradient(to bottom, #010204, #010204 5px, rgba(0, 200, 113, 0.05) 4px, rgba(0, 200, 113, 0.05) 6px)',
-        }}
       >
         <div
-          className="pointer-events-none fixed top-0 left-0 -z-10 h-full w-full animate-scan-line ease-scan-line"
+          className="fixed top-0 left-0 h-dvh w-dvw bg-surface1"
+          style={{
+            backgroundImage:
+              'linear-gradient(0deg, rgb(0, 200, 113, 0.05) 25%, #05080f 25%, #05080f 50%, rgb(0, 200, 113, 0.05) 50%, rgb(0, 200, 113, 0.05) 75%, #05080f 75%, #05080f 100%)',
+            backgroundSize: '16.00px 16.00px',
+          }}
+        />
+        <div
+          className="pointer-events-none fixed top-0 left-0 z-0 h-full w-full animate-scan-line ease-scan-line"
           style={
             {
               // background:
               //   'linear-gradient(to bottom, rgba(0, 255, 0, 0.05) 0%, rgba(0, 0, 0, 0.1) 10%, rgba(0, 255, 0, 0.05) 100%)',
               '--duration': '4',
-              background: 'linear-gradient(360deg, rgba(72, 86, 226, 0.7) -171.31%, rgba(72, 86, 226, 0) 100%)',
+              background: 'linear-gradient(360deg, rgba(72, 86, 226, 0.35) -171.31%, rgba(72, 86, 226, 0) 100%)',
             } as CSSProperties
           }
         />

@@ -1,20 +1,26 @@
 'use client';
 
-import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
 import { Fragment, useState } from 'react';
 import Svg from 'react-inlinesvg';
 
 import { useIsMobile } from '@/hooks';
 import { cn } from '@/lib';
-import { BlurFade, Button, Carousel, CarouselContent, CarouselItem, Separator } from '@/ui';
+import {
+  AnimatedTestimonials,
+  BlurFade,
+  buttonVariants,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  Separator,
+} from '@/ui';
 
 import { TEAM } from './constant';
 import { TeamMemberInfo } from './type';
 
 export function TeamSection() {
   const isMobile = useIsMobile();
-  const [activeMember, setActiveMember] = useState(1);
 
   return (
     <section className="container mx-auto flex max-w-185 flex-col gap-6 py-12 md:pb-32">
@@ -39,107 +45,7 @@ export function TeamSection() {
           </CarouselContent>
         </Carousel>
       ) : (
-        <div className="grid h-166 grid-cols-[1fr_28.75rem] gap-6">
-          <motion.div
-            initial={{ opacity: 0, translateY: 20 }}
-            animate={{ opacity: 1, translateY: 0 }}
-            transition={{
-              duration: 0.3,
-              delay: 0.5,
-            }}
-            className="relative flex w-full flex-col items-start justify-start gap-2 rounded-lg bg-surface2"
-          >
-            {TEAM.map((t) => (
-              <motion.div
-                key={t.fullName}
-                className="flex flex-col items-start justify-start gap-4 px-4 py-3 select-none"
-                onMouseEnter={() => setActiveMember(t.id)}
-                onClick={() => setActiveMember(t.id)}
-                initial={{ width: '100%', height: '5rem' }}
-                animate={{
-                  width: '100%',
-                  height: activeMember === t.id ? '8.5rem' : '5rem',
-                }}
-                transition={{ duration: 0.3, ease: 'easeInOut' }}
-              >
-                <AnimatePresence>
-                  <span key={t.fullName} className="flex flex-col items-start justify-start gap-2">
-                    <h3 className="satoshi-h4 text-white">{t.fullName}</h3>
-                    <span className="flex items-center justify-start gap-1.5">
-                      {t.positions.map((p, pi) => (
-                        <Fragment key={p}>
-                          <span key={p} className="satoshi-body1 text-gray-400">
-                            {p}
-                          </span>
-                          {t.positions.length > 1 && pi !== t.positions.length - 1 ? (
-                            <Separator orientation="vertical" className="h-4! bg-gray-400" />
-                          ) : (
-                            ''
-                          )}
-                        </Fragment>
-                      ))}
-                    </span>
-                  </span>
-
-                  {activeMember === t.id ? (
-                    <motion.div
-                      initial={{ opacity: 0, translateY: '1rem' }}
-                      animate={{ opacity: 1, translateY: 0 }}
-                      transition={{
-                        duration: 0.3,
-                        delay: 0.1,
-                      }}
-                      className="flex items-center justify-start gap-2"
-                    >
-                      {t.socials.map((s) => (
-                        <Button key={s.link} variant="primary-outline" asChild>
-                          <Link target="_blank" href={s.link}>
-                            <Svg src={s.logo} className="[&_path]:fill-green-400!" />
-                            {s.label}
-                          </Link>
-                        </Button>
-                      ))}
-                    </motion.div>
-                  ) : null}
-                </AnimatePresence>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          <div className="relative aspect-square size-115 self-center py-6">
-            {TEAM.map(({ avatar, fullName, id }, idx) => (
-              <BlurFade key={fullName} delay={0.25 + idx * 0.05} inView>
-                <span
-                  onMouseEnter={() => setActiveMember(id)}
-                  className={cn(
-                    'absolute',
-                    'delay-200 before:absolute before:inset-0 before:top-0 before:left-0 before:size-full before:rounded-full before:bg-black/60 before:content-[""]',
-                    {
-                      'before:bg-transparent': id === activeMember,
-                    }
-                  )}
-                  style={{
-                    width: `calc(var(--spacing) * ${avatar.size})`,
-                    height: `calc(var(--spacing) * ${avatar.size})`,
-                    top: `calc(var(--spacing) * ${avatar.position?.top})`,
-                    left: `calc(var(--spacing) * ${avatar.position?.left})`,
-                  }}
-                >
-                  <img
-                    src={avatar.src}
-                    alt={fullName}
-                    className={cn(
-                      'size-full rounded-full object-cover transition-transform duration-300 hover:scale-105',
-                      {
-                        'scale-105': id === activeMember,
-                      }
-                    )}
-                  />
-                </span>
-              </BlurFade>
-            ))}
-          </div>
-        </div>
+        <AnimatedTestimonials />
       )}
     </section>
   );
@@ -180,17 +86,59 @@ function MemberCard({ fullName, positions, avatar, socials }: TeamMemberInfo) {
           </span>
         </span>
 
-        <div className="flex items-center justify-start gap-2">
+        <div className="flex w-full items-center justify-start gap-2">
           {socials.map((s) => (
-            <Button key={s.link} variant="primary-outline" asChild>
-              <Link target="_blank" href={s.link}>
-                <Svg src={s.logo} className="[&_path]:fill-green-400!" />
-                {s.label}
-              </Link>
-            </Button>
+            <Link
+              key={s.link}
+              target="_blank"
+              href={s.link}
+              className={buttonVariants({ variant: 'primary-outline', className: s.label ? 'flex-1' : '' })}
+            >
+              <Svg src={s.logo} className="[&_path]:fill-green-400!" />
+              {s.label}
+            </Link>
           ))}
         </div>
       </div>
     </CarouselItem>
+  );
+}
+
+function OldView() {
+  const [activeMember, setActiveMember] = useState(1);
+
+  return (
+    <div className="grid h-166 grid-cols-[1fr_28.75rem] gap-6">
+      <div className="relative aspect-square size-115 self-center py-6">
+        {TEAM.map(({ avatar, fullName, id }, idx) => (
+          <BlurFade key={fullName} delay={0.25 + idx * 0.05} inView>
+            <span
+              onMouseEnter={() => setActiveMember(id)}
+              className={cn(
+                'absolute',
+                'delay-200 before:absolute before:inset-0 before:top-0 before:left-0 before:size-full before:rounded-full before:bg-black/60 before:content-[""]',
+                {
+                  'before:bg-transparent': id === activeMember,
+                }
+              )}
+              style={{
+                width: `calc(var(--spacing) * ${avatar.size})`,
+                height: `calc(var(--spacing) * ${avatar.size})`,
+                top: `calc(var(--spacing) * ${avatar.position?.top})`,
+                left: `calc(var(--spacing) * ${avatar.position?.left})`,
+              }}
+            >
+              <img
+                src={avatar.src}
+                alt={fullName}
+                className={cn('size-full rounded-full object-cover transition-transform duration-300 hover:scale-105', {
+                  'scale-105': id === activeMember,
+                })}
+              />
+            </span>
+          </BlurFade>
+        ))}
+      </div>
+    </div>
   );
 }
