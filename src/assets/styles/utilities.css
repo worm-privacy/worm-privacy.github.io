@@ -16,24 +16,22 @@
       circle at center,
       #fff,
       var(--lines),
-      #fff,
-      0,
-      #fff0,
+      transparent,
+      transparent,
       calc(var(--lines) * 2),
-      #fff0 0
+      #fff 0
     );
     mask: repeating-radial-gradient(
       circle at center,
       #fff,
       var(--lines),
-      #fff,
-      0,
-      #fff0,
+      transparent,
+      #ffffff,
       calc(var(--lines) * 2),
-      #fff0 0
+      #fff 0
     );
 
-    background: var(--color-green-300);
+    background: var(--color-green-400);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;

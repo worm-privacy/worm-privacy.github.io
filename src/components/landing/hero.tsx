@@ -23,7 +23,7 @@ export function HeroSection() {
         />
         <div className="flex size-full flex-col gap-10 px-8 py-19.5 md:px-25 md:py-20">
           <h1
-            className={cn('orbitron-h1 noise flex items-center-safe justify-center', {
+            className={cn('orbitron-h1 noise flex w-full items-center-safe justify-center', {
               'orbitron-h2': isMobile,
             })}
             style={{
@@ -31,7 +31,8 @@ export function HeroSection() {
                 '0 0 0px rgba(150,250,209,0.5), 0 0 5px rgba(150,250,209,0.5), 0 0 10px rgba(150,250,209,0.5), 0 0 20px rgba(150,250,209,0.5)',
             }}
           >
-            Privacy<sup className="noise pb-2 text-xl md:pt-4 md:text-4xl!">2</sup>
+            <span className="orbitron-h1 noise text-5xl! leading-tight! md:text-[88px]!">Privacy</span>
+            <sup className="noise pb-2 text-xl md:pt-4 md:text-4xl!">2</sup>
           </h1>
 
           <h3
