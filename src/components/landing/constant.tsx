@@ -1,5 +1,5 @@
-import { Button } from '../ui';
 import Link from 'next/link';
+import { buttonVariants } from '../ui';
 import { HowItWorksContent, Roadmap, SocialMedia, TeamMemberInfo, TokenomicsContent } from './type';
 
 export const TEAM: TeamMemberInfo[] = [
@@ -126,10 +126,8 @@ export const HOW_IT_WORKS: HowItWorksContent[] = [
     description: 'Consume your BETH across WORM epochs, and earn WORM!',
     color: 'green',
     action: (
-      <Link href="/app/mine">
-        <Button variant="primary" className="w-full">
-          Get Now!
-        </Button>
+      <Link className={buttonVariants({ variant: 'primary', className: 'w-full' })} href="/app/mine">
+        Get Now!
       </Link>
     ),
   },
