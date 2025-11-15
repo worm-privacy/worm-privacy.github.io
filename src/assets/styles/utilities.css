@@ -10,18 +10,18 @@
     }
   }
 
-  .noise-effect {
-    color: transparent;
-    background:
-      repeating-radial-gradient(rgba(0, 0, 0, 0.25) 0 0.0001%, var(--green-300) 0 0.0002%) 30% 10% / 40vw 40vw,
-      repeating-conic-gradient(rgba(0, 0, 0, 0.25) 0 0.0001%, var(--green-300) 0 0.0002%) 70% 70% / 60vw 60vw;
-    background-clip: text;
-    -webkit-background-clip: text;
-    background-blend-mode: difference;
-  }
-
   .noise {
     animation: liner var(--hour) linear infinite;
+    -webkit-mask: repeating-radial-gradient(
+      circle at center,
+      #fff,
+      var(--lines),
+      #fff,
+      0,
+      #fff0,
+      calc(var(--lines) * 2),
+      #fff0 0
+    );
     mask: repeating-radial-gradient(
       circle at center,
       #fff,
@@ -33,9 +33,10 @@
       #fff0 0
     );
 
-    /* background-image: linear-gradient(to right in oklch, deeppink, blue); */
     background: var(--color-green-300);
+    background-clip: text;
     -webkit-background-clip: text;
+    color: transparent;
     -webkit-text-fill-color: transparent;
   }
 }
