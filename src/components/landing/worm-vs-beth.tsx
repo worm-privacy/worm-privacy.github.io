@@ -47,13 +47,13 @@ export function WormVSBethSection() {
             >
               <li>World's first PPoB cryptocurrency</li>
               <li>Private bridge to privacy protocols</li>
-              <li>Private money</li>
+              <li>Collect BETH minting fees</li>
             </ul>
           </div>
         </div>
         <div className="flex flex-col-reverse items-end gap-4 md:flex-row md:items-center md:gap-7">
           <div className="flex flex-col gap-4 text-white md:gap-6">
-            <h3 className={cn('satoshi-h4')}>Scarce asset minted from BETH</h3>
+            <h3 className={cn('satoshi-h4')}>ETH burn receipt</h3>
             <ul
               className={cn(
                 'satoshi-body1 flex flex-col items-end gap-3 md:gap-4 [&>li]:relative',
