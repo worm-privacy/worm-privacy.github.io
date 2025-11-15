@@ -153,40 +153,47 @@ export const ROADMAP: Roadmap[] = [
   {
     order: 1,
     title: 'Launch zk-SNARK burn circuit & WORM',
-    deadline: 'Q1 2026',
+    deadline: 'Q3 2025',
     description: 'Core privacy infrastructure and burn receipt system',
     status: 'passed',
   },
   {
     order: 2,
     title: 'WORM contract deployment with capped minting',
-    deadline: 'Q1 2026',
+    deadline: 'Q3 2025',
     description: 'Scarce asset minting with competitive distribution.',
     status: 'passed',
   },
   {
     order: 3,
     title: 'Lindwurm Testnet',
-    deadline: 'Q1 2026',
+    deadline: 'Q3 2025',
     description: 'Very first testnet of WORM, with a working instance of BETH/WORM.',
-    status: 'active',
+    status: 'passed',
   },
   {
     order: 4,
     title: 'Shai-Hulud Testnet',
-    deadline: 'Q1 2026',
-    description: 'The second testnet involves and refactored circuit and partial spends.',
-    status: 'not-yet',
+    deadline: 'Q4 2025',
+    description: 'The second testnet involves refactored circuit and partial spends.',
+    status: 'passed',
   },
   {
     order: 5,
-    title: 'Protocol Audit / Trusted Setup',
-    deadline: 'Q1 2026',
-    description: 'Auditing of ZK circuits and running a Groth16 trusted setup ceremony.',
-    status: 'not-yet',
+    title: 'Protocol Audit',
+    deadline: 'Q4 2025',
+    description: 'Auditing of ZK circuits.',
+    status: 'passed',
   },
   {
     order: 6,
+    title: 'Burrow Testnet',
+    deadline: 'Q4 2025',
+    description: 'The third testnet involves BETH/ETH market and staking.',
+    status: 'passed',
+  },
+  {
+    order: 7,
     title: 'Mainnet launch',
     deadline: 'Q1 2026',
     description: 'Launching BETH/WORM tokens on mainnet.',
@@ -195,10 +202,10 @@ export const ROADMAP: Roadmap[] = [
 ];
 
 export const SOCIALS: SocialMedia[] = [
-  { link: 'https://t.me', logo: '/assets/icons/telegram.svg' },
-  { link: 'https://x.com', logo: '/assets/icons/x.svg' },
-  { link: 'https://discord.com', logo: '/assets/icons/discord.svg' },
-  { link: 'https://github.com', logo: '/assets/icons/github.svg' },
+  { link: 'https://t.me/WormPrivacy', logo: '/assets/icons/telegram.svg' },
+  { link: 'https://x.com/EIP7503', logo: '/assets/icons/x.svg' },
+  { link: 'https://discord.gg/EIP7503', logo: '/assets/icons/discord.svg' },
+  { link: 'https://github.com/worm-privacy', logo: '/assets/icons/github.svg' },
 ];
 
 export const TOKENOMICS: TokenomicsContent[] = [
