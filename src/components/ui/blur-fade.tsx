@@ -41,7 +41,7 @@ export function BlurFade({
     hidden: {
       [direction === 'left' || direction === 'right' ? 'x' : 'y']:
         direction === 'right' || direction === 'down' ? -offset : offset,
-      opacity: 0,
+      opacity: '0',
       filter: `blur(${blur})`,
     },
     visible: {

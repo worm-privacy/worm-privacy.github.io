@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import Svg from 'react-inlinesvg';
 
 import Link from 'next/link';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { TEAM } from '../landing/constant';
 import { buttonVariants } from './button';
 import { ScrollArea } from './scroll-area';
@@ -17,6 +17,12 @@ export const AnimatedTestimonials = () => {
     return index === active;
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => setActive((prev) => (prev >= TEAM.length ? 1 : prev + 1)), 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const randomRotateY = () => {
     return Math.floor(Math.random() * 21) - 10;
   };
@@ -26,9 +32,9 @@ export const AnimatedTestimonials = () => {
         <AnimatePresence>
           {TEAM.map((tm, index) => (
             <motion.div
-              key={index}
+              key={tm.id}
               initial={{
-                opacity: 0,
+                opacity: '0',
                 scale: 0.9,
                 z: -100,
                 rotate: randomRotateY(),
@@ -42,7 +48,7 @@ export const AnimatedTestimonials = () => {
                 y: isActive(tm.id) ? [0, -80, 0] : 0,
               }}
               exit={{
-                opacity: 0,
+                opacity: '0',
                 scale: 0.9,
                 z: 100,
                 rotate: randomRotateY(),

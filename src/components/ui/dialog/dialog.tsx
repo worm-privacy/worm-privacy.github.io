@@ -106,7 +106,7 @@ function DialogContent({
               key="dialog-content"
               data-slot="dialog-content"
               initial={{
-                opacity: 0,
+                opacity: '0',
                 filter: 'blur(4px)',
                 transform: `perspective(500px) ${rotateAxis}(${initialRotation}) scale(0.8)`,
               }}
@@ -116,7 +116,7 @@ function DialogContent({
                 transform: `perspective(500px) ${rotateAxis}(0deg) scale(1)`,
               }}
               exit={{
-                opacity: 0,
+                opacity: '0',
                 filter: 'blur(4px)',
                 transform: `perspective(500px) ${rotateAxis}(${initialRotation}) scale(0.8)`,
               }}

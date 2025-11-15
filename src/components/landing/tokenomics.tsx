@@ -88,7 +88,7 @@ function TokenomicsDialog({ label, share, color }: TokenomicsContent['stats'][nu
             tapScale={1}
             className="satoshi-body1 relative ml-auto h-full w-full items-center justify-baseline gap-4 bg-gray-400/12 px-4 py-3 pl-6 text-left whitespace-break-spaces text-white md:pl-5.25"
           >
-            <span className={`orbitron-body2 text-${color}-300`}>{`${share * 100}%`}</span>
+            <span className={`orbitron-body2 text-${color}-300 min-w-[4ch]`}>{`${share * 100}%`}</span>
             {label}
           </Button>
         </DialogTrigger>

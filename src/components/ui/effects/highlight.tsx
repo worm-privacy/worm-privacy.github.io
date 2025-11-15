@@ -226,10 +226,10 @@ function Highlight<T extends React.ElementType = 'div'>({ ref, ...props }: Highl
                     left: boundsState.left,
                     width: boundsState.width,
                     height: boundsState.height,
-                    opacity: 0,
+                    opacity: '0',
                   }}
                   exit={{
-                    opacity: 0,
+                    opacity: '0',
                     transition: {
                       ...transition,
                       delay: (transition?.delay ?? 0) + (exitDelay ?? 0) / 1000,
@@ -480,7 +480,7 @@ function HighlightItem<T extends React.ElementType>({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{
-                  opacity: 0,
+                  opacity: '0',
                   transition: {
                     ...itemTransition,
                     delay: (itemTransition?.delay ?? 0) + (exitDelay ?? contextExitDelay ?? 0) / 1000,
@@ -540,7 +540,7 @@ function HighlightItem<T extends React.ElementType>({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{
-                opacity: 0,
+                opacity: '0',
                 transition: {
                   ...itemTransition,
                   delay: (itemTransition?.delay ?? 0) + (exitDelay ?? contextExitDelay ?? 0) / 1000,
