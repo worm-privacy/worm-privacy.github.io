@@ -19,7 +19,7 @@ export function WormVSBethSection() {
       </h1>
 
       <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 md:gap-0">
-        <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:gap-7">
+        <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-start md:gap-7">
           <div className="relative md:h-113.75 md:w-48 md:rounded-xl md:border-3 md:border-green-500/36 lg:w-58">
             <h1
               className={cn(
@@ -33,7 +33,7 @@ export function WormVSBethSection() {
               worm
             </h1>
           </div>
-          <div className="flex flex-col gap-4 text-white md:gap-6">
+          <div className="flex flex-1 flex-col gap-4 text-white md:gap-6">
             <h3 className="satoshi-h4">Scarce asset minted from BETH</h3>
             <ul
               className={cn(
@@ -52,7 +52,7 @@ export function WormVSBethSection() {
           </div>
         </div>
         <div className="flex flex-col-reverse items-end gap-4 md:flex-row md:items-center md:gap-7">
-          <div className="flex flex-col gap-4 text-white md:gap-6">
+          <div className="flex flex-1 flex-col gap-4 text-white md:items-end md:gap-6">
             <h3 className={cn('satoshi-h4')}>ETH burn receipt</h3>
             <ul
               className={cn(
