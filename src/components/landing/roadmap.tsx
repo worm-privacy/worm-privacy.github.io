@@ -11,19 +11,19 @@ import { Roadmap } from './type';
 import { useIsMobile } from '@/hooks';
 import { cn } from '@/lib';
 
-type AnimatedItemProps = HTMLMotionProps<'li'> & {
+type AnimatedItemProps = HTMLMotionProps<'div'> & {
   delay?: number;
   index: number;
-  onMouseEnter?: MouseEventHandler<HTMLLIElement>;
-  onClick?: MouseEventHandler<HTMLLIElement>;
+  onMouseEnter?: MouseEventHandler<HTMLDivElement>;
+  onClick?: MouseEventHandler<HTMLDivElement>;
 };
 
 function AnimatedItem({ children, delay = 0, index, onMouseEnter, onClick, ...props }: AnimatedItemProps) {
-  const ref = useRef<HTMLLIElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { amount: 0.5, once: false });
 
   return (
-    <motion.li
+    <motion.div
       ref={ref}
       data-index={index}
       onMouseEnter={onMouseEnter}
@@ -34,7 +34,7 @@ function AnimatedItem({ children, delay = 0, index, onMouseEnter, onClick, ...pr
       {...props}
     >
       {children}
-    </motion.li>
+    </motion.div>
   );
 }
 
