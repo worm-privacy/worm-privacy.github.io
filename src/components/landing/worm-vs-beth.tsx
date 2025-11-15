@@ -53,7 +53,7 @@ export function WormVSBethSection() {
         </div>
         <div className="flex flex-col-reverse items-end gap-4 md:flex-row md:items-center md:gap-7">
           <div className="flex flex-1 flex-col gap-4 text-white md:items-end md:gap-6">
-            <h3 className={cn('satoshi-h4')}>ETH burn receipt</h3>
+            <h3 className={cn('satoshi-h4 text-right')}>ETH burn receipt</h3>
             <ul
               className={cn(
                 'satoshi-body1 flex flex-col items-end gap-3 md:gap-4 [&>li]:relative',
