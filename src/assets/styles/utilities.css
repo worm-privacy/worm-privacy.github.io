@@ -39,16 +39,16 @@
     color: transparent;
     -webkit-text-fill-color: transparent;
   }
-}
 
-@property --lines {
-  syntax: '<length>';
-  inherits: false;
-  initial-value: 0.0001px;
-}
+  @property --lines {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0.0001px;
+  }
 
-@keyframes liner {
-  50% {
-    --lines: 0.00012px;
+  @keyframes liner {
+    50% {
+      --lines: 0.00012px;
+    }
   }
 }
