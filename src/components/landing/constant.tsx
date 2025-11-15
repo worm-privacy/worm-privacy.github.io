@@ -55,23 +55,6 @@ export const TEAM: TeamMemberInfo[] = [
   },
   {
     id: 4,
-    fullName: 'Sarah Kaviani',
-    positions: ['Software Engineer'],
-    avatar: {
-      src: '/assets/img/sarah.png',
-      size: 32,
-      position: {
-        top: 75,
-        left: 58.25,
-      },
-    },
-    socials: [
-      { link: 'https://x.com', logo: '/assets/icons/x.svg', label: '' },
-      { link: 'https://github.com', logo: '/assets/icons/github.svg', label: 'GitHub' },
-    ],
-  },
-  {
-    id: 5,
     fullName: 'Sage Tega',
     positions: ['Growth Lead'],
     avatar: {
@@ -88,7 +71,7 @@ export const TEAM: TeamMemberInfo[] = [
     ],
   },
   {
-    id: 6,
+    id: 5,
     fullName: 'Ali Zeynali',
     positions: ['Product Designer'],
     avatar: {
@@ -105,7 +88,7 @@ export const TEAM: TeamMemberInfo[] = [
     ],
   },
   {
-    id: 7,
+    id: 6,
     fullName: 'Arman Omidi',
     positions: ['Frontend Developer'],
     avatar: {
@@ -126,25 +109,27 @@ export const TEAM: TeamMemberInfo[] = [
 export const HOW_IT_WORKS: HowItWorksContent[] = [
   {
     order: 1,
-    title: 'ETH burns',
+    title: 'Burn ETH',
     description: 'ETH is sent to normal looking addresses, no one can claim you were using WORM!',
     color: 'blue',
   },
   {
     order: 2,
-    title: 'Get BETH',
+    title: 'Mint BETH',
     description: 'You prove your burn through zkSNARKs, the protocol gives you BETH in exchange!',
     color: 'magenta',
   },
   {
     order: 3,
-    title: 'Mint WORM',
+    title: 'Mine WORM',
     description: 'Consume your BETH across WORM epochs, and earn WORM!',
     color: 'green',
     action: (
-      <Button variant="primary" className="w-full">
-        Get Now!
-      </Button>
+      <Link href="/app/mine">
+        <Button variant="primary" className="w-full">
+          Get Now!
+        </Button>
+      </Link>
     ),
   },
 ];
