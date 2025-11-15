@@ -1,4 +1,5 @@
 import { Button } from '../ui';
+import Link from 'next/link';
 import { HowItWorksContent, Roadmap, SocialMedia, TeamMemberInfo, TokenomicsContent } from './type';
 
 export const TEAM: TeamMemberInfo[] = [
