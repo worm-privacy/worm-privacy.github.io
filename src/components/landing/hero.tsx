@@ -1,6 +1,7 @@
 'use client';
 
 import Svg from 'react-inlinesvg';
+import Link from 'next/link';
 
 import { useIsMobile } from '@/hooks';
 import { cn } from '@/lib';
@@ -60,17 +61,18 @@ export function HeroSection() {
         </span>
 
         <div className="flex w-full items-center justify-center  gap-4 md:justify-start">
-          <Button
-            className="w-1/2 md:w-max"
-            onClick={() => {
-              console.log('CCCCCCCCCCCCCCCCCC');
-            }}
-          >
-            Get WORM
-          </Button>
-          <Button variant="primary-outline" className="w-1/2 md:w-max [&_path]:fill-green-400!">
-            Follow on <Svg src="/assets/icons/x.svg" />
-          </Button>
+          <Link href="/app/mine">
+            <Button
+              className="w-1/2 md:w-max"
+            >
+              Get WORM
+            </Button>
+          </Link>
+          <Link href="https://x.com/EIP7503">
+            <Button variant="primary-outline" className="w-1/2 md:w-max [&_path]:fill-green-400!">
+              Follow on <Svg src="/assets/icons/x.svg" />
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

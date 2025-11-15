@@ -8,9 +8,7 @@ import {
   NetworkStats,
   RoadmapSection,
   SloganSection,
-  TeamSection,
-  TokenomicsSection,
-  WormVSBethSection,
+  TeamSection, WormVSBethSection
 } from '@/components/landing';
 import { Footer } from '@/components/landing/footer';
 
@@ -24,7 +22,7 @@ export default function Home() {
           <HowItWorks />
           <WormVSBethSection />
           <NetworkStats />
-          <TokenomicsSection />
+          {/* <TokenomicsSection /> */}
           <RoadmapSection />
           <TeamSection />
         </main>
