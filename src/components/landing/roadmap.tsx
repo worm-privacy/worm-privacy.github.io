@@ -62,13 +62,13 @@ function RoadmapSection() {
 
 function RoadmapStep({ title, status, deadline, description, order }: Roadmap) {
   return (
-    <AnimatedItem
-      index={order}
-      className={cn('grid w-full gap-3 rounded-lg border border-green-400/12 bg-surface1 p-8 md:gap-4', {
-        'grid-rows-1': status !== 'active',
-      })}
-    >
-      <AccordionItem value={title}>
+    <AnimatedItem index={order}>
+      <AccordionItem
+        value={title}
+        className={cn('grid w-full gap-3 rounded-lg border border-green-400/12 bg-surface1 p-8 md:gap-4', {
+          'grid-rows-1': status !== 'active',
+        })}
+      >
         <AccordionTrigger status={status}>
           {status === 'active' ? (
             <Svg src="/assets/icons/check.svg" className="self-center" />

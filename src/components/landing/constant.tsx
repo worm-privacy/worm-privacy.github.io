@@ -127,7 +127,7 @@ export const HOW_IT_WORKS: HowItWorksContent[] = [
     color: 'green',
     action: (
       <Link className={buttonVariants({ variant: 'primary', className: 'w-full' })} href="/app/mine">
-        Get Now!
+        Get WORM
       </Link>
     ),
   },
