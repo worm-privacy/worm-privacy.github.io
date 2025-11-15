@@ -31,7 +31,13 @@ export function HeroSection() {
                 '0 0 0px rgba(150,250,209,0.5), 0 0 5px rgba(150,250,209,0.5), 0 0 10px rgba(150,250,209,0.5), 0 0 20px rgba(150,250,209,0.5)',
             }}
           >
-            <span className="orbitron-h1 noise text-5xl! leading-tight! md:text-[88px]!">Privacy</span>
+            <span
+              className={cn('orbitron-h1 noise leading-tight! md:text-[5.5rem]!', {
+                'orbitron-h2 noise text-5xl! leading-snug!': isMobile,
+              })}
+            >
+              Privacy
+            </span>
             <sup className="noise pb-2 text-xl md:pt-4 md:text-4xl!">2</sup>
           </h1>
 
