@@ -8,8 +8,8 @@ import { CSSProperties } from 'react';
 import '../assets/styles/globals.css';
 
 export const metadata: Metadata = {
-  title: 'Worm',
-  description: 'Worm Frontend',
+  title: 'WORM - Plausibly deniable privacy on Ethereum',
+  description: 'Plausibly deniable privacy on Ethereum',
 };
 
 export const viewport: Viewport = {

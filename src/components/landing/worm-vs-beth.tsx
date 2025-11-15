@@ -15,7 +15,7 @@ export function WormVSBethSection() {
           'orbitron-h3': isMobile,
         })}
       >
-        Worm VS Beth
+        WORM VS BETH
       </h1>
 
       <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 md:gap-0">
