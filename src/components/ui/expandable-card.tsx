@@ -115,7 +115,7 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
                         e.stopPropagation();
                       }}
                       className={cn(
-                        'satoshi-h4 absolute bottom-6 left-6 z-100 flex flex-col items-start gap-6 text-gray-400 md:right-4 md:bottom-8 md:left-32',
+                        'satoshi-h4 absolute right-6 bottom-6 left-6 z-100 flex flex-col items-start gap-6 text-gray-400 md:right-4 md:bottom-8 md:left-32',
                         {
                           'satoshi-h5': isMobile,
                         }

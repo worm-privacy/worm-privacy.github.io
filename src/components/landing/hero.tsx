@@ -67,15 +67,15 @@ export function HeroSection() {
           </span>
         </span>
 
-        <div className="flex w-full items-center justify-center  gap-4 md:justify-start">
-          <Link className={buttonVariants({ className: 'w-1/2 md:w-max' })} href="/app/mine">
+        <div className="grid w-full grid-cols-2 gap-4 md:flex md:items-center md:justify-start">
+          <Link className={buttonVariants({ className: 'w-full md:w-max' })} href="/app/mine">
             Get WORM
           </Link>
 
           <Link
             className={buttonVariants({
               variant: 'primary-outline',
-              className: 'w-1/2 md:w-max [&_path]:fill-green-400!',
+              className: 'w-full md:w-max [&_path]:fill-green-400!',
             })}
             href="https://x.com/EIP7503"
           >
