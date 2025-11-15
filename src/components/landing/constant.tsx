@@ -175,10 +175,17 @@ export const ROADMAP: Roadmap[] = [
     title: 'Burrow Testnet',
     deadline: 'Q4 2025',
     description: 'The third testnet involves BETH/ETH market and staking.',
-    status: 'passed',
+    status: 'active',
   },
   {
     order: 7,
+    title: 'Trusted Setup',
+    deadline: 'Q1 2026',
+    description: 'Trusted Setup of our Groth16 circuits.',
+    status: 'not-yet',
+  },
+  {
+    order: 8,
     title: 'Mainnet launch',
     deadline: 'Q1 2026',
     description: 'Launching BETH/WORM tokens on mainnet.',
