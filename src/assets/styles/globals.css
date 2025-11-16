@@ -2,7 +2,6 @@
 @plugin '@tailwindcss/typography';
 
 @import './variables.css';
-
 @import './tailwind.css';
 @import './utilities.css';
 @import './typography.css';

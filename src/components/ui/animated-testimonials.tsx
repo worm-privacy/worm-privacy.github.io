@@ -1,13 +1,11 @@
 'use client';
 
 import { AnimatePresence, motion } from 'motion/react';
-
-import Link from 'next/link';
 import { Fragment, useEffect, useState } from 'react';
+
+import { buttonVariants, ScrollArea, Separator } from '@/ui';
+import Link from 'next/link';
 import { TEAM } from '../landing/constant';
-import { buttonVariants } from './button';
-import { ScrollArea } from './scroll-area';
-import { Separator } from './separator';
 
 export const AnimatedTestimonials = () => {
   const [active, setActive] = useState(TEAM[0].id);
