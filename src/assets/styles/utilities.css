@@ -9,44 +9,44 @@
       --s: 1rem;
     }
   }
+}
 
-  .noise {
-    animation: liner var(--hour) linear infinite;
-    -webkit-mask: repeating-radial-gradient(
-      circle at center,
-      #fff,
-      var(--lines),
-      transparent,
-      transparent,
-      calc(var(--lines) * 2),
-      #fff 0
-    );
-    mask: repeating-radial-gradient(
-      circle at center,
-      #fff,
-      var(--lines),
-      transparent,
-      #ffffff,
-      calc(var(--lines) * 2),
-      #fff 0
-    );
+.noise {
+  animation: liner var(--hour) linear infinite;
+  -webkit-mask: repeating-radial-gradient(
+    circle at center,
+    #fff,
+    var(--lines),
+    transparent,
+    transparent,
+    calc(var(--lines) * 2),
+    #fff 0
+  );
+  mask: repeating-radial-gradient(
+    circle at center,
+    #fff,
+    var(--lines),
+    transparent,
+    #ffffff,
+    calc(var(--lines) * 2),
+    #fff 0
+  );
 
-    background: var(--color-green-400);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-  }
+  background: var(--color-green-400);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
 
-  @property --lines {
-    syntax: '<length>';
-    inherits: false;
-    initial-value: 0.0001px;
-  }
+@property --lines {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0.0001px;
+}
 
-  @keyframes liner {
-    50% {
-      --lines: 0.00012px;
-    }
+@keyframes liner {
+  50% {
+    --lines: 0.00012px;
   }
 }
