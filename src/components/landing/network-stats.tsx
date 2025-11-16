@@ -78,7 +78,7 @@ export function NetworkStats() {
         const totalContribs = result.totalContribs;
         const epochBeth = epochIndex >= 0 && epochIndex < totalContribs.length ? totalContribs[epochIndex] : 0n;
 
-        const wormPrice = epochBeth > 0n ? (currentRewardResult * BigInt(1e18)) / epochBeth : 0n;
+        const wormPrice = epochBeth > 0n ? (epochBeth * BigInt(1e18)) / currentRewardResult : 0n;
 
         const epochTimeInSeconds = Number(result.epochRemainingTime);
         setStats({
@@ -179,7 +179,7 @@ export function NetworkStats() {
           </div>
 
           <p className="satoshi-h4 flex items-center gap-1 text-white">
-            1 <span className="text-blue-400">ETH</span> ~ {loading ? '...' : formatNumber(stats.wormPrice)}{' '}
+            {loading ? '...' : formatNumber(stats.wormPrice)}{' '}<span className="text-blue-400">ETH</span> ~ 1{' '}
             <span className="text-green-400">WORM</span>
           </p>
         </div>
