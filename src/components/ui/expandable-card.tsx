@@ -97,7 +97,8 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
                         {
                           'orbitron-h3': isMobile,
                           'md:left-2': content.order === 2,
-                          'md:-left-1': content.order === 3,
+                          'md:left-3': content.order === 1,
+                          'md:-left-4': content.order === 3,
                         }
                       )}
                       style={{
@@ -148,7 +149,8 @@ export function ExpandableCard({ className, contents, ...props }: ExpandableCard
                       'text-green-400': content.color === 'green',
                       'text-blue-400': content.color === 'blue',
                       'md:left-2': content.order === 2,
-                      'md:-left-1': content.order === 3,
+                      'md:left-3': content.order === 1,
+                      'md:-left-4': content.order === 3,
                     }
                   )}
                   style={{

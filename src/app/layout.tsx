@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from 'next';
+import { CSSProperties } from 'react';
 
 import { orbitron, satoshi } from '@/assets/fonts';
+import { TailwindIndicator } from '@/components/ui';
 import { cn } from '@/lib';
 
-import { TailwindIndicator } from '@/components/ui';
-import { CSSProperties } from 'react';
 import '../assets/styles/globals.css';
 
 export const metadata: Metadata = {
