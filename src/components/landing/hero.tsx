@@ -5,12 +5,20 @@ import Link from 'next/link';
 import { useIsMobile } from '@/hooks';
 import { cn } from '@/lib';
 import { buttonVariants } from '@/ui';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Icons } from '../ui/icons';
 
 export function HeroSection() {
   const isMobile = useIsMobile();
   const noise = useRef<SVGFETurbulenceElement>(null);
+  const [isSafari, setIsSafari] = useState(false);
+
+  useEffect(() => {
+    const ua = navigator.userAgent.toLowerCase();
+    if (ua.indexOf('safari') !== -1 && ua.indexOf('chrome') === -1) {
+      setIsSafari(true);
+    }
+  }, []);
 
   useEffect(() => {
     function animateNoise(time?: number) {
@@ -32,89 +40,95 @@ export function HeroSection() {
       <div className="corner-only relative w-full items-center justify-center overflow-clip rounded-base border-2 border-green-500/70 bg-surface text-gray-400 md:w-160 md:justify-self-center lg:justify-self-auto">
         <Icons.gridPattern className="absolute -top-10 -right-10 -bottom-10 -left-10 -z-10 object-cover md:top-0 md:left-0 md:size-full" />
 
-        <div className="flex size-full flex-col gap-10 px-8 py-19.5 md:px-25 md:py-20">
-          {/* <svg className="absolute top-0 left-0  h-17 w-full md:h-30">
-            <filter id="f">
-              <feGaussianBlur stdDeviation="10 10" result="glow" fillOpacity="0.5" />
-              <feMerge>
-                <feMergeNode in="glow" />
-                <feMergeNode in="glow" />
-                <feMergeNode in="glow" />
-              </feMerge>
-              <feTurbulence
-                ref={noise}
-                type="fractalNoise"
-                baseFrequency="0.85"
-                numOctaves="100000"
-                result="turbulence"
-              />
-              <feDisplacementMap
-                in2="turbulence"
-                in="SourceGraphic"
-                scale="200"
-                xChannelSelector="R"
-                yChannelSelector="G"
-              />
-            </filter>
+        <div className="flex size-full flex-col items-center gap-10 px-8 py-19.5 md:px-25 md:py-20">
+          {isSafari ? (
+            <h1 className="mx-auto flex w-full items-center-safe justify-center text-center font-orbitron text-[4rem] font-bold text-green-400 md:text-[5.625rem]">
+              Privacy<sup className="fill-green-400 font-orbitron text-xl md:text-4xl">2</sup>
+            </h1>
+          ) : (
+            <svg className="h-17 w-full md:h-30">
+              <filter id="f">
+                <feGaussianBlur stdDeviation="10 10" result="glow" fillOpacity="0.5" />
+                <feMerge>
+                  <feMergeNode in="glow" />
+                  <feMergeNode in="glow" />
+                  <feMergeNode in="glow" />
+                </feMerge>
+                <feTurbulence
+                  ref={noise}
+                  type="fractalNoise"
+                  baseFrequency="0.85"
+                  numOctaves="100000"
+                  result="turbulence"
+                />
+                <feDisplacementMap
+                  in2="turbulence"
+                  in="SourceGraphic"
+                  scale="200"
+                  xChannelSelector="R"
+                  yChannelSelector="G"
+                />
+              </filter>
 
-            <clipPath id="textClip">
-              <text
-                y="75%"
-                x="50%"
-                textAnchor="middle"
-                className="fill-[#96fad1] font-orbitron text-[4rem] font-bold md:text-[5.625rem]"
-              >
-                Privacy
-                <tspan
-                  dy={isMobile ? '-2rem' : '-3rem'}
+              <clipPath id="textClip">
+                <text
+                  y="75%"
+                  x="50%"
                   textAnchor="middle"
-                  className="fill-green-500 font-orbitron text-xl md:pt-4 md:text-4xl"
+                  className="fill-[#96fad1] font-orbitron text-[4rem] font-bold md:text-[5.625rem]"
+                >
+                  Privacy
+                  <tspan
+                    dy={isMobile ? '-2rem' : '-3rem'}
+                    textAnchor="middle"
+                    className="fill-green-500 font-orbitron text-xl md:pt-4 md:text-4xl"
+                    fillOpacity={0.4}
+                  >
+                    2
+                  </tspan>
+                </text>
+              </clipPath>
+
+              <g id="background">
+                <text
+                  y="75%"
+                  x="50%"
+                  textAnchor="middle"
+                  className="fill-[#96fad1] font-orbitron text-[4rem] font-bold md:text-[5.625rem]"
                   fillOpacity={0.4}
                 >
-                  2
-                </tspan>
-              </text>
-            </clipPath>
+                  Privacy
+                  <tspan
+                    dy={isMobile ? '-2rem' : '-3rem'}
+                    textAnchor="middle"
+                    className="fill-green-500 font-orbitron text-xl md:pt-4 md:text-4xl"
+                    fillOpacity={0.4}
+                  >
+                    2
+                  </tspan>
+                </text>
+              </g>
 
-            <g id="background">
-              <text
-                y="75%"
-                x="50%"
-                textAnchor="middle"
-                className="fill-[#96fad1] font-orbitron text-[4rem] font-bold md:text-[5.625rem]"
-                fillOpacity={0.4}
-              >
-                Privacy
-                <tspan
-                  dy={isMobile ? '-2rem' : '-3rem'}
+              <g id="background" clipPath="url(#textClip)" filter="url(#f)">
+                <text
+                  y="75%"
+                  x="50%"
                   textAnchor="middle"
-                  className="fill-green-500 font-orbitron text-xl md:pt-4 md:text-4xl"
-                  fillOpacity={0.4}
+                  className="fill-[#96fad1] font-orbitron text-[4rem] font-bold md:text-[5.625rem]"
                 >
-                  2
-                </tspan>
-              </text>
-            </g>
-
-            <g id="background" clipPath="url(#textClip)" filter="url(#f)">
-              <text
-                y="75%"
-                x="50%"
-                textAnchor="middle"
-                className="fill-[#96fad1] font-orbitron text-[4rem] font-bold md:text-[5.625rem]"
-              >
-                Privacy
-                <tspan
-                  dy={isMobile ? '-2rem' : '-3rem'}
-                  textAnchor="middle"
-                  className="fill-green-500 font-orbitron text-xl md:pt-4 md:text-4xl"
-                  fillOpacity={0.4}
-                >
-                  2
-                </tspan>
-              </text>
-            </g>
-          </svg> */}
+                  Privacy
+                  <tspan
+                    dy={isMobile ? '-2rem' : '-3rem'}
+                    textAnchor="middle"
+                    className="fill-green-500 font-orbitron text-xl md:pt-4 md:text-4xl"
+                    fillOpacity={0.4}
+                  >
+                    2
+                  </tspan>
+                </text>
+              </g>
+            </svg>
+          )}
 
           <h3
             className={cn('satoshi-h1 text-center text-white', {
