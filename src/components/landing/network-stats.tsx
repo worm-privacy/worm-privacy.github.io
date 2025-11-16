@@ -3,11 +3,11 @@
 import { Progress } from '@/components/ui/progress';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { cn } from '@/lib/utils';
-import { BrowserProvider, Contract, JsonRpcProvider } from 'ethers';
+import { Contract, JsonRpcProvider } from 'ethers';
 import { useEffect, useState } from 'react';
 
 const CONTRACT_ADDRESS = '0xcBdF9890B5935F01B2f21583d1885CdC8389eb5F';
-const RPC_URL = process.env.NEXT_PUBLIC_RPC_URL || '';
+const RPC_URL = "https://sepolia.drpc.org";
 
 const CONTRACT_ABI = [
   {
@@ -66,8 +66,7 @@ export function NetworkStats() {
           setLoading(false);
           return;
         }
-        // @ts-expect-error window.ethereum
-        const provider = window.ethereum ? new BrowserProvider(window.ethereum) : new JsonRpcProvider(RPC_URL);
+        const provider = new JsonRpcProvider(RPC_URL);
         const contract = new Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
 
         const result = await contract.info('0x0000000000000000000000000000000000000000', 0n, 0n);
