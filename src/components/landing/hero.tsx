@@ -63,13 +63,13 @@ export function HeroSection() {
                 y="75%"
                 x="50%"
                 textAnchor="middle"
-                className="fill-[#96fad1] font-orbitron text-[5.625rem] font-bold"
+                className="fill-[#96fad1] font-orbitron text-[3rem] font-bold md:text-[5.625rem]"
               >
                 Privacy
                 <tspan
-                  dy="-3rem"
+                  dy={isMobile ? '-1.5rem' : '-3rem'}
                   textAnchor="middle"
-                  className="fill-green-500 pb-2 font-orbitron text-xl text-[3.375rem] md:pt-4 md:text-4xl"
+                  className="fill-green-500 font-orbitron text-xl md:pt-4 md:text-4xl"
                   fillOpacity={0.4}
                 >
                   2
@@ -82,14 +82,14 @@ export function HeroSection() {
                 y="75%"
                 x="50%"
                 textAnchor="middle"
-                className="fill-[#96fad1] font-orbitron text-[5.625rem] font-bold"
+                className="fill-[#96fad1] font-orbitron text-[3rem] font-bold md:text-[5.625rem]"
                 fillOpacity={0.4}
               >
                 Privacy
                 <tspan
-                  dy="-3rem"
+                  dy={isMobile ? '-1.5rem' : '-3rem'}
                   textAnchor="middle"
-                  className="fill-green-500 pb-2 font-orbitron text-xl text-[3.375rem] md:pt-4 md:text-4xl"
+                  className="fill-green-500 font-orbitron text-xl md:pt-4 md:text-4xl"
                   fillOpacity={0.4}
                 >
                   2
@@ -102,13 +102,13 @@ export function HeroSection() {
                 y="75%"
                 x="50%"
                 textAnchor="middle"
-                className="fill-[#96fad1] font-orbitron text-[5.625rem] font-bold"
+                className="fill-[#96fad1] font-orbitron text-[3rem] font-bold md:text-[5.625rem]"
               >
                 Privacy
                 <tspan
-                  dy="-3rem"
+                  dy={isMobile ? '-1.5rem' : '-3rem'}
                   textAnchor="middle"
-                  className="fill-green-500 pb-2 font-orbitron text-xl text-[3.375rem] md:pt-4 md:text-4xl"
+                  className="fill-green-500 font-orbitron text-xl md:pt-4 md:text-4xl"
                   fillOpacity={0.4}
                 >
                   2
