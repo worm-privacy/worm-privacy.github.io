@@ -33,7 +33,7 @@ export function HeroSection() {
         <Icons.gridPattern className="absolute -top-10 -right-10 -bottom-10 -left-10 -z-10 object-cover md:top-0 md:left-0 md:size-full" />
 
         <div className="flex size-full flex-col gap-10 px-8 py-19.5 md:px-25 md:py-20">
-          <svg className="h-17 md:h-30">
+          {/* <svg className="absolute top-0 left-0  h-17 w-full md:h-30">
             <filter id="f">
               <feGaussianBlur stdDeviation="10 10" result="glow" fillOpacity="0.5" />
               <feMerge>
@@ -41,7 +41,6 @@ export function HeroSection() {
                 <feMergeNode in="glow" />
                 <feMergeNode in="glow" />
               </feMerge>
-              {/* <feTurbulence ref={noise} type="fractalNoise" baseFrequency="0.75" seed="100" /> */}
               <feTurbulence
                 ref={noise}
                 type="fractalNoise"
@@ -115,7 +114,7 @@ export function HeroSection() {
                 </tspan>
               </text>
             </g>
-          </svg>
+          </svg> */}
 
           <h3
             className={cn('satoshi-h1 text-center text-white', {
