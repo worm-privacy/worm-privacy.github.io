@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { buttonVariants } from '../ui';
+import { Icons } from '../ui/icons';
 import { HowItWorksContent, Roadmap, SocialMedia, TeamMemberInfo, TokenomicsContent } from './type';
 
 export const TEAM: TeamMemberInfo[] = [
@@ -16,8 +17,8 @@ export const TEAM: TeamMemberInfo[] = [
       },
     },
     socials: [
-      { link: 'https://x.com', logo: '/assets/icons/x.svg', label: '' },
-      { link: 'https://github.com', logo: '/assets/icons/github.svg', label: 'GitHub' },
+      { link: 'https://x.com', logo: Icons.x, label: '' },
+      { link: 'https://github.com', logo: Icons.github, label: 'GitHub' },
     ],
   },
   {
@@ -33,8 +34,8 @@ export const TEAM: TeamMemberInfo[] = [
       },
     },
     socials: [
-      { link: 'https://x.com', logo: '/assets/icons/x.svg', label: '' },
-      { link: 'https://github.com', logo: '/assets/icons/github.svg', label: 'GitHub' },
+      { link: 'https://x.com', logo: Icons.x, label: '' },
+      { link: 'https://github.com', logo: Icons.github, label: 'GitHub' },
     ],
   },
   {
@@ -50,8 +51,8 @@ export const TEAM: TeamMemberInfo[] = [
       },
     },
     socials: [
-      { link: 'https://x.com', logo: '/assets/icons/x.svg', label: '' },
-      { link: 'https://github.com', logo: '/assets/icons/github.svg', label: 'GitHub' },
+      { link: 'https://x.com', logo: Icons.x, label: '' },
+      { link: 'https://github.com', logo: Icons.github, label: 'GitHub' },
     ],
   },
   {
@@ -67,8 +68,8 @@ export const TEAM: TeamMemberInfo[] = [
       },
     },
     socials: [
-      { link: 'https://x.com', logo: '/assets/icons/x.svg', label: '' },
-      { link: 'https://github.com', logo: '/assets/icons/github.svg', label: 'GitHub' },
+      { link: 'https://x.com', logo: Icons.x, label: '' },
+      { link: 'https://github.com', logo: Icons.github, label: 'GitHub' },
     ],
   },
   {
@@ -84,8 +85,8 @@ export const TEAM: TeamMemberInfo[] = [
       },
     },
     socials: [
-      { link: 'https://x.com', logo: '/assets/icons/x.svg', label: '' },
-      { link: 'https://github.com', logo: '/assets/icons/github.svg', label: 'GitHub' },
+      { link: 'https://x.com', logo: Icons.x, label: '' },
+      { link: 'https://github.com', logo: Icons.github, label: 'GitHub' },
     ],
   },
   {
@@ -101,8 +102,8 @@ export const TEAM: TeamMemberInfo[] = [
       },
     },
     socials: [
-      { link: 'https://x.com', logo: '/assets/icons/x.svg', label: '' },
-      { link: 'https://github.com', logo: '/assets/icons/github.svg', label: 'GitHub' },
+      { link: 'https://x.com', logo: Icons.x, label: '' },
+      { link: 'https://github.com', logo: Icons.github, label: 'GitHub' },
     ],
   },
 ];
@@ -193,10 +194,10 @@ export const ROADMAP: Roadmap[] = [
 ];
 
 export const SOCIALS: SocialMedia[] = [
-  { link: 'https://t.me/WormPrivacy', logo: '/assets/icons/telegram.svg' },
-  { link: 'https://x.com/EIP7503', logo: '/assets/icons/x.svg' },
-  { link: 'https://discord.gg/EIP7503', logo: '/assets/icons/discord.svg' },
-  { link: 'https://github.com/worm-privacy', logo: '/assets/icons/github.svg' },
+  { link: 'https://t.me/WormPrivacy', logo: Icons.telegram },
+  { link: 'https://x.com/EIP7503', logo: Icons.x },
+  { link: 'https://discord.gg/EIP7503', logo: Icons.discord },
+  { link: 'https://github.com/worm-privacy', logo: Icons.github },
 ];
 
 export const TOKENOMICS: TokenomicsContent[] = [

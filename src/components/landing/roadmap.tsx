@@ -2,7 +2,6 @@
 
 import { HTMLMotionProps, motion, useInView } from 'motion/react';
 import { MouseEventHandler, useRef } from 'react';
-import Svg from 'react-inlinesvg';
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/ui';
 import { ROADMAP } from './constant';
@@ -10,6 +9,7 @@ import { Roadmap } from './type';
 
 import { useIsMobile } from '@/hooks';
 import { cn } from '@/lib';
+import { Icons } from '../ui/icons';
 
 type AnimatedItemProps = HTMLMotionProps<'div'> & {
   delay?: number;
@@ -43,13 +43,13 @@ function RoadmapSection() {
 
   return (
     <section className="container mx-auto flex max-w-185 flex-col gap-6 px-4 py-12 md:px-0 md:pb-32">
-      <h1
+      <h2
         className={cn('orbitron-h2 text-green-400', {
           'orbitron-h3': isMobile,
         })}
       >
         Roadmap
-      </h1>
+      </h2>
 
       <Accordion type="single" collapsible defaultValue={ROADMAP[2].title}>
         {ROADMAP.map((step) => (
@@ -71,11 +71,11 @@ function RoadmapStep({ title, status, deadline, description, order }: Roadmap) {
       >
         <AccordionTrigger status={status}>
           {status === 'active' ? (
-            <Svg src="/assets/icons/check.svg" className="self-center" />
+            <Icons.check className="self-center" />
           ) : status === 'passed' ? (
-            <Svg src="/assets/icons/checks.svg" className="self-center" />
+            <Icons.checks className="self-center" />
           ) : (
-            <Svg src="/assets/icons/clock-countdown.svg" className="self-center" />
+            <Icons.clockCountDown className="self-center" />
           )}
           <span className="flex w-full flex-col-reverse items-start justify-start gap-1 md:flex-row md:items-center md:justify-between md:gap-6">
             <h4

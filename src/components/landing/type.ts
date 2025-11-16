@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ComponentProps, ReactNode } from 'react';
 
 export type Roadmap = {
   order: number;
@@ -20,7 +20,7 @@ export type TeamMemberInfo = {
       top: number;
     };
   };
-  socials: { link: string; logo: string; label: string }[];
+  socials: { link: string; logo: (props: Partial<ComponentProps<'svg'>>) => ReactNode; label: string }[];
 };
 
 export type HowItWorksContent = {
@@ -41,5 +41,5 @@ export type TokenomicsContent = {
 
 export type SocialMedia = {
   link: string;
-  logo: string;
+  logo: (props: Partial<ComponentProps<'svg'>>) => ReactNode;
 };

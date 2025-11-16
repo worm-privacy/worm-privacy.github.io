@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import Svg from 'react-inlinesvg';
 
 import { useIsMobile } from '@/hooks';
 import { cn } from '@/lib';
 import { buttonVariants } from '@/ui';
+import { Icons } from '../ui/icons';
 import { SOCIALS } from './constant';
 
 export function Footer() {
@@ -15,13 +15,13 @@ export function Footer() {
         <div className="col-span-2 flex w-full items-center justify-between">
           <span className="flex flex-col items-start gap-6 md:gap-2">
             <span className="flex items-center justify-start gap-2">
-              <Svg src="/assets/icons/logo.svg" className="block md:hidden" />
-              <Svg src="/assets/icons/typed-logo.svg" />
+              <Icons.logo className="block md:hidden" />
+              <Icons.typedLogo className="block md:hidden" />
             </span>
             <p className="satoshi-body2 text-gray-400">Privacy first project built on Ethereum</p>
           </span>
 
-          <Svg src="/assets/icons/logo.svg" className="hidden md:block" />
+          <Icons.logo className="hidden md:block" />
         </div>
 
         <nav className="flex w-full flex-col items-center justify-between gap-6 md:flex-row md:gap-0">
@@ -47,7 +47,7 @@ export function Footer() {
             {SOCIALS.map((s) => (
               <li key={s.link}>
                 <Link href={s.link} className={buttonVariants({ variant: 'icon', size: 'icon' })}>
-                  <Svg src={s.logo} className="size-4.5!" />
+                  <s.logo className="size-4.5!" />
                 </Link>
               </li>
             ))}

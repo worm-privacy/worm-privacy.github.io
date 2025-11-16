@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { Fragment, useState } from 'react';
-import Svg from 'react-inlinesvg';
 
 import { useIsMobile } from '@/hooks';
 import { cn } from '@/lib';
@@ -24,13 +23,13 @@ export function TeamSection() {
 
   return (
     <section className="container mx-auto flex max-w-185 flex-col gap-6 py-12 md:pb-32">
-      <h1
+      <h2
         className={cn('orbitron-h2 px-4 text-green-400 md:px-0', {
           'orbitron-h3': isMobile,
         })}
       >
         Team
-      </h1>
+      </h2>
       {isMobile ? (
         <Carousel
           opts={{
@@ -94,7 +93,8 @@ function MemberCard({ fullName, positions, avatar, socials }: TeamMemberInfo) {
               href={s.link}
               className={buttonVariants({ variant: 'primary-outline', className: s.label ? 'flex-1' : '' })}
             >
-              <Svg src={s.logo} className="[&_path]:fill-green-400!" />
+              <s.logo className="[&_path]:fill-green-400!" />
+
               {s.label}
             </Link>
           ))}

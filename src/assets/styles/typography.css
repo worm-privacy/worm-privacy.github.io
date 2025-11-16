@@ -259,3 +259,15 @@
   letter-spacing: var(--orbitron-body3--letter-spacing);
   line-height: var(--orbitron-body3--line-height);
 }
+
+@layer base {
+  h1 {
+    font-weight: var(--orbitron-h1--font-weight);
+    font-size: var(--orbitron-h1);
+    letter-spacing: var(--orbitron-h1--letter-spacing);
+    line-height: var(--orbitron-h1--line-height);
+  }
+  h2 {
+    font-size: var(--text-xl);
+  }
+}

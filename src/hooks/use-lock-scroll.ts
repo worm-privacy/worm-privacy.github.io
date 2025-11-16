@@ -1,66 +1,90 @@
-'use client';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import { useLayoutEffect } from 'react';
+export const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
-export function useLockScroll() {
-  useLayoutEffect(() => {
-    const originalStyle = window.getComputedStyle(document.body).overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = originalStyle;
-    };
-  }, []);
-}
-
-import { useRef } from 'react';
-
-const useScrollBlock = () => {
-  const scroll = useRef(false);
-
-  const blockScroll = () => {
-    if (typeof document === 'undefined') return;
-
-    const html = document.documentElement;
-    const { body } = document;
-
-    if (!body || !body.style || scroll.current) return;
-
-    const scrollBarWidth = window.innerWidth - html.clientWidth;
-    const bodyPaddingRight = parseInt(window.getComputedStyle(body).getPropertyValue('padding-right')) || 0;
-
-    /**
-     * 1. Fixes a bug in iOS and desktop Safari whereby setting
-     *    `overflow: hidden` on the html/body does not prevent scrolling.
-     * 2. Fixes a bug in desktop Safari where `overflowY` does not prevent
-     *    scroll if an `overflow-x` style is also applied to the body.
-     */
-    html.style.position = 'relative'; /* [1] */
-    body.style.position = 'relative'; /* [1] */
-    html.style.overflow = 'hidden'; /* [2] */
-    body.style.overflow = 'hidden'; /* [2] */
-    body.style.paddingRight = `${bodyPaddingRight + scrollBarWidth}px`;
-
-    scroll.current = true;
-  };
-
-  const allowScroll = () => {
-    if (typeof document === 'undefined') return;
-
-    const html = document.documentElement;
-    const { body } = document;
-
-    if (!body || !body.style || !scroll.current) return;
-
-    html.style.position = '';
-    html.style.overflow = '';
-    body.style.position = '';
-    body.style.overflow = '';
-    body.style.paddingRight = '';
-
-    scroll.current = false;
-  };
-
-  return [blockScroll, allowScroll];
+type UseScrollLockOptions = {
+  autoLock?: boolean;
+  lockTarget?: HTMLElement | string;
+  widthReflow?: boolean;
 };
 
-export { useScrollBlock };
+type UseScrollLockReturn = {
+  isLocked: boolean;
+  lock: () => void;
+  unlock: () => void;
+};
+
+type OriginalStyle = {
+  overflow: CSSStyleDeclaration['overflow'];
+  paddingRight: CSSStyleDeclaration['paddingRight'];
+};
+
+const IS_SERVER = typeof window === 'undefined';
+
+export function useScrollLock(options: UseScrollLockOptions = {}): UseScrollLockReturn {
+  const { autoLock = true, lockTarget, widthReflow = true } = options;
+  const [isLocked, setIsLocked] = useState(false);
+  const target = useRef<HTMLElement | null>(null);
+  const originalStyle = useRef<OriginalStyle | null>(null);
+
+  const lock = () => {
+    if (target.current) {
+      const { overflow, paddingRight } = target.current.style;
+
+      // Save the original styles
+      originalStyle.current = { overflow, paddingRight };
+
+      // Prevent width reflow
+      if (widthReflow) {
+        // Use window inner width if body is the target as global scrollbar isn't part of the document
+        const offsetWidth = target.current === document.body ? window.innerWidth : target.current.offsetWidth;
+        // Get current computed padding right in pixels
+        const currentPaddingRight = parseInt(window.getComputedStyle(target.current).paddingRight, 10) || 0;
+
+        const scrollbarWidth = offsetWidth - target.current.scrollWidth;
+        target.current.style.paddingRight = `${scrollbarWidth + currentPaddingRight}px`;
+      }
+
+      // Lock the scroll
+      target.current.style.overflow = 'hidden';
+
+      setIsLocked(true);
+    }
+  };
+
+  const unlock = () => {
+    if (target.current && originalStyle.current) {
+      target.current.style.overflow = originalStyle.current.overflow;
+
+      // Only reset padding right if we changed it
+      if (widthReflow) {
+        target.current.style.paddingRight = originalStyle.current.paddingRight;
+      }
+    }
+
+    setIsLocked(false);
+  };
+
+  useIsomorphicLayoutEffect(() => {
+    if (IS_SERVER) return;
+
+    if (lockTarget) {
+      target.current = typeof lockTarget === 'string' ? document.querySelector(lockTarget) : lockTarget;
+    }
+
+    if (!target.current) {
+      target.current = document.body;
+    }
+
+    if (autoLock) {
+      lock();
+    }
+
+    return () => {
+      unlock();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoLock, lockTarget, widthReflow]);
+
+  return { isLocked, lock, unlock };
+}

@@ -9,6 +9,7 @@ export * from './chart';
 export * from './dialog';
 export * from './expandable-card';
 export * from './pie-chart';
+export * from './preloader';
 export * from './progress';
 export * from './scroll-area';
 export * from './separator';

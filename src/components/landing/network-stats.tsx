@@ -10,13 +10,13 @@ export function NetworkStats() {
   return (
     <section className="container mx-auto flex max-w-185 flex-col gap-8 px-4 py-12 md:px-0 md:pt-0 md:pb-32">
       <span className="flex flex-col justify-start gap-2 md:gap-0">
-        <h1
+        <h2
           className={cn('orbitron-h2 text-green-400', {
             'orbitron-h3': isMobile,
           })}
         >
           Network Stats
-        </h1>
+        </h2>
         <h3
           className={cn('orbitron-h4 text-gray-400', {
             'orbitron-body2': isMobile,

@@ -1,7 +1,5 @@
 'use client';
 
-import Svg from 'react-inlinesvg';
-
 import {
   Dialog,
   DialogClose,
@@ -14,6 +12,7 @@ import {
 import { useIsMobile } from '@/hooks';
 import { cn } from '@/lib';
 import { Button, PieChart, ScrollArea } from '@/ui';
+import { Icons } from '../ui/icons';
 import { TOKENOMICS } from './constant';
 import { TokenomicsContent } from './type';
 
@@ -21,13 +20,13 @@ export function TokenomicsSection() {
   const isMobile = useIsMobile();
   return (
     <section className="container mx-auto flex max-w-185 flex-col gap-10 px-4 py-12 md:px-0 md:pt-0 md:pb-32">
-      <h1
+      <h2
         className={cn('orbitron-h2 text-green-400', {
           'orbitron-h3': isMobile,
         })}
       >
         Tokenomics
-      </h1>
+      </h2>
 
       <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-[18.125rem_1fr]">
         <div className="self-center">
@@ -96,7 +95,7 @@ function TokenomicsDialog({ label, share, color }: TokenomicsContent['stats'][nu
       <DialogContent className="max-w-150">
         <DialogClose asChild>
           <Button variant="ghost" className="absolute top-6 right-8 z-10 w-max">
-            <Svg src="/assets/icons/close.svg" />
+            <Icons.close />
           </Button>
         </DialogClose>
         <DialogHeader>

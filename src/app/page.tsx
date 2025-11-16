@@ -8,7 +8,8 @@ import {
   NetworkStats,
   RoadmapSection,
   SloganSection,
-  TeamSection, WormVSBethSection
+  TeamSection,
+  WormVSBethSection,
 } from '@/components/landing';
 import { Footer } from '@/components/landing/footer';
 
