@@ -27,7 +27,7 @@ export function Footer() {
         <nav className="flex w-full flex-col items-center justify-between gap-6 md:flex-row md:gap-0">
           <ul className="flex w-full items-center justify-center gap-3.5 md:justify-start md:gap-7">
             <li>
-              <Link href="/docs" className={buttonVariants({ variant: 'link', className: 'px-3! py-2.5!' })}>
+              <Link href="https://github.com/worm-privacy/whitepaper" className={buttonVariants({ variant: 'link', className: 'px-3! py-2.5!' })}>
                 Documentation
               </Link>
             </li>

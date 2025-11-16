@@ -17,8 +17,8 @@ export const TEAM: TeamMemberInfo[] = [
       },
     },
     socials: [
-      { link: 'https://x.com', logo: Icons.x, label: '' },
-      { link: 'https://github.com', logo: Icons.github, label: 'GitHub' },
+      { link: 'https://x.com/KiviGelase', logo: Icons.x, label: '' },
+      { link: 'https://github.com/keyvank', logo: Icons.github, label: 'GitHub' },
     ],
   },
   {
@@ -34,8 +34,8 @@ export const TEAM: TeamMemberInfo[] = [
       },
     },
     socials: [
-      { link: 'https://x.com', logo: Icons.x, label: '' },
-      { link: 'https://github.com', logo: Icons.github, label: 'GitHub' },
+      { link: 'https://x.com/Artem82581916', logo: Icons.x, label: '' },
+      { link: 'https://github.com/LightFromHeaven007', logo: Icons.github, label: 'GitHub' },
     ],
   },
   {
@@ -51,8 +51,8 @@ export const TEAM: TeamMemberInfo[] = [
       },
     },
     socials: [
-      { link: 'https://x.com', logo: Icons.x, label: '' },
-      { link: 'https://github.com', logo: Icons.github, label: 'GitHub' },
+      { link: 'https://x.com/lovely_necro', logo: Icons.x, label: '' },
+      { link: 'https://github.com/lovely-necromancer', logo: Icons.github, label: 'GitHub' },
     ],
   },
   {
@@ -68,7 +68,7 @@ export const TEAM: TeamMemberInfo[] = [
       },
     },
     socials: [
-      { link: 'https://x.com', logo: Icons.x, label: '' },
+      { link: 'https://x.com/Sage_Tega', logo: Icons.x, label: '' },
       { link: 'https://github.com', logo: Icons.github, label: 'GitHub' },
     ],
   },
@@ -103,7 +103,7 @@ export const TEAM: TeamMemberInfo[] = [
     },
     socials: [
       { link: 'https://x.com', logo: Icons.x, label: '' },
-      { link: 'https://github.com', logo: Icons.github, label: 'GitHub' },
+      { link: 'https://github.com/arman94', logo: Icons.github, label: 'GitHub' },
     ],
   },
 ];
