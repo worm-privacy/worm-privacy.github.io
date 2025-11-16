@@ -1,7 +1,7 @@
 'use client';
 
+import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import { AnimatePresence, motion, type HTMLMotionProps } from 'motion/react';
-import { Accordion as AccordionPrimitive } from 'radix-ui';
 import * as React from 'react';
 
 import { useControlledState } from '@/hooks/use-controlled-state';

@@ -33,7 +33,7 @@ export function HeroSection() {
         <Icons.gridPattern className="absolute -top-10 -right-10 -bottom-10 -left-10 -z-10 object-cover md:top-0 md:left-0 md:size-full" />
 
         <div className="flex size-full flex-col gap-10 px-8 py-19.5 md:px-25 md:py-20">
-          <svg className="h-30">
+          <svg className="h-17 md:h-30">
             <filter id="f">
               <feGaussianBlur stdDeviation="10 10" result="glow" fillOpacity="0.5" />
               <feMerge>
@@ -63,11 +63,11 @@ export function HeroSection() {
                 y="75%"
                 x="50%"
                 textAnchor="middle"
-                className="fill-[#96fad1] font-orbitron text-[3rem] font-bold md:text-[5.625rem]"
+                className="fill-[#96fad1] font-orbitron text-[4rem] font-bold md:text-[5.625rem]"
               >
                 Privacy
                 <tspan
-                  dy={isMobile ? '-1.5rem' : '-3rem'}
+                  dy={isMobile ? '-2rem' : '-3rem'}
                   textAnchor="middle"
                   className="fill-green-500 font-orbitron text-xl md:pt-4 md:text-4xl"
                   fillOpacity={0.4}
@@ -82,12 +82,12 @@ export function HeroSection() {
                 y="75%"
                 x="50%"
                 textAnchor="middle"
-                className="fill-[#96fad1] font-orbitron text-[3rem] font-bold md:text-[5.625rem]"
+                className="fill-[#96fad1] font-orbitron text-[4rem] font-bold md:text-[5.625rem]"
                 fillOpacity={0.4}
               >
                 Privacy
                 <tspan
-                  dy={isMobile ? '-1.5rem' : '-3rem'}
+                  dy={isMobile ? '-2rem' : '-3rem'}
                   textAnchor="middle"
                   className="fill-green-500 font-orbitron text-xl md:pt-4 md:text-4xl"
                   fillOpacity={0.4}
@@ -102,11 +102,11 @@ export function HeroSection() {
                 y="75%"
                 x="50%"
                 textAnchor="middle"
-                className="fill-[#96fad1] font-orbitron text-[3rem] font-bold md:text-[5.625rem]"
+                className="fill-[#96fad1] font-orbitron text-[4rem] font-bold md:text-[5.625rem]"
               >
                 Privacy
                 <tspan
-                  dy={isMobile ? '-1.5rem' : '-3rem'}
+                  dy={isMobile ? '-2rem' : '-3rem'}
                   textAnchor="middle"
                   className="fill-green-500 font-orbitron text-xl md:pt-4 md:text-4xl"
                   fillOpacity={0.4}
