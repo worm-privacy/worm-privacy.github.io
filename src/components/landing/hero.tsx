@@ -5,10 +5,23 @@ import Link from 'next/link';
 import { useIsMobile } from '@/hooks';
 import { cn } from '@/lib';
 import { buttonVariants } from '@/ui';
+import { useEffect, useRef } from 'react';
 import { Icons } from '../ui/icons';
 
 export function HeroSection() {
   const isMobile = useIsMobile();
+  const noise = useRef<SVGFETurbulenceElement>(null);
+
+  useEffect(() => {
+    function animateNoise(time?: number) {
+      if (noise.current) {
+        noise.current.setAttribute('seed', (Number(time) * 0.01).toString());
+        requestAnimationFrame(animateNoise);
+      }
+    }
+
+    animateNoise();
+  }, []);
 
   return (
     <section className="flex flex-col items-center justify-center gap-10 px-4 py-12 md:container md:mx-auto md:grid md:max-w-280 md:grid-cols-1 md:gap-30 md:px-0 md:pt-0 md:pb-32 lg:grid-cols-[1fr_calc(var(--spacing)*89.25)]">
@@ -20,22 +33,89 @@ export function HeroSection() {
         <Icons.gridPattern className="absolute -top-10 -right-10 -bottom-10 -left-10 -z-10 object-cover md:top-0 md:left-0 md:size-full" />
 
         <div className="flex size-full flex-col gap-10 px-8 py-19.5 md:px-25 md:py-20">
-          <h1
-            className="noise flex w-full items-center-safe justify-center"
-            style={{
-              textShadow:
-                '0 0 0px rgba(150,250,209,0.5), 0 0 5px rgba(150,250,209,0.5), 0 0 10px rgba(150,250,209,0.5), 0 0 20px rgba(150,250,209,0.5)',
-            }}
-          >
-            <span
-              className={cn('orbitron-h1 noise leading-tight! md:text-[5.5rem]!', {
-                'orbitron-h2 noise text-5xl! leading-snug!': isMobile,
-              })}
-            >
-              Privacy
-            </span>
-            <sup className="noise pb-2 text-xl md:pt-4 md:text-4xl!">2</sup>
-          </h1>
+          <svg className="h-30">
+            <filter id="f">
+              <feGaussianBlur stdDeviation="10 10" result="glow" fillOpacity="0.5" />
+              <feMerge>
+                <feMergeNode in="glow" />
+                <feMergeNode in="glow" />
+                <feMergeNode in="glow" />
+              </feMerge>
+              {/* <feTurbulence ref={noise} type="fractalNoise" baseFrequency="0.75" seed="100" /> */}
+              <feTurbulence
+                ref={noise}
+                type="fractalNoise"
+                baseFrequency="0.85"
+                numOctaves="100000"
+                result="turbulence"
+              />
+              <feDisplacementMap
+                in2="turbulence"
+                in="SourceGraphic"
+                scale="200"
+                xChannelSelector="R"
+                yChannelSelector="G"
+              />
+            </filter>
+
+            <clipPath id="textClip">
+              <text
+                y="75%"
+                x="50%"
+                textAnchor="middle"
+                className="fill-[#96fad1] font-orbitron text-[5.625rem] font-bold"
+              >
+                Privacy
+                <tspan
+                  dy="-3rem"
+                  textAnchor="middle"
+                  className="fill-green-500 pb-2 font-orbitron text-xl text-[3.375rem] md:pt-4 md:text-4xl"
+                  fillOpacity={0.4}
+                >
+                  2
+                </tspan>
+              </text>
+            </clipPath>
+
+            <g id="background">
+              <text
+                y="75%"
+                x="50%"
+                textAnchor="middle"
+                className="fill-[#96fad1] font-orbitron text-[5.625rem] font-bold"
+                fillOpacity={0.4}
+              >
+                Privacy
+                <tspan
+                  dy="-3rem"
+                  textAnchor="middle"
+                  className="fill-green-500 pb-2 font-orbitron text-xl text-[3.375rem] md:pt-4 md:text-4xl"
+                  fillOpacity={0.4}
+                >
+                  2
+                </tspan>
+              </text>
+            </g>
+
+            <g id="background" clipPath="url(#textClip)" filter="url(#f)">
+              <text
+                y="75%"
+                x="50%"
+                textAnchor="middle"
+                className="fill-[#96fad1] font-orbitron text-[5.625rem] font-bold"
+              >
+                Privacy
+                <tspan
+                  dy="-3rem"
+                  textAnchor="middle"
+                  className="fill-green-500 pb-2 font-orbitron text-xl text-[3.375rem] md:pt-4 md:text-4xl"
+                  fillOpacity={0.4}
+                >
+                  2
+                </tspan>
+              </text>
+            </g>
+          </svg>
 
           <h3
             className={cn('satoshi-h1 text-center text-white', {
