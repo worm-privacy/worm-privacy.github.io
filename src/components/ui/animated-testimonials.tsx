@@ -1,7 +1,6 @@
 'use client';
 
 import { AnimatePresence, motion } from 'motion/react';
-import Svg from 'react-inlinesvg';
 
 import Link from 'next/link';
 import { Fragment, useEffect, useState } from 'react';
@@ -131,7 +130,7 @@ export const AnimatedTestimonials = () => {
                         href={s.link}
                         className={buttonVariants({ variant: 'primary-outline', className: s.label ? 'flex-1' : '' })}
                       >
-                        <Svg src={s.logo} className="[&_path]:fill-green-400!" />
+                        <s.logo className="[&_path]:fill-green-400!" />
                         {s.label}
                       </Link>
                     ))}

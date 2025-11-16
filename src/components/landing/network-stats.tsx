@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Contract, BrowserProvider, JsonRpcProvider } from 'ethers';
+import { Progress } from '@/components/ui/progress';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { cn } from '@/lib/utils';
-import { Progress } from '@/components/ui/progress';
+import { BrowserProvider, Contract, JsonRpcProvider } from 'ethers';
+import { useEffect, useState } from 'react';
 
 const CONTRACT_ADDRESS = '0xcBdF9890B5935F01B2f21583d1885CdC8389eb5F';
 const RPC_URL = process.env.NEXT_PUBLIC_RPC_URL || '';
@@ -60,12 +60,13 @@ export function NetworkStats() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
+        // @ts-expect-error window.ethereum
         if (!window.ethereum && !RPC_URL) {
           console.error('No Ethereum provider found and missing RPC URL');
           setLoading(false);
           return;
         }
-
+        // @ts-expect-error window.ethereum
         const provider = window.ethereum ? new BrowserProvider(window.ethereum) : new JsonRpcProvider(RPC_URL);
         const contract = new Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
 
@@ -118,7 +119,7 @@ export function NetworkStats() {
     return () => clearInterval(interval);
   }, [loading, remainingTime]);
 
-  const formatTimeDisplay = (seconds) => {
+  const formatTimeDisplay = (seconds: number) => {
     const secs = Math.max(0, Math.floor(seconds));
     const hours = Math.floor(secs / 3600);
     const mins = Math.floor((secs % 3600) / 60);
@@ -132,7 +133,7 @@ export function NetworkStats() {
 
   const progressPercentage = initialEpochTime > 0 ? ((600 - remainingTime) / 600) * 100 : 0;
 
-  const formatNumber = (num) => {
+  const formatNumber = (num: string) => {
     const value = parseFloat(num) / 1e18;
     return value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   };
@@ -161,9 +162,7 @@ export function NetworkStats() {
           boxShadow: '0px 0px 20px 0px rgba(0, 200, 113, 0.12)',
         }}
       >
-        <h4 className="orbitron-h5 text-gray-400">
-          {loading ? 'Loading...' : `Epoch ${stats.currentEpoch}`}
-        </h4>
+        <h4 className="orbitron-h5 text-gray-400">{loading ? 'Loading...' : `Epoch ${stats.currentEpoch}`}</h4>
 
         <div className="flex flex-1 flex-col items-center justify-center gap-4">
           <div className="flex w-full flex-1 flex-col gap-1">
@@ -171,18 +170,18 @@ export function NetworkStats() {
               <span className="text-white">{loading ? '...' : formatNumber(stats.epochBeth)}</span>
               <span className="text-magenta-400">BETH</span>
             </p>
-            <Progress
-              value={progressPercentage}
-              label={loading ? 'Loading...' : formatTimeDisplay(remainingTime)}
-            />
+            <Progress value={progressPercentage} label={loading ? 'Loading...' : formatTimeDisplay(remainingTime)} />
             <p className="satoshi-body2 flex items-center gap-1">
               <span className="text-gray-400">Current epoch reward:</span>
-              <span className="orbitron-h4 text-green-400">{loading ? '...' : formatNumber(stats.currentReward)} WORM</span>
+              <span className="orbitron-h4 text-green-400">
+                {loading ? '...' : formatNumber(stats.currentReward)} WORM
+              </span>
             </p>
           </div>
 
           <p className="satoshi-h4 flex items-center gap-1 text-white">
-            1 <span className="text-blue-400">ETH</span> ~ {loading ? '...' : formatNumber(stats.wormPrice)} <span className="text-green-400">WORM</span>
+            1 <span className="text-blue-400">ETH</span> ~ {loading ? '...' : formatNumber(stats.wormPrice)}{' '}
+            <span className="text-green-400">WORM</span>
           </p>
         </div>
       </div>
