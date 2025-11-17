@@ -1,11 +1,13 @@
 'use client';
 
+import { useIsMobile } from '@/hooks';
 import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import { PropsWithChildren, useCallback, useLayoutEffect, useRef, useState } from 'react';
 import ResizeObserver from 'resize-observer-polyfill';
 
 function SmoothScroll({ children }: PropsWithChildren) {
   const scrollRef = useRef(null);
+  const isMobile = useIsMobile();
 
   const [pageHeight, setPageHeight] = useState(0);
 
@@ -26,7 +28,9 @@ function SmoothScroll({ children }: PropsWithChildren) {
   const physics = { damping: 20, mass: 0.27, stiffness: 200 };
   const spring = useSpring(transform, physics);
 
-  return (
+  return isMobile ? (
+    children
+  ) : (
     <>
       <motion.div
         ref={scrollRef}

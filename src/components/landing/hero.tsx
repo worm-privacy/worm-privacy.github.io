@@ -42,7 +42,13 @@ export function HeroSection() {
 
         <div className="flex size-full flex-col items-center gap-10 px-8 py-19.5 md:px-25 md:py-20">
           {isSafari ? (
-            <h1 className="mx-auto flex w-full items-center-safe justify-center text-center font-orbitron text-[4rem] font-bold text-green-400 md:text-[5.625rem]">
+            <h1
+              className="mx-auto flex w-full items-center-safe justify-center text-center font-orbitron text-[4rem] font-bold text-green-400 md:text-[5.625rem]"
+              style={{
+                textShadow:
+                  '0 0 0px rgba(150,250,209,0.5), 0 0 5px rgba(150,250,209,0.5), 0 0 10px rgba(150,250,209,0.5), 0 0 20px rgba(150,250,209,0.5)',
+              }}
+            >
               Privacy<sup className="fill-green-400 font-orbitron text-xl md:text-4xl">2</sup>
             </h1>
           ) : (
@@ -57,7 +63,7 @@ export function HeroSection() {
                 <feTurbulence
                   ref={noise}
                   type="fractalNoise"
-                  baseFrequency="0.85"
+                  baseFrequency="0.75"
                   numOctaves="100000"
                   result="turbulence"
                 />
