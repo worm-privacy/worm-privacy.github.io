@@ -25,7 +25,10 @@ type AccordionItemProps = AccordionItemPrimitiveProps;
 function AccordionItem({ className, ...props }: AccordionItemProps) {
   return (
     <AccordionItemPrimitive
-      className={cn('flex flex-col gap-4 transition-all ease-in-out data-[state=closed]:gap-0', className)}
+      className={cn(
+        'flex flex-col gap-4 bg-linear-to-t from-transparent to-transparent transition-all ease-in-out data-[state=closed]:gap-0 data-[state=open]:from-green-400/7',
+        className
+      )}
       {...props}
     />
   );

@@ -19,7 +19,6 @@ type AccordionItemContextType = {
 };
 
 const [AccordionProvider, useAccordion] = getStrictContext<AccordionContextType>('AccordionContext');
-
 const [AccordionItemProvider, useAccordionItem] = getStrictContext<AccordionItemContextType>('AccordionItemContext');
 
 type AccordionProps = React.ComponentProps<typeof AccordionPrimitive.Root>;
