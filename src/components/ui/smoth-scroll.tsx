@@ -29,7 +29,7 @@ function SmoothScroll({ children }: PropsWithChildren) {
   const spring = useSpring(transform, physics);
 
   return isMobile ? (
-    children
+    <div className="relative w-full will-change-transform">{children} </div>
   ) : (
     <>
       <motion.div
