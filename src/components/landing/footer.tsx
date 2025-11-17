@@ -16,7 +16,7 @@ export function Footer() {
           <span className="flex flex-col items-start gap-6 md:gap-2">
             <span className="flex items-center justify-start gap-2">
               <Icons.logo className="block md:hidden" />
-              <Icons.typedLogo className="block md:hidden" />
+              <Icons.typedLogo className="block" />
             </span>
             <p className="satoshi-body2 text-gray-400">Privacy first project built on Ethereum</p>
           </span>

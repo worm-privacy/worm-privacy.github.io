@@ -51,7 +51,7 @@ function RoadmapSection() {
         Roadmap
       </h2>
 
-      <Accordion type="single" collapsible defaultValue={ROADMAP[2].title}>
+      <Accordion type="single" collapsible defaultValue={ROADMAP.find((r) => r.status === 'active')!.title}>
         {ROADMAP.map((step) => (
           <RoadmapStep key={step.title} {...step} />
         ))}
@@ -65,7 +65,7 @@ function RoadmapStep({ title, status, deadline, description, order }: Roadmap) {
     <AnimatedItem index={order}>
       <AccordionItem
         value={title}
-        className={cn('grid w-full gap-3 rounded-lg border border-green-400/12 bg-surface1 p-8 md:gap-4', {
+        className={cn('grid w-full gap-3 rounded-lg border border-green-400/12 bg-surface1 p-6 md:gap-4 md:p-8', {
           'grid-rows-1': status !== 'active',
         })}
       >
