@@ -90,6 +90,7 @@
   --radius-xl: calc(var(--radius) + 11px);
 
   --breakpoint-xs: 20rem;
+
   --breakpoint-sm: 40rem;
   --breakpoint-md: 48rem;
   --breakpoint-lg: 71rem;

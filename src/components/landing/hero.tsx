@@ -43,7 +43,7 @@ export function HeroSection() {
         <div className="flex size-full flex-col items-center gap-10 px-8 py-19.5 md:px-25 md:py-20">
           {isSafari ? (
             <h1
-              className="mx-auto flex w-full items-center-safe justify-center text-center font-orbitron text-[4rem] font-bold text-green-400 md:text-[5.625rem]"
+              className="mx-auto flex w-full items-center-safe justify-center text-center font-orbitron text-[3rem] font-bold text-green-400 sm:text-[4rem] md:text-[5.625rem]"
               style={{
                 textShadow:
                   '0 0 0px rgba(150,250,209,0.5), 0 0 5px rgba(150,250,209,0.5), 0 0 10px rgba(150,250,209,0.5), 0 0 20px rgba(150,250,209,0.5)',
@@ -81,7 +81,7 @@ export function HeroSection() {
                   y="75%"
                   x="50%"
                   textAnchor="middle"
-                  className="fill-[#96fad1] font-orbitron text-[4rem] font-bold md:text-[5.625rem]"
+                  className="fill-[#96fad1] font-orbitron text-[3rem] font-bold sm:text-[4rem] md:text-[5.625rem]"
                 >
                   Privacy
                   <tspan
@@ -100,7 +100,7 @@ export function HeroSection() {
                   y="75%"
                   x="50%"
                   textAnchor="middle"
-                  className="fill-[#96fad1] font-orbitron text-[4rem] font-bold md:text-[5.625rem]"
+                  className="fill-[#96fad1] font-orbitron text-[3rem] font-bold sm:text-[4rem] md:text-[5.625rem]"
                   fillOpacity={0.4}
                 >
                   Privacy
@@ -120,7 +120,7 @@ export function HeroSection() {
                   y="75%"
                   x="50%"
                   textAnchor="middle"
-                  className="fill-[#96fad1] font-orbitron text-[4rem] font-bold md:text-[5.625rem]"
+                  className="fill-[#96fad1] font-orbitron text-[3rem] font-bold sm:text-[4rem] md:text-[5.625rem]"
                 >
                   Privacy
                   <tspan
