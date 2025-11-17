@@ -90,7 +90,7 @@ export function WormVSBethSection() {
           <span className="absolute -top-full">
             <Icons.arrow className="absolute -top-6 left-18 -rotate-30 md:left-14 md:-rotate-60" />
             <span className="satoshi-body3 absolute -top-16 -left-8 w-29 text-gray-400 md:-top-16 md:-left-14">
-              User's share of WORM in <b className="text-white">E</b>poch i
+              Total WORM <b className="text-white">E</b>mission on epoch i
             </span>
           </span>
 
@@ -111,7 +111,7 @@ export function WormVSBethSection() {
           <span className="absolute -bottom-full">
             <Icons.arrow className="absolute -bottom-6 left-2 rotate-150 md:-left-4 md:rotate-180" />
             <span className="satoshi-body3 absolute -bottom-22 -left-12 w-29 text-gray-400 md:-bottom-20 md:-left-32">
-              Total <b className="text-white">W</b>ORM that can be generated at epoch i
+              User's share of <b className="text-white">W</b>ORM on epoch i
             </span>
           </span>
           <span className="text-green-400">
