@@ -44,9 +44,6 @@ importers:
       ethers:
         specifier: ^6.15.0
         version: 6.15.0
-      framer-motion:
-        specifier: ^12.23.24
-        version: 12.23.24(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       motion:
         specifier: ^12.23.24
         version: 12.23.24(react-dom@19.2.0(react@19.2.0))(react@19.2.0)

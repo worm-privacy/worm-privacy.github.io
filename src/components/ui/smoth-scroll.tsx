@@ -29,13 +29,33 @@ function SmoothScroll({ children }: PropsWithChildren) {
   const spring = useSpring(transform, physics);
 
   return isMobile ? (
-    <div className="relative w-full will-change-transform">{children} </div>
+    <motion.div
+      initial={{ opacity: 0, y: '100vh' }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        type: 'spring',
+        stiffness: 100,
+        damping: 20,
+        mass: 1,
+      }}
+      className="relative w-full will-change-transform"
+    >
+      {children}
+    </motion.div>
   ) : (
     <>
       <motion.div
         ref={scrollRef}
+        initial={{ top: '100%', opacity: 0 }}
+        animate={{ top: '0%', opacity: 1 }}
+        transition={{
+          type: 'spring',
+          stiffness: 100,
+          damping: 20,
+          mass: 1,
+        }}
         style={{ y: spring }}
-        className="fixed top-0 left-0 w-full overflow-hidden will-change-transform"
+        className="fixed left-0 w-full overflow-hidden will-change-transform"
       >
         {children}
       </motion.div>
