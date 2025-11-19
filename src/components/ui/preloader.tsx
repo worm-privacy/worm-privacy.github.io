@@ -93,7 +93,7 @@ export function Preloader({ setLoaded }: PreloaderProps) {
         >
           <div className="relative flex flex-col items-center gap-2">
             <motion.svg width="600" height="69" viewBox="0 0 600 69" fill="none" className="max-w-full">
-              <defs>
+              {/* <defs>
                 <filter
                   id="filter0_f_586_8828"
                   x="471.9"
@@ -107,9 +107,9 @@ export function Preloader({ setLoaded }: PreloaderProps) {
                   <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
                   <feGaussianBlur stdDeviation="13.05" result="effect1_foregroundBlur_586_8828" />
                 </filter>
-              </defs>
+              </defs> */}
 
-              <motion.g transform="translate(13, 0)" origin="center">
+              <motion.g transform="translate(13, 0)" origin="center" transition={{ duration: 2 }}>
                 {PATHS.map((d, i) => (
                   <motion.path
                     key={i}
@@ -117,7 +117,7 @@ export function Preloader({ setLoaded }: PreloaderProps) {
                     initial={{ fillOpacity: 0.2 }}
                     animate={{ fillOpacity: 1 }}
                     transition={{
-                      delay: (2 / PATHS.length) * (i + 1),
+                      delay: (2 / PATHS.length) * i,
                       ease: 'easeInOut',
                     }}
                     fill="#00C871"
@@ -125,7 +125,7 @@ export function Preloader({ setLoaded }: PreloaderProps) {
                 ))}
               </motion.g>
 
-              <motion.g
+              {/* <motion.g
                 initial={{ x: lineStart.x, y: lineStart.y }}
                 animate={{
                   x: lineEnd.x,
@@ -138,7 +138,7 @@ export function Preloader({ setLoaded }: PreloaderProps) {
                 filter="url(#filter0_f_586_8828)"
               >
                 <rect x="498" y="26.1016" width="49" height="16" fill="#00C871" fill-opacity="0.4" />
-              </motion.g>
+              </motion.g> */}
 
               <motion.g
                 initial={{ x: lineStart.x, y: lineStart.y }}
