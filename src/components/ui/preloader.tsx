@@ -93,23 +93,7 @@ export function Preloader({ setLoaded }: PreloaderProps) {
         >
           <div className="relative flex flex-col items-center gap-2">
             <motion.svg width="600" height="69" viewBox="0 0 600 69" fill="none" className="max-w-full">
-              {/* <defs>
-                <filter
-                  id="filter0_f_586_8828"
-                  x="471.9"
-                  y="0.00156212"
-                  width="101.2"
-                  height="68.2"
-                  filterUnits="userSpaceOnUse"
-                  colorInterpolationFilters="sRGB"
-                >
-                  <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                  <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-                  <feGaussianBlur stdDeviation="13.05" result="effect1_foregroundBlur_586_8828" />
-                </filter>
-              </defs> */}
-
-              <motion.g transform="translate(13, 0)" origin="center" transition={{ duration: 2 }}>
+              <g>
                 {PATHS.map((d, i) => (
                   <motion.path
                     key={i}
@@ -117,54 +101,52 @@ export function Preloader({ setLoaded }: PreloaderProps) {
                     initial={{ fillOpacity: 0.2 }}
                     animate={{ fillOpacity: 1 }}
                     transition={{
-                      delay: (2 / PATHS.length) * i,
-                      ease: 'easeInOut',
+                      delay: (2 / PATHS.length) * i + 2 / PATHS.length,
+                      ease: 'linear',
                     }}
                     fill="#00C871"
                   />
                 ))}
-              </motion.g>
-
-              {/* <motion.g
-                initial={{ x: lineStart.x, y: lineStart.y }}
-                animate={{
-                  x: lineEnd.x,
-                  y: lineEnd.y,
-                }}
-                transition={{
-                  duration: 2,
-                  ease: 'easeInOut',
-                }}
-                filter="url(#filter0_f_586_8828)"
-              >
-                <rect x="498" y="26.1016" width="49" height="16" fill="#00C871" fill-opacity="0.4" />
-              </motion.g> */}
-
-              <motion.g
-                initial={{ x: lineStart.x, y: lineStart.y }}
-                animate={{
-                  x: lineEnd.x,
-                  y: lineEnd.y,
-                }}
-                transition={{
-                  duration: 2,
-                  ease: 'easeInOut',
-                }}
-                // filter="url(#filter0_f_586_8828)"
-              >
-                <path
+                <motion.path
                   d="M510.688 27.4978C509.798 26.6047 508.583 26.1016 507.33 26.1016H504.661C503.37 26.1016 502.205 26.6299 501.366 27.4726C500.526 28.3154 500 29.4852 500 30.7682C500 33.3468 502.08 35.4349 504.648 35.4349H504.811C505.977 35.4349 507.104 35.9003 507.931 36.7305L511.114 39.9255C511.815 40.6173 512.63 41.1707 513.519 41.5355C514.409 41.9003 515.374 42.1016 516.351 42.1016C517.817 42.1016 519.245 41.6613 520.461 40.8563L522.578 39.4349L510.688 27.4978ZM506.064 32.177C505.701 32.5418 505.212 32.7682 504.661 32.7682C503.558 32.7682 502.669 31.8751 502.669 30.7682C502.669 29.6613 502.894 29.7116 503.258 29.3594C503.621 28.9946 504.122 28.7682 504.661 28.7682C505.2 28.7682 505.713 28.9946 506.064 29.3594C506.428 29.7242 506.653 30.2273 506.653 30.7682C506.653 31.3091 506.428 31.8248 506.064 32.177Z"
                   fill="#00C871"
+                  initial={{ x: lineStart.x, y: lineStart.y }}
+                  animate={{
+                    x: lineEnd.x,
+                    y: lineEnd.y,
+                  }}
+                  transition={{
+                    duration: 2,
+                    ease: 'linear',
+                  }}
                 />
-                <path
+                <motion.path
                   d="M514.609 28.7682L525.172 39.372C526.913 41.1204 529.256 42.089 531.712 42.089C533.541 42.089 535.321 41.5481 536.849 40.5292L538.503 39.4223L527.941 28.8185C526.199 27.0827 523.844 26.1016 521.4 26.1016C519.571 26.1016 517.792 26.6424 516.263 27.6613L514.609 28.7682Z"
                   fill="#00C871"
+                  initial={{ x: lineStart.x, y: lineStart.y }}
+                  animate={{
+                    x: lineEnd.x,
+                    y: lineEnd.y,
+                  }}
+                  transition={{
+                    duration: 2,
+                    ease: 'linear',
+                  }}
                 />
-                <path
+                <motion.path
                   d="M530.824 28.5921L540.121 38.3406L548.102 32.5921L544.231 28.8185C542.452 27.0827 540.058 26.1016 537.565 26.1016C535.773 26.1016 534.007 26.6047 532.491 27.5607L530.837 28.5921H530.824Z"
                   fill="#00C871"
+                  initial={{ x: lineStart.x, y: lineStart.y }}
+                  animate={{
+                    x: lineEnd.x,
+                    y: lineEnd.y,
+                  }}
+                  transition={{
+                    duration: 2,
+                    ease: 'linear',
+                  }}
                 />
-              </motion.g>
+              </g>
             </motion.svg>
 
             <motion.div
