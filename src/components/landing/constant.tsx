@@ -40,10 +40,10 @@ export const TEAM: TeamMemberInfo[] = [
   },
   {
     id: 3,
-    fullName: 'Shahriar Ebrahimi',
-    positions: ['Cryptography Advisor'],
+    fullName: 'Ali Ghahremani',
+    positions: ['Developer'],
     avatar: {
-      src: '/assets/img/shahriar.png',
+      src: '/assets/img/ali77gh.jpg',
       size: 38.25,
       position: {
         top: 10,
@@ -51,8 +51,8 @@ export const TEAM: TeamMemberInfo[] = [
       },
     },
     socials: [
-      { link: 'https://x.com/lovely_necro', logo: Icons.x, label: '' },
-      { link: 'https://github.com/lovely-necromancer', logo: Icons.github, label: 'GitHub' },
+      { link: 'https://x.com/Ali98developer', logo: Icons.x, label: '' },
+      { link: 'https://github.com/ali77gh', logo: Icons.github, label: 'GitHub' },
     ],
   },
   {
@@ -85,7 +85,7 @@ export const TEAM: TeamMemberInfo[] = [
       },
     },
     socials: [
-      { link: 'https://x.com', logo: Icons.x, label: '' },
+      { link: 'https://x.com/ThisIsGandalff', logo: Icons.x, label: '' },
       { link: 'https://github.com', logo: Icons.github, label: 'GitHub' },
     ],
   },
