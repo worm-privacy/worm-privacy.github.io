@@ -151,7 +151,7 @@
   --orange-500: #ffaa43;
   --orange-600: #d88621;
 
-  --brand: var(--color-green-500);
+  --brand: #00c871ff;
 
   /* base is 9px */
   --radius: 0.5625rem;
