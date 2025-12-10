@@ -27,6 +27,6 @@ const queryClient = new QueryClient();
 import { anvil, sepolia } from 'viem/chains';
 const config = getDefaultConfig({
   appName: 'Worm',
-  projectId: 'YOUR_PROJECT_ID', // TODO Provide projectId
+  projectId: 'ff488caeeb8e5b10e03f4fe7ba2fda00',
   chains: [mainnet, sepolia, anvil],
 });
