@@ -1,9 +1,9 @@
 'use client';
 
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
 import { useState } from 'react';
 import { Icons } from '../ui/icons';
+import { CustomConnectWalletButton } from './custom-connect-wallet-button';
 import RainbowKitRoot from './rainbowkit-root';
 
 const TopBar = () => {
@@ -23,10 +23,7 @@ const TopBar = () => {
           <Icons.typedLogo className="block" />
         </div>
         {isConnect ? (
-          // <button className="flex items-center rounded-lg  bg-brand px-4 py-3 font-satoshi text-sm text-[14px] font-medium text-black transition-colors duration-200">
-          //   Connect Wallet
-          // </button>
-          <ConnectButton />
+          <CustomConnectWalletButton />
         ) : (
           <button className="flex items-center rounded-lg border border-emerald-400 bg-gray-800 px-3 py-3 font-mono text-sm text-emerald-400 transition-colors duration-200 hover:bg-emerald-400 hover:text-gray-900">
             {truncateAddress(walletAddress)}
