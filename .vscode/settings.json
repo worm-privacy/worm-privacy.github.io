@@ -2,8 +2,8 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-    "source.addMissingImports.ts": "explicit",
-    "source.removeUnusedImports": "explicit"
+    // "source.addMissingImports.ts": "explicit",
+    // "source.removeUnusedImports": "explicit"
   },
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsdk": "node_modules/typescript/lib",
