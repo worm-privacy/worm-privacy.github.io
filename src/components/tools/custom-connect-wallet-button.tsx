@@ -63,7 +63,7 @@ export const CustomConnectWalletButton = () => {
 
                   <button
                     onClick={openAccountModal}
-                    className="flex items-center rounded-lg border border-brand  px-4 py-3 font-satoshi text-[14px] font-medium text-brand transition-colors duration-200"
+                    className="flex items-center rounded-lg border border-[rgba(var(--brand-rgb),0.24)] px-8 py-3 font-satoshi text-[14px] font-medium text-brand transition-colors duration-200"
                   >
                     {account.displayName}
                   </button>

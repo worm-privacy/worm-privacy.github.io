@@ -5,7 +5,7 @@ export default function TabBar() {
   let path = usePathname();
 
   return (
-    <div className="min-h-screen text-white">
+    <div className="text-white">
       <div className="">
         {/* Back Button */}
         <button className="my-6 flex items-center space-x-2 px-[255px] text-gray-300 transition-colors hover:text-white">
