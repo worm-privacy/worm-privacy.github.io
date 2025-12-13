@@ -152,7 +152,7 @@
   --orange-600: #d88621;
 
   --brand: #00c871ff;
-
+  --brand-rgb: 0, 200, 130;
   /* base is 9px */
   --radius: 0.5625rem;
 }
