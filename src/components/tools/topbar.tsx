@@ -16,7 +16,7 @@ const TopBar = () => {
 
   return (
     <RainbowKitRoot>
-      <div className="pl flex items-center justify-between rounded-b-3xl bg-surface1 px-[255px] py-4">
+      <div className="pl flex items-center justify-between rounded-b-3xl border border-[rgba(var(--brand-rgb),0.24)] bg-surface1 px-[255px] py-4">
         {/* Logo */}
         <div className="flex items-center space-x-2">
           <Icons.logo className="h-16" />
