@@ -1,15 +1,14 @@
-/// @param [selected] starts from 0
 const StepsComponent = (props: { steps: StepItem[]; selected: number }) => {
   let steps = props.steps;
   let selected = props.selected;
 
   return (
     <div className=" text-white">
-      <div className="mx-auto max-w-4xl">
-        <div className="rounded-xl border border-[#1a1a2e] bg-[#010204] p-8 shadow-lg">
-          <div className="space-y-8">
+      <div className="mx-auto w-[580px]">
+        <div className="rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#010204] p-4 shadow-lg">
+          <div className="space-y-5">
             {steps.map((step, index) => (
-              <div key={index} className={`flex items-start transition-all ${index == selected ? 'p-6' : 'p-3'}`}>
+              <div key={index} className={`flex items-start transition-all ${index == selected ? 'p-5' : 'p-2'}`}>
                 <div
                   className={`mr-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full font-orbitron transition-all   ${
                     index === selected ? 'text-[24px] text-[#00ff9d]' : 'text-[14px] text-gray-500'
