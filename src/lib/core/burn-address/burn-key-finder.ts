@@ -19,7 +19,7 @@ export async function findBurnKey(burnExtraCommit: BurnExtraCommitment, revealAm
     const burnExtraCommitBytes = numberToBytes(burnExtraCommit.hash, 32);
     const eipBytes = new TextEncoder().encode('EIP-7503');
 
-    let burnKey = secureRandomBigIntBits(256);
+    let burnKey = secureRandomBigIntBits(248);
 
     let iterations = 0;
 
