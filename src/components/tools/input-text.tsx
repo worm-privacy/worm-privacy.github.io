@@ -5,7 +5,10 @@ const InputComponent = (props: InputComponentProps) => {
 
   return (
     <div>
-      <label className="mb-2 block text-sm font-medium text-white">{props.label}</label>
+      <div className="flex flex-row items-end">
+        <label className="mb-2 block text-[14px] font-medium text-white">{props.label}</label>
+        <label className="mb-2 ml-1 block text-[12px] text-[#94A3B8]">Optional</label>
+      </div>
       <div className="flex items-center rounded-lg bg-[rgba(var(--neutral-low-rgb),0.24)] px-3 py-2.5">
         <input
           type={inputType}
@@ -28,6 +31,7 @@ export type InputComponentProps = {
   inputType?: 'text' | 'number';
   inputKind?: InputKind;
   setValue: Dispatch<SetStateAction<string>>;
+  optional?: boolean;
 };
 type InputKind = 'ETH' | 'BETH' | 'Epoch';
 
