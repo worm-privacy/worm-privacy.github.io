@@ -7,18 +7,37 @@ import TabBar from '@/components/tools/tabbar';
 import TopBar from '@/components/tools/topbar';
 import { Icons } from '@/components/ui/icons';
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
+import { generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
+import { parseEther } from 'ethers';
 import { Dispatch, SetStateAction, useState } from 'react';
 
 export default function BurnETH() {
   let [currentStep, setCurrentStep] = useState(0);
   const [burnAmount, setBurnAmount] = useState('');
   const [receiverAddress, setReceiverAddress] = useState('');
-  const [proverFee, setProverFee] = useState('');
-  const [broadcasterFee, setBroadcasterFee] = useState('');
+  const [proverFee, setProverFee] = useState('0.001');
+  const [broadcasterFee, setBroadcasterFee] = useState('0.001');
   const [swapAmount, setSwapAmount] = useState('');
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
-  const onGenerateAddressClicked = () => {};
+  const onGenerateAddressClicked = async () => {
+    if (isGenerating) return;
+    setIsGenerating(true);
+    try {
+      let burnAddress = await generateBurnAddress(
+        receiverAddress,
+        parseEther(proverFee),
+        parseEther(broadcasterFee),
+        parseEther(burnAmount),
+        new Uint8Array()
+      );
+      console.log(`burnAddress: ${burnAddress}`);
+    } catch (e) {
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   const onRecoverClicked = () => {};
 
@@ -51,6 +70,7 @@ export default function BurnETH() {
                   onGenerateBurnAddressClicked={onGenerateAddressClicked}
                   onRecoverClicked={onRecoverClicked}
                   setIsAdvancedOpen={setIsAdvancedOpen}
+                  isGenerating={isGenerating}
                 />
               )}
             </div>
@@ -70,6 +90,7 @@ const MainLayout = (props: {
   setIsAdvancedOpen: Dispatch<SetStateAction<boolean>>;
   onGenerateBurnAddressClicked: () => void;
   onRecoverClicked: () => void;
+  isGenerating: boolean;
 }) => {
   return (
     <div className="rounded-lg p-6 lg:w-2/3">
@@ -138,7 +159,7 @@ const MainLayout = (props: {
             onClick={props.onGenerateBurnAddressClicked}
             className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black "
           >
-            Generate burn address
+            {props.isGenerating ? 'Generating...' : 'Generate burn address'}
           </button>
 
           <div className="flex justify-center">

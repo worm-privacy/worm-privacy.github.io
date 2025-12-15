@@ -7,7 +7,7 @@ import { newExtraCommitment } from './extra-commitment';
 const POSEIDON_BURN_ADDRESS_PREFIX = BigInt('0xba44186ee7876b8007d2482cd46cec2d115b780980a6b46f0363f983d892f7e');
 const NULLIFIER_PREFIX = BigInt('0xba44186ee7876b8007d2482cd46cec2d115b780980a6b46f0363f983d892f7f');
 
-const generateBurnAddress = async (
+export const generateBurnAddress = async (
   receiverAddr: string,
   proverFee: bigint,
   broadcasterFee: bigint,
