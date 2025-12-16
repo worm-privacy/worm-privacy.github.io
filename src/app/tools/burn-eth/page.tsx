@@ -7,39 +7,58 @@ import TabBar from '@/components/tools/tabbar';
 import TopBar from '@/components/tools/topbar';
 import { Icons } from '@/components/ui/icons';
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
+import { useInput, UserInputState } from '@/hooks/use-input';
 import { generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
+import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
 import { parseEther } from 'ethers';
 import { Dispatch, SetStateAction, useState } from 'react';
 
 export default function BurnETH() {
-  let [currentStep, setCurrentStep] = useState(0);
-  const [burnAmount, setBurnAmount] = useState('');
-  const [receiverAddress, setReceiverAddress] = useState('');
-  const [proverFee, setProverFee] = useState('0.001');
-  const [broadcasterFee, setBroadcasterFee] = useState('0.001');
-  const [swapAmount, setSwapAmount] = useState('');
+  // Layout switching states
+  const [currentStep, setCurrentStep] = useState(0);
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
+  // Main inputs
+  const burnAmount = useInput('', validateETHAmount);
+  const receiverAddress = useInput('', validateAddress);
+
+  // Advanced inputs
+  const proverFee = useInput('0.001', validateETHAmount);
+  const broadcasterFee = useInput('0.001', validateETHAmount);
+  const swapAmount = useInput('0.001', validateETHAmount);
+
   const onGenerateAddressClicked = async () => {
+    // Validation
+    if (!validateAll(burnAmount, receiverAddress)) return;
+
     if (isGenerating) return;
     setIsGenerating(true);
     try {
       let burnAddress = await generateBurnAddress(
-        receiverAddress,
-        parseEther(proverFee),
-        parseEther(broadcasterFee),
-        parseEther(burnAmount),
+        receiverAddress.value,
+        parseEther(proverFee.value),
+        parseEther(broadcasterFee.value),
+        parseEther(burnAmount.value),
         new Uint8Array()
       );
       console.log(`burnAddress: ${burnAddress}`);
     } catch (e) {
+      console.error(e);
     } finally {
       setIsGenerating(false);
     }
   };
 
-  const onRecoverClicked = () => {};
+  const onRecoverClicked = () => {
+    // TODO load json file
+  };
+
+  const onApplyClicked = () => {
+    // Don't let user come back from advanced options page without validation
+    if (!validateAll(proverFee, broadcasterFee, swapAmount)) return;
+    setIsAdvancedOpen(false);
+  };
 
   return (
     <SmoothScroll>
@@ -54,19 +73,14 @@ export default function BurnETH() {
               {isAdvancedOpen ? (
                 <AdvancedLayout
                   broadcasterFee={broadcasterFee}
-                  setBroadcasterFee={setBroadcasterFee}
                   proverFee={proverFee}
-                  setProverFee={setProverFee}
                   swapAmount={swapAmount}
-                  setSwapAmount={setSwapAmount}
-                  setIsAdvancedOpen={setIsAdvancedOpen}
+                  onApplyClicked={onApplyClicked}
                 />
               ) : (
                 <MainLayout
                   burnAmount={burnAmount}
-                  setBurnAmount={setBurnAmount}
                   receiverAddress={receiverAddress}
-                  setReceiverAddress={setReceiverAddress}
                   onGenerateBurnAddressClicked={onGenerateAddressClicked}
                   onRecoverClicked={onRecoverClicked}
                   setIsAdvancedOpen={setIsAdvancedOpen}
@@ -83,10 +97,8 @@ export default function BurnETH() {
 }
 
 const MainLayout = (props: {
-  burnAmount: string;
-  setBurnAmount: Dispatch<SetStateAction<string>>;
-  receiverAddress: string;
-  setReceiverAddress: Dispatch<SetStateAction<string>>;
+  burnAmount: UserInputState;
+  receiverAddress: UserInputState;
   setIsAdvancedOpen: Dispatch<SetStateAction<boolean>>;
   onGenerateBurnAddressClicked: () => void;
   onRecoverClicked: () => void;
@@ -95,20 +107,8 @@ const MainLayout = (props: {
   return (
     <div className="rounded-lg p-6 lg:w-2/3">
       <div className="space-y-4">
-        <InputComponent
-          label="Burn amount"
-          hint="0.0"
-          value={props.burnAmount}
-          setValue={props.setBurnAmount}
-          inputType="number"
-          inputKind="ETH"
-        />
-        <InputComponent
-          label="Receiver address"
-          hint="0xf3...fd23"
-          value={props.receiverAddress}
-          setValue={props.setReceiverAddress}
-        />
+        <InputComponent label="Burn amount" hint="0.0" state={props.burnAmount} inputType="number" inputKind="ETH" />
+        <InputComponent label="Receiver address" hint="0xf3...fd23" state={props.receiverAddress} />
 
         {/* Fees Section */}
         <div className="space-y-1">
@@ -157,7 +157,7 @@ const MainLayout = (props: {
         <div className="space-y-4">
           <button
             onClick={props.onGenerateBurnAddressClicked}
-            className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black "
+            className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black"
           >
             {props.isGenerating ? 'Generating...' : 'Generate burn address'}
           </button>
@@ -175,13 +175,10 @@ const MainLayout = (props: {
 };
 
 const AdvancedLayout = (props: {
-  broadcasterFee: string;
-  setBroadcasterFee: Dispatch<SetStateAction<string>>;
-  proverFee: string;
-  setProverFee: Dispatch<SetStateAction<string>>;
-  swapAmount: string;
-  setSwapAmount: Dispatch<SetStateAction<string>>;
-  setIsAdvancedOpen: Dispatch<SetStateAction<boolean>>;
+  broadcasterFee: UserInputState;
+  proverFee: UserInputState;
+  swapAmount: UserInputState;
+  onApplyClicked: () => void;
 }) => {
   return (
     <div className="rounded-lg p-6 lg:w-2/3">
@@ -190,24 +187,15 @@ const AdvancedLayout = (props: {
         <InputComponent
           label="Broadcaster fee"
           hint="0.2"
-          value={props.broadcasterFee}
-          setValue={props.setBroadcasterFee}
+          state={props.broadcasterFee}
           inputKind="BETH"
           inputType="number"
         />
-        <InputComponent
-          label="Prover fee"
-          hint="0.2"
-          value={props.proverFee}
-          setValue={props.setProverFee}
-          inputKind="BETH"
-          inputType="number"
-        />
+        <InputComponent label="Prover fee" hint="0.2" state={props.proverFee} inputKind="BETH" inputType="number" />
         <InputComponent
           label="Sell BETH for ETH "
           hint="0.2"
-          value={props.swapAmount}
-          setValue={props.setSwapAmount}
+          state={props.swapAmount}
           inputKind="BETH"
           inputType="number"
         />
@@ -216,7 +204,7 @@ const AdvancedLayout = (props: {
           <div className="text-[#6E7AF0]"> ETH </div>
         </div>
         <button
-          onClick={() => props.setIsAdvancedOpen(false)}
+          onClick={() => props.onApplyClicked()}
           className="mt-10 w-full rounded-lg bg-[rgba(var(--neutral-low-rgb),0.24)] px-4 py-3 font-semibold text-white"
         >
           Apply
