@@ -156,6 +156,7 @@
   --dark-card: #090c15;
   --neutral-low: #64748b3d;
   --neutral-low-rgb: 100, 116, 139;
+  --err: #ef4444;
 
   /* base is 9px */
   --radius: 0.5625rem;

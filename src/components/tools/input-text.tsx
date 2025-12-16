@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { Icons } from '../ui/icons';
 
 const InputComponent = (props: InputComponentProps) => {
   let inputType = props.inputType ?? 'text';
@@ -19,6 +20,12 @@ const InputComponent = (props: InputComponentProps) => {
         />
         <span className={`ml-2 ${inputKindColor(props.inputKind)}`}>{props.inputKind ?? ''}</span>
       </div>
+      {props.error && (
+        <div className="mt-1 ml-1 flex flex-row items-center gap-3">
+          <Icons.alert />
+          <div className="text-[14px] text-(--err) ">{props.error}</div>
+        </div>
+      )}
     </div>
   );
 };
@@ -32,6 +39,7 @@ export type InputComponentProps = {
   inputKind?: InputKind;
   setValue: Dispatch<SetStateAction<string>>;
   optional?: boolean;
+  error?: string; // undefined or empty means no error
 };
 type InputKind = 'ETH' | 'BETH' | 'Epoch';
 
