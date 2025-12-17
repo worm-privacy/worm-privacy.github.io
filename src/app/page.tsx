@@ -8,6 +8,7 @@ import {
   RoadmapSection,
   SloganSection,
   TeamSection,
+  TokenomicsSection,
   WormVSBethSection,
 } from '@/components/landing';
 import { Preloader } from '@/components/ui';
@@ -39,7 +40,7 @@ export default function Home() {
         <HowItWorks />
         <WormVSBethSection />
         <NetworkStats />
-        {/* <TokenomicsSection /> */}
+        <TokenomicsSection />
         <RoadmapSection />
         <TeamSection />
       </main>
