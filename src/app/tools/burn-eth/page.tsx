@@ -48,7 +48,7 @@ export default function BurnETH() {
       console.error(e);
     } finally {
       setIsGenerating(false);
-      setCurrentStep(currentStep + 1);
+      setCurrentStep(1);
     }
   };
 
