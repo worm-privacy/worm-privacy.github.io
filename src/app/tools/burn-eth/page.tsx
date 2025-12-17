@@ -2,6 +2,7 @@
 
 import { Footer } from '@/components/landing';
 import InputComponent from '@/components/tools/input-text';
+import LoadingComponent from '@/components/tools/loading';
 import StepsComponent, { StepItem } from '@/components/tools/steps';
 import TabBar from '@/components/tools/tabbar';
 import TopBar from '@/components/tools/topbar';
@@ -47,6 +48,7 @@ export default function BurnETH() {
       console.error(e);
     } finally {
       setIsGenerating(false);
+      setCurrentStep(currentStep + 1);
     }
   };
 
@@ -70,7 +72,9 @@ export default function BurnETH() {
           <div className="rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
             <div className="flex flex-col gap-6 lg:flex-row">
               <StepsComponent steps={BURN_ETH_STEPS} selected={currentStep} />
-              {isAdvancedOpen ? (
+              {isGenerating ? (
+                <LoadingComponent />
+              ) : isAdvancedOpen ? (
                 <AdvancedLayout
                   broadcasterFee={broadcasterFee}
                   proverFee={proverFee}
