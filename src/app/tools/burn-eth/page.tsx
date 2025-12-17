@@ -8,15 +8,39 @@ import TopBar from '@/components/tools/topbar';
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
 import { useState } from 'react';
 import { BurnAddressGeneratorLayout } from './burn-address';
+import { BurnETHLayout } from './burn-ether';
+import { MintBETHLayout } from './mint-beth';
 
-export default function BurnETH() {
+export default function BurnETHRoot() {
   // Layout switching states
   const [currentStep, setCurrentStep] = useState(0);
+  const [burnAddress, setBurnAddress] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const onAddressBurnGenerated = (address: string) => {
     console.log(`burn address: ${address}`);
     setCurrentStep(1); // move to next step (transfer to burn address)
+    setBurnAddress(address);
+  };
+
+  const LayoutMapping = (props: { index: number }) => {
+    switch (props.index) {
+      case 0:
+        return (
+          <BurnAddressGeneratorLayout
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+            onBurnAddressGenerated={onAddressBurnGenerated}
+          />
+        );
+      case 1:
+        return <BurnETHLayout burnAddress={burnAddress} />;
+      case 2:
+        return <MintBETHLayout />;
+
+      default:
+        throw 'unreachable';
+    }
   };
 
   return (
@@ -29,15 +53,7 @@ export default function BurnETH() {
           <div className="rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
             <div className="flex flex-row gap-6">
               <StepsComponent steps={BURN_ETH_STEPS} selected={currentStep} />
-              {isLoading ? (
-                <LoadingComponent />
-              ) : (
-                <BurnAddressGeneratorLayout
-                  isLoading={isLoading}
-                  setIsLoading={setIsLoading}
-                  onBurnAddressGenerated={onAddressBurnGenerated}
-                />
-              )}
+              {isLoading ? <LoadingComponent /> : <LayoutMapping index={currentStep} />}
             </div>
           </div>
         </div>
