@@ -7,7 +7,7 @@ import { parseEther } from 'ethers';
 import { Dispatch, SetStateAction, useState } from 'react';
 
 export const BurnAddressGeneratorLayout = (props: {
-  onBurnAddressGenerated: (address: string) => void;
+  onBurnAddressGenerated: (address: string, burnAmount: string) => void;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
 }) => {
@@ -37,7 +37,7 @@ export const BurnAddressGeneratorLayout = (props: {
         parseEther(burnAmount.value),
         new Uint8Array()
       );
-      props.onBurnAddressGenerated(burnAddress);
+      props.onBurnAddressGenerated(burnAddress, burnAmount.value);
     } catch (e) {
       console.error(e);
     } finally {

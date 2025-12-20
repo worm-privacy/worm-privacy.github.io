@@ -15,12 +15,14 @@ export default function BurnETHRoot() {
   // Layout switching states
   const [currentStep, setCurrentStep] = useState(0);
   const [burnAddress, setBurnAddress] = useState('');
+  const [burnAmount, setBurnAmount] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const onAddressBurnGenerated = (address: string) => {
+  const onAddressBurnGenerated = (address: string, burnAmount: string) => {
     console.log(`burn address: ${address}`);
     setCurrentStep(1); // move to next step (transfer to burn address)
     setBurnAddress(address);
+    setBurnAmount(burnAmount);
   };
 
   const LayoutMapping = (props: { index: number }) => {
@@ -34,7 +36,7 @@ export default function BurnETHRoot() {
           />
         );
       case 1:
-        return <BurnETHLayout burnAddress={burnAddress} />;
+        return <BurnETHLayout burnAddress={burnAddress} burnAmount={burnAmount} />;
       case 2:
         return <MintBETHLayout />;
 
