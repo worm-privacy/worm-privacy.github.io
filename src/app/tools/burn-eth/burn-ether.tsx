@@ -1,12 +1,26 @@
 import { Icons } from '@/components/ui/icons';
+import { useTransfer } from '@/hooks/use-transfer';
+import { parseEther } from 'ethers';
 import { useBalance, UseBalanceReturnType, useConnection } from 'wagmi';
 
 export const BurnETHLayout = (props: { burnAddress: string; burnAmount: string }) => {
   let account = useConnection();
   let balance = useBalance({ address: account.address });
 
-  const onBackupClick = () => {};
-  const onBurnClick = () => {};
+  let { transferETH, status, error } = useTransfer();
+
+  const onBackupClick = () => {
+    // TODO;
+    console.error('TODO');
+  };
+
+  const onBurnClick = async () => {
+    let result = await transferETH({
+      to: props.burnAddress as `0x${string}`, // burn address is already validated
+      value: parseEther(props.burnAmount),
+    });
+    console.log('transaction result:', result);
+  };
 
   return (
     <div className="h-full w-full text-white">
@@ -22,12 +36,12 @@ export const BurnETHLayout = (props: { burnAddress: string; burnAmount: string }
 
       {/* Buttons */}
       <div className="mt-50 mb-4 flex h-10 justify-center">
-        <button onClick={onBurnClick} className="flex items-center text-sm font-medium text-brand">
+        <button onClick={onBackupClick} className="flex items-center text-sm font-medium text-brand">
           <Icons.backup className="mr-2" />
           Backup minting data
         </button>
       </div>
-      <button onClick={onBackupClick} className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black">
+      <button onClick={onBurnClick} className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black">
         Burn ETH
       </button>
     </div>
