@@ -1,11 +1,14 @@
 import { Icons } from '@/components/ui/icons';
 import { useTransfer } from '@/hooks/use-transfer';
 import { parseEther } from 'ethers';
+import { useState } from 'react';
 import { useBalance, UseBalanceReturnType, useConnection } from 'wagmi';
 
 export const BurnETHLayout = (props: { burnAddress: string; burnAmount: string }) => {
   let account = useConnection();
   let balance = useBalance({ address: account.address });
+
+  let [confirmation, setConfirmation] = useState(false);
 
   let { transferETH, status, error } = useTransfer();
 
@@ -15,15 +18,16 @@ export const BurnETHLayout = (props: { burnAddress: string; burnAmount: string }
   };
 
   const onBurnClick = async () => {
+    if (!confirmation) return setConfirmation(true);
     let result = await transferETH({
-      to: props.burnAddress as `0x${string}`, // burn address is already validated
+      to: props.burnAddress as `0x${string}`,
       value: parseEther(props.burnAmount),
     });
     console.log('transaction result:', result);
   };
 
   return (
-    <div className="h-full w-full text-white">
+    <div className=" flex h-[480px] w-full flex-col text-white">
       <div className="mb-6 text-[18px]">
         Send <b>{props.burnAmount} ETH</b> to this burn address:
       </div>
@@ -34,15 +38,20 @@ export const BurnETHLayout = (props: { burnAddress: string; burnAmount: string }
         <div className="ml-2 text-[#6E7AF0]">ETH</div>
       </div>
 
+      {/* Spacer */}
+      <div className="grow" />
+
       {/* Buttons */}
-      <div className="mt-50 mb-4 flex h-10 justify-center">
-        <button onClick={onBackupClick} className="flex items-center text-sm font-medium text-brand">
-          <Icons.backup className="mr-2" />
-          Backup minting data
-        </button>
-      </div>
+      {!confirmation && (
+        <div className="mb-4 flex h-10 justify-center">
+          <button onClick={onBackupClick} className="flex items-center text-sm font-medium text-brand">
+            <Icons.backup className="mr-2" />
+            Backup minting data
+          </button>
+        </div>
+      )}
       <button onClick={onBurnClick} className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black">
-        Burn ETH
+        {confirmation ? 'Continue' : 'Burn ETH'}
       </button>
     </div>
   );
