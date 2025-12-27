@@ -13,7 +13,7 @@ export const generateBurnAddress = async (
   broadcasterFee: bigint,
   revealAmount: bigint,
   receiverHook: Uint8Array
-): Promise<string> => {
+): Promise<BurnAddressContent> => {
   try {
     let burnExtraCommit = newExtraCommitment(receiverAddr, proverFee, broadcasterFee, receiverHook);
     let burnKey = await findBurnKey(burnExtraCommit, revealAmount);
@@ -28,15 +28,33 @@ export const generateBurnAddress = async (
     const hashBytes = numberToBytes(BigInt(poseidonHash), 32);
     const addressBytes = hashBytes.slice(0, 20);
 
-    const addressHex =
+    const burnAddress =
       '0x' +
       Array.from(addressBytes)
         .map((b) => b.toString(16).padStart(2, '0'))
         .join('');
 
-    return addressHex;
+    return {
+      burnKey: burnKey,
+      receiverAddr: receiverAddr,
+      proverFee: proverFee,
+      broadcasterFee: broadcasterFee,
+      revealAmount: revealAmount,
+      receiverHook: receiverHook,
+      burnAddress: burnAddress,
+    };
   } catch (err) {
     console.error('Error deriving burn address:', err);
     throw new Error('Failed to derive burn address');
   }
+};
+
+export type BurnAddressContent = {
+  burnKey: bigint;
+  receiverAddr: string;
+  proverFee: bigint;
+  broadcasterFee: bigint;
+  revealAmount: bigint;
+  receiverHook: Uint8Array;
+  burnAddress: string;
 };

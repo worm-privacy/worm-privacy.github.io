@@ -1,16 +1,43 @@
+import { useNetwork } from '@/hooks/use-network';
+import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
+import { proof_post } from '@/lib/core/miner-api/proof-api';
+import { toHex } from '@/lib/core/utils/to-hex';
 import { useState } from 'react';
+import { formatEther } from 'viem';
+import { usePublicClient } from 'wagmi';
 
-export const MintBETHLayout = (props: { mintAmount: string; receiverAddress: string }) => {
+export const MintBETHLayout = (props: { mintAmount: string; burnAddress: BurnAddressContent }) => {
   const [endPoint, setEndPoint] = useState(ENDPOINTS[0].url);
+  let network = useNetwork();
 
-  const onGenerateClick = () => {
-    console.log('generate!!');
+  const client = usePublicClient();
+  const onGenerateClick = async () => {
+    let blockNumber = (await client!.getBlock()).number;
+    let proof = await client?.getProof({
+      address: props.burnAddress.burnAddress as `0x${string}`,
+      storageKeys: [],
+      blockNumber: blockNumber,
+    });
+
+    await proof_post(endPoint, {
+      target_block: blockNumber,
+      account_proof: proof!,
+      network: network,
+      burn_key: toHex(props.burnAddress.burnKey),
+      receiver_address: props.burnAddress.receiverAddr,
+      broadcaster_fee: formatEther(props.burnAddress.broadcasterFee),
+      prover_fee: formatEther(props.burnAddress.proverFee),
+      spend: formatEther(props.burnAddress.revealAmount),
+      receiver_hook: '0x', // this means empty
+    });
+
+    console.log('Pushed');
   };
 
   return (
     <div className="flex w-full flex-col text-white">
       <div className="mb-5 font-normal">{props.mintAmount} BETH is going to minted for address</div>
-      <div className="mb-5 text-[18px] font-bold">{props.receiverAddress}</div>
+      <div className="mb-5 text-[18px] font-bold">{props.burnAddress.receiverAddr}</div>
 
       <div className=" text-[14px] font-normal">Proving Endpoint</div>
       <select

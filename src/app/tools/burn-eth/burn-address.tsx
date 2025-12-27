@@ -1,13 +1,13 @@
 import InputComponent from '@/components/tools/input-text';
 import { Icons } from '@/components/ui/icons';
 import { useInput, UserInputState } from '@/hooks/use-input';
-import { generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
+import { BurnAddressContent, generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
 import { parseEther } from 'ethers';
 import { Dispatch, SetStateAction, useState } from 'react';
 
 export const BurnAddressGeneratorLayout = (props: {
-  onBurnAddressGenerated: (address: string, burnAmount: string, receiverAddress: string) => void;
+  onBurnAddressGenerated: (burnAddress: BurnAddressContent) => void;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
 }) => {
@@ -37,7 +37,7 @@ export const BurnAddressGeneratorLayout = (props: {
         parseEther(burnAmount.value),
         new Uint8Array()
       );
-      props.onBurnAddressGenerated(burnAddress, burnAmount.value, receiverAddress.value);
+      props.onBurnAddressGenerated(burnAddress);
     } catch (e) {
       console.error(e);
     } finally {
