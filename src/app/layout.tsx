@@ -5,6 +5,7 @@ import { orbitron, satoshi } from '@/assets/fonts';
 import { TailwindIndicator } from '@/components/ui';
 import { cn } from '@/lib';
 
+import RainbowKitRoot from '@/components/tools/rainbowkit-root';
 import '../assets/styles/globals.css';
 
 export const metadata: Metadata = {
@@ -48,7 +49,7 @@ export default function RootLayout({
             } as CSSProperties
           }
         />
-        {children}
+        <RainbowKitRoot>{children}</RainbowKitRoot>
         <TailwindIndicator />
       </body>
     </html>
