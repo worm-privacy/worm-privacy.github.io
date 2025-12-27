@@ -4,7 +4,7 @@ import { parseEther } from 'ethers';
 import { useState } from 'react';
 import { useBalance, UseBalanceReturnType, useConnection } from 'wagmi';
 
-export const BurnETHLayout = (props: { burnAddress: string; burnAmount: string }) => {
+export const BurnETHLayout = (props: { burnAddress: string; burnAmount: string; onBurnComplete: () => void }) => {
   let account = useConnection();
   let balance = useBalance({ address: account.address });
 
@@ -23,7 +23,13 @@ export const BurnETHLayout = (props: { burnAddress: string; burnAmount: string }
       to: props.burnAddress as `0x${string}`,
       value: parseEther(props.burnAmount),
     });
-    console.log('transaction result:', result);
+
+    if (result.status == 'success') {
+      console.log(`burn transfer hash: ${result.hash}`);
+      props.onBurnComplete();
+    } else {
+      console.error(`error while transferring: ${result.error}`);
+    }
   };
 
   return (
@@ -43,8 +49,8 @@ export const BurnETHLayout = (props: { burnAddress: string; burnAmount: string }
 
       {/* Buttons */}
       {!confirmation && (
-        <div className="mb-4 flex h-10 justify-center">
-          <button onClick={onBackupClick} className="flex items-center text-sm font-medium text-brand">
+        <div className="mb-4 flex h-10 justify-center text-[14px] font-bold text-brand">
+          <button onClick={onBackupClick} className="flex items-center ">
             <Icons.backup className="mr-2" />
             Backup minting data
           </button>

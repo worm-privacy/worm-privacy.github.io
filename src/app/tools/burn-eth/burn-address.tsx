@@ -7,7 +7,7 @@ import { parseEther } from 'ethers';
 import { Dispatch, SetStateAction, useState } from 'react';
 
 export const BurnAddressGeneratorLayout = (props: {
-  onBurnAddressGenerated: (address: string, burnAmount: string) => void;
+  onBurnAddressGenerated: (address: string, burnAmount: string, receiverAddress: string) => void;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
 }) => {
@@ -37,7 +37,7 @@ export const BurnAddressGeneratorLayout = (props: {
         parseEther(burnAmount.value),
         new Uint8Array()
       );
-      props.onBurnAddressGenerated(burnAddress, burnAmount.value);
+      props.onBurnAddressGenerated(burnAddress, burnAmount.value, receiverAddress.value);
     } catch (e) {
       console.error(e);
     } finally {
@@ -106,6 +106,7 @@ const MainLayout = (props: {
         <div className="text-[16px]">
           <div className="mb-1 text-white">You get</div>
           <div>
+            {/* TODO calculate amounts */}
             <span className="text-white">0.65 </span>
             <span className="text-pink-400">BETH</span>
             <span className="text-white"> + </span>
@@ -180,6 +181,7 @@ const AdvancedLayout = (props: {
           inputType="number"
         />
         <div className="flex flex-row">
+          {/* TODO calculate amount */}
           <div className="mr-1 text-[#94A3B8]">You Will get: 0.09 </div>
           <div className="text-[#6E7AF0]"> ETH </div>
         </div>
