@@ -1,9 +1,7 @@
 import { useNetwork } from '@/hooks/use-network';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
-import { proof_post } from '@/lib/core/miner-api/proof-api';
-import { toHex } from '@/lib/core/utils/to-hex';
+import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-api';
 import { useState } from 'react';
-import { formatEther } from 'viem';
 import { usePublicClient } from 'wagmi';
 
 export const MintBETHLayout = (props: { mintAmount: string; burnAddress: BurnAddressContent }) => {
@@ -19,17 +17,21 @@ export const MintBETHLayout = (props: { mintAmount: string; burnAddress: BurnAdd
       blockNumber: blockNumber,
     });
 
-    await proof_post(endPoint, {
-      target_block: blockNumber,
-      account_proof: proof!,
-      network: network,
-      burn_key: toHex(props.burnAddress.burnKey),
-      receiver_address: props.burnAddress.receiverAddr,
-      broadcaster_fee: formatEther(props.burnAddress.broadcasterFee),
-      prover_fee: formatEther(props.burnAddress.proverFee),
-      spend: formatEther(props.burnAddress.revealAmount),
-      receiver_hook: '0x', // this means empty
-    });
+    const burnAddress = props.burnAddress;
+    await proof_post(
+      endPoint,
+      createProofPostRequest(
+        blockNumber,
+        network,
+        burnAddress.burnKey,
+        burnAddress.receiverAddr,
+        burnAddress.broadcasterFee,
+        burnAddress.proverFee,
+        burnAddress.revealAmount,
+        '0x', // TODO
+        proof!
+      )
+    );
 
     console.log('Pushed');
   };
@@ -48,13 +50,11 @@ export const MintBETHLayout = (props: { mintAmount: string; burnAddress: BurnAdd
           setEndPoint(e.target.value);
         }}
       >
-        <div className="rounded-lg bg-[#05080F]">
-          {ENDPOINTS.map((item) => (
-            <option value={item.url} className="bg-[#05080F]" key={item.name}>
-              {item.name} - {item.url}
-            </option>
-          ))}
-        </div>
+        {ENDPOINTS.map((item) => (
+          <option value={item.url} className="bg-[#05080F]" key={item.name}>
+            {item.name} - {item.url}
+          </option>
+        ))}
       </select>
       <div className="grow" />
 
@@ -66,7 +66,7 @@ export const MintBETHLayout = (props: { mintAmount: string; burnAddress: BurnAdd
 };
 
 const ENDPOINTS = [
-  { name: 'My Machine', url: 'http://localhost:8545' },
+  { name: 'My Machine', url: 'http://localhost:8080' },
   // TODO
   { name: 'Worm Server 1', url: 'https://TODO1.com' },
   { name: 'Worm Server 2', url: 'https://TODO2.com' },
