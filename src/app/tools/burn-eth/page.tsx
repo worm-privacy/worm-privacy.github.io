@@ -42,7 +42,7 @@ export default function BurnETHRoot() {
         return <BurnETHLayout burnAddress={burnAddress!} onBurnComplete={onBurnComplete} />;
       case 2:
         // TODO mint amount
-        return <MintBETHLayout mintAmount="1" burnAddress={burnAddress!} />;
+        return <MintBETHLayout mintAmount="1" burnAddress={burnAddress!} setIsLoading={setIsLoading}/>;
 
       default:
         throw 'unreachable';

@@ -1,39 +1,88 @@
 import { useNetwork } from '@/hooks/use-network';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
 import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-api';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { usePublicClient } from 'wagmi';
 
-export const MintBETHLayout = (props: { mintAmount: string; burnAddress: BurnAddressContent }) => {
+export const MintBETHLayout = (props: {
+  mintAmount: string;
+  burnAddress: BurnAddressContent;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+}) => {
+  let [flowState, setFlowState] = useState<FlowState>('end-point');
+
+  switch (flowState) {
+    case 'end-point':
+      return (
+        <>
+          <EndPointSelection
+            mintAmount={props.mintAmount}
+            burnAddress={props.burnAddress}
+            setIsLoading={props.setIsLoading}
+            setFlowState={setFlowState}
+          />
+        </>
+      );
+    case 'generated':
+      return (
+        <>
+          <Generated />
+        </>
+      );
+    case 'submitted':
+      return (
+        <>
+          <Submitted />
+        </>
+      );
+    default:
+      throw 'unreachable!';
+  }
+};
+
+const GET_PROOF_RESULT_POLLING_INTERVAL = 5000;
+const EndPointSelection = (props: {
+  mintAmount: string;
+  burnAddress: BurnAddressContent;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setFlowState: Dispatch<SetStateAction<FlowState>>;
+}) => {
   const [endPoint, setEndPoint] = useState(ENDPOINTS[0].url);
   let network = useNetwork();
 
   const client = usePublicClient();
   const onGenerateClick = async () => {
-    let blockNumber = (await client!.getBlock()).number;
-    let proof = await client?.getProof({
-      address: props.burnAddress.burnAddress as `0x${string}`,
-      storageKeys: [],
-      blockNumber: blockNumber,
-    });
+    props.setIsLoading(true);
+    try {
+      let blockNumber = (await client!.getBlock()).number;
+      let proof = await client?.getProof({
+        address: props.burnAddress.burnAddress as `0x${string}`,
+        storageKeys: [],
+        blockNumber: blockNumber,
+      });
 
-    const burnAddress = props.burnAddress;
-    await proof_post(
-      endPoint,
-      createProofPostRequest(
-        blockNumber,
-        network,
-        burnAddress.burnKey,
-        burnAddress.receiverAddr,
-        burnAddress.broadcasterFee,
-        burnAddress.proverFee,
-        burnAddress.revealAmount,
-        '0x', // TODO
-        proof!
-      )
-    );
+      const burnAddress = props.burnAddress;
+      await proof_post(
+        endPoint,
+        createProofPostRequest(
+          blockNumber,
+          network,
+          burnAddress.burnKey,
+          burnAddress.receiverAddr,
+          burnAddress.broadcasterFee,
+          burnAddress.proverFee,
+          burnAddress.revealAmount,
+          '0x', // TODO
+          proof!
+        )
+      );
 
-    console.log('Pushed');
+      console.log('Proof request Pushed to queue');
+    } catch (e) {
+      console.error(e);
+    } finally {
+      props.setIsLoading(false);
+    }
   };
 
   return (
@@ -64,6 +113,16 @@ export const MintBETHLayout = (props: { mintAmount: string; burnAddress: BurnAdd
     </div>
   );
 };
+
+const Generated = (props: {}) => {
+  return <div>Proof Generated</div>;
+};
+
+const Submitted = (props: {}) => {
+  return <div> Submitted! </div>;
+};
+
+type FlowState = 'end-point' | 'generated' | 'submitted';
 
 const ENDPOINTS = [
   { name: 'My Machine', url: 'http://localhost:8080' },
