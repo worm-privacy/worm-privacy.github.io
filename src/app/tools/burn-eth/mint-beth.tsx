@@ -1,5 +1,6 @@
 import { useNetwork } from '@/hooks/use-network';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
+import { calculateNullifier } from '@/lib/core/burn-address/nullifier';
 import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-api';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { usePublicClient } from 'wagmi';
@@ -49,6 +50,9 @@ const EndPointSelection = (props: {
 }) => {
   const [endPoint, setEndPoint] = useState(ENDPOINTS[0].url);
   let network = useNetwork();
+
+  let nullifier = calculateNullifier(props.burnAddress.burnKey).toString(10);
+  console.log(`nullifier: ${nullifier}`);
 
   const client = usePublicClient();
   const onGenerateClick = async () => {
