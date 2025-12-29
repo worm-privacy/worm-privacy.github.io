@@ -1,7 +1,13 @@
+import { useInterval } from '@/hooks/use-interval';
 import { useNetwork } from '@/hooks/use-network';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
 import { calculateNullifier } from '@/lib/core/burn-address/nullifier';
-import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-api';
+import {
+  createProofPostRequest,
+  proof_get_by_nullifier,
+  proof_post,
+  RapidsnarkOutput,
+} from '@/lib/core/miner-api/proof-api';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { usePublicClient } from 'wagmi';
 
@@ -11,6 +17,19 @@ export const MintBETHLayout = (props: {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
 }) => {
   let [flowState, setFlowState] = useState<FlowState>('end-point');
+  const [proof, setProof] = useState<RapidsnarkOutput | null>(null);
+
+  const onProofGenerated = (proof: RapidsnarkOutput) => {
+    setProof(proof);
+    setFlowState('generated');
+    props.setIsLoading(false);
+  };
+
+  const onProofGenerationFailed = (msg: string) => {
+    //TODO show error
+    console.error(msg);
+    props.setIsLoading(false);
+  };
 
   switch (flowState) {
     case 'end-point':
@@ -21,6 +40,8 @@ export const MintBETHLayout = (props: {
             burnAddress={props.burnAddress}
             setIsLoading={props.setIsLoading}
             setFlowState={setFlowState}
+            onProofGenerated={onProofGenerated}
+            onProofGenerationFailed={onProofGenerationFailed}
           />
         </>
       );
@@ -47,12 +68,34 @@ const EndPointSelection = (props: {
   burnAddress: BurnAddressContent;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setFlowState: Dispatch<SetStateAction<FlowState>>;
+  onProofGenerated: (proof: RapidsnarkOutput) => void;
+  onProofGenerationFailed: (msg: string) => void;
 }) => {
   const [endPoint, setEndPoint] = useState(ENDPOINTS[0].url);
   let network = useNetwork();
 
   let nullifier = calculateNullifier(props.burnAddress.burnKey).toString(10);
   console.log(`nullifier: ${nullifier}`);
+
+  const fetchResultInterval = async () => {
+    // keep polling until we get
+    try {
+      const result = await proof_get_by_nullifier(endPoint, nullifier);
+      if (result != 'waiting') {
+        props.onProofGenerated(result);
+        stopPolling();
+      }
+    } catch (e) {
+      console.error(e);
+      stopPolling();
+      props.onProofGenerationFailed(typeof e == 'string' ? e : 'unknown error');
+    }
+  };
+
+  const { start: startPolling, stop: stopPolling } = useInterval(
+    fetchResultInterval,
+    GET_PROOF_RESULT_POLLING_INTERVAL
+  );
 
   const client = usePublicClient();
   const onGenerateClick = async () => {
@@ -82,10 +125,9 @@ const EndPointSelection = (props: {
       );
 
       console.log('Proof request Pushed to queue');
+      startPolling();
     } catch (e) {
-      console.error(e);
-    } finally {
-      props.setIsLoading(false);
+      props.onProofGenerationFailed(typeof e == 'string' ? e : 'unknown error');
     }
   };
 
