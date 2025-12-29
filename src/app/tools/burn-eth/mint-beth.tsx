@@ -2,12 +2,10 @@ import { useInterval } from '@/hooks/use-interval';
 import { useNetwork } from '@/hooks/use-network';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
 import { calculateNullifier } from '@/lib/core/burn-address/nullifier';
-import {
-  createProofPostRequest,
-  proof_get_by_nullifier,
-  proof_post,
-  RapidsnarkOutput,
-} from '@/lib/core/miner-api/proof-api';
+
+import { proof_get_by_nullifier, RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
+import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-post';
+
 import { Dispatch, SetStateAction, useState } from 'react';
 import { usePublicClient } from 'wagmi';
 
