@@ -1,3 +1,4 @@
+import LoadingComponent from '@/components/tools/loading';
 import { useInterval } from '@/hooks/use-interval';
 import { useNetwork } from '@/hooks/use-network';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
@@ -12,22 +13,30 @@ import { usePublicClient } from 'wagmi';
 export const MintBETHLayout = (props: {
   mintAmount: string;
   burnAddress: BurnAddressContent;
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   let [flowState, setFlowState] = useState<FlowState>('end-point');
   const [proof, setProof] = useState<RapidsnarkOutput | null>(null);
 
   const onProofGenerated = (proof: RapidsnarkOutput) => {
     setProof(proof);
     setFlowState('generated');
-    props.setIsLoading(false);
+    setIsLoading(false);
   };
 
   const onProofGenerationFailed = (msg: string) => {
     //TODO show error
     console.error(msg);
-    props.setIsLoading(false);
+    setIsLoading(false);
   };
+
+  if (isLoading) {
+    return;
+    <>
+      <LoadingComponent />
+    </>;
+  }
 
   switch (flowState) {
     case 'end-point':
@@ -36,7 +45,7 @@ export const MintBETHLayout = (props: {
           <EndPointSelection
             mintAmount={props.mintAmount}
             burnAddress={props.burnAddress}
-            setIsLoading={props.setIsLoading}
+            setIsLoading={setIsLoading}
             setFlowState={setFlowState}
             onProofGenerated={onProofGenerated}
             onProofGenerationFailed={onProofGenerationFailed}
