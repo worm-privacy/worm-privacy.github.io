@@ -10,18 +10,14 @@ import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-p
 import { Dispatch, SetStateAction, useState } from 'react';
 import { usePublicClient } from 'wagmi';
 
-export const MintBETHLayout = (props: {
-  mintAmount: string;
-  burnAddress: BurnAddressContent;
-}) => {
+export const MintBETHLayout = (props: { mintAmount: string; burnAddress: BurnAddressContent }) => {
   const [isLoading, setIsLoading] = useState(false);
-
-  let [flowState, setFlowState] = useState<FlowState>('end-point');
+  let [flowState, setFlowState] = useState<FlowState>(FlowState.EndPoint);
   const [proof, setProof] = useState<RapidsnarkOutput | null>(null);
 
   const onProofGenerated = (proof: RapidsnarkOutput) => {
     setProof(proof);
-    setFlowState('generated');
+    setFlowState(FlowState.Generated);
     setIsLoading(false);
   };
 
@@ -32,14 +28,15 @@ export const MintBETHLayout = (props: {
   };
 
   if (isLoading) {
-    return;
-    <>
-      <LoadingComponent />
-    </>;
+    return (
+      <>
+        <LoadingComponent />
+      </>
+    );
   }
 
   switch (flowState) {
-    case 'end-point':
+    case FlowState.EndPoint:
       return (
         <>
           <EndPointSelection
@@ -52,13 +49,13 @@ export const MintBETHLayout = (props: {
           />
         </>
       );
-    case 'generated':
+    case FlowState.Generated:
       return (
         <>
-          <Generated />
+          <Generated burnAddress={props.burnAddress} />
         </>
       );
-    case 'submitted':
+    case FlowState.Submitted:
       return (
         <>
           <Submitted />
@@ -167,15 +164,32 @@ const EndPointSelection = (props: {
   );
 };
 
-const Generated = (props: {}) => {
-  return <div>Proof Generated</div>;
+const Generated = (props: { burnAddress: BurnAddressContent }) => {
+  const onSubmitClicked = () => {
+    console.log('submit clicked');
+  };
+
+  return (
+    <div className="flex w-full flex-col gap-6 text-white">
+      <div className="text[24px]">Proof Generated</div>
+      <div className="text[18px]">{props.burnAddress.burnAddress}</div>
+      <div className="grow" />
+      <button onClick={onSubmitClicked} className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black">
+        Submit proof
+      </button>
+    </div>
+  );
 };
 
 const Submitted = (props: {}) => {
   return <div> Submitted! </div>;
 };
 
-type FlowState = 'end-point' | 'generated' | 'submitted';
+enum FlowState {
+  EndPoint,
+  Generated,
+  Submitted,
+}
 
 const ENDPOINTS = [
   { name: 'My Machine', url: 'http://localhost:8080' },
