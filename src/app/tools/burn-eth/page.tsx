@@ -6,6 +6,7 @@ import StepsComponent, { StepItem } from '@/components/tools/steps';
 import TabBar from '@/components/tools/tabbar';
 import TopBar from '@/components/tools/topbar';
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
+import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
 import { useState } from 'react';
 import { BurnAddressGeneratorLayout } from './burn-address';
 import { BurnETHLayout } from './burn-ether';
@@ -14,15 +15,17 @@ import { MintBETHLayout } from './mint-beth';
 export default function BurnETHRoot() {
   // Layout switching states
   const [currentStep, setCurrentStep] = useState(0);
-  const [burnAddress, setBurnAddress] = useState('');
-  const [burnAmount, setBurnAmount] = useState('');
+  const [burnAddress, setBurnAddress] = useState<BurnAddressContent | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
 
-  const onAddressBurnGenerated = (address: string, burnAmount: string) => {
+  const onAddressBurnGenerated = (address: BurnAddressContent) => {
     console.log(`burn address: ${address}`);
     setCurrentStep(1); // move to next step (transfer to burn address)
     setBurnAddress(address);
-    setBurnAmount(burnAmount);
+  };
+
+  const onBurnComplete = () => {
+    setCurrentStep(2);
   };
 
   const LayoutMapping = (props: { index: number }) => {
@@ -36,9 +39,10 @@ export default function BurnETHRoot() {
           />
         );
       case 1:
-        return <BurnETHLayout burnAddress={burnAddress} burnAmount={burnAmount} />;
+        return <BurnETHLayout burnAddress={burnAddress!} onBurnComplete={onBurnComplete} />;
       case 2:
-        return <MintBETHLayout />;
+        // TODO mint amount
+        return <MintBETHLayout mintAmount="1" burnAddress={burnAddress!} />;
 
       default:
         throw 'unreachable';

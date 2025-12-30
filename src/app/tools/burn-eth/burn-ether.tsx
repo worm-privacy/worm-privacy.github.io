@@ -1,10 +1,10 @@
 import { Icons } from '@/components/ui/icons';
 import { useTransfer } from '@/hooks/use-transfer';
-import { parseEther } from 'ethers';
+import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
 import { useState } from 'react';
 import { useBalance, UseBalanceReturnType, useConnection } from 'wagmi';
 
-export const BurnETHLayout = (props: { burnAddress: string; burnAmount: string }) => {
+export const BurnETHLayout = (props: { burnAddress: BurnAddressContent; onBurnComplete: () => void }) => {
   let account = useConnection();
   let balance = useBalance({ address: account.address });
 
@@ -20,18 +20,24 @@ export const BurnETHLayout = (props: { burnAddress: string; burnAmount: string }
   const onBurnClick = async () => {
     if (!confirmation) return setConfirmation(true);
     let result = await transferETH({
-      to: props.burnAddress as `0x${string}`,
-      value: parseEther(props.burnAmount),
+      to: props.burnAddress.burnAddress as `0x${string}`,
+      value: props.burnAddress.revealAmount,
     });
-    console.log('transaction result:', result);
+
+    if (result.status == 'success') {
+      console.log(`burn transfer hash: ${result.hash}`);
+      props.onBurnComplete();
+    } else {
+      console.error(`error while transferring: ${result.error}`);
+    }
   };
 
   return (
     <div className=" flex h-[480px] w-full flex-col text-white">
       <div className="mb-6 text-[18px]">
-        Send <b>{props.burnAmount} ETH</b> to this burn address:
+        Send <b>{props.burnAddress.revealAmount} ETH</b> to this burn address:
       </div>
-      <div className="mb-6 text-[18px] font-bold">{props.burnAddress}</div>
+      <div className="mb-6 text-[18px] font-bold">{props.burnAddress.burnAddress}</div>
       <div>Balance</div>
       <div className="flex flex-row">
         <div className="font-bold">{balanceToString(balance)}</div>
@@ -43,8 +49,8 @@ export const BurnETHLayout = (props: { burnAddress: string; burnAmount: string }
 
       {/* Buttons */}
       {!confirmation && (
-        <div className="mb-4 flex h-10 justify-center">
-          <button onClick={onBackupClick} className="flex items-center text-sm font-medium text-brand">
+        <div className="mb-4 flex h-10 justify-center text-[14px] font-bold text-brand">
+          <button onClick={onBackupClick} className="flex items-center ">
             <Icons.backup className="mr-2" />
             Backup minting data
           </button>
