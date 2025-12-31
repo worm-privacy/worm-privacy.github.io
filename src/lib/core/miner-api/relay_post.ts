@@ -1,15 +1,10 @@
 import { WormNetwork } from '@/hooks/use-network';
 import { formatEther } from 'ethers';
 import { toHex } from '../utils/to-hex';
-import { proof_get } from './proof-get';
 import { RapidsnarkOutput } from './proof-get-by-nullifier';
 
 // POST /relay
 export const relay_post = async (serverURL: string, payload: RelayPostRequest): Promise<void> => {
-  if (payload.prover_address == null) {
-    payload.prover_address = (await proof_get(serverURL)).prover_address;
-  }
-
   let body: RelayPostRequestAPI = {
     network: payload.network,
     proof: payload.proof,
@@ -20,7 +15,6 @@ export const relay_post = async (serverURL: string, payload: RelayPostRequest): 
     reveal_amount: formatEther(payload.broadcaster_fee),
     receiver: payload.receiver,
     prover_fee: formatEther(payload.broadcaster_fee),
-    prover_address: payload.prover_address,
     swap_calldata: payload.swap_calldata,
   };
 
@@ -52,8 +46,6 @@ export type RelayPostRequest = {
   receiver: string;
   prover_fee: bigint;
 
-  // null means server will set its own address as prover_address
-  prover_address: string | null;
   swap_calldata: string;
 };
 
@@ -71,6 +63,5 @@ type RelayPostRequestAPI = {
   receiver: string;
   prover_fee: string;
 
-  prover_address: string;
   swap_calldata: string;
 };

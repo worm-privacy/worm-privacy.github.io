@@ -10,11 +10,9 @@ export const proof_get = async (serverURL: string): Promise<ProofGetResponse> =>
   let body = await response.json();
   return {
     min_prover_fee: parseEther(body.min_prover_fee),
-    prover_address: body.prover_address,
   };
 };
 
 export type ProofGetResponse = {
   min_prover_fee: bigint;
-  prover_address: string;
 };
