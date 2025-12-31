@@ -1,6 +1,6 @@
 import { WormNetwork } from '@/hooks/use-network';
 import { formatEther } from 'ethers';
-import { toHex } from '../utils/to-hex';
+import { toHex } from 'viem';
 import { RapidsnarkOutput } from './proof-get-by-nullifier';
 
 // POST /relay
@@ -12,10 +12,10 @@ export const relay_post = async (serverURL: string, payload: RelayPostRequest): 
     nullifier: toHex(payload.nullifier),
     remaining_coin: toHex(payload.remaining_coin),
     broadcaster_fee: formatEther(payload.broadcaster_fee),
-    reveal_amount: formatEther(payload.broadcaster_fee),
+    reveal_amount: formatEther(payload.reveal_amount),
     receiver: payload.receiver,
-    prover_fee: formatEther(payload.broadcaster_fee),
-    swap_calldata: payload.swap_calldata,
+    prover_fee: formatEther(payload.prover_fee),
+    swap_calldata: toHex(payload.swap_calldata),
   };
 
   const response = await fetch(`${serverURL}/relay`, {
@@ -46,7 +46,7 @@ export type RelayPostRequest = {
   receiver: string;
   prover_fee: bigint;
 
-  swap_calldata: string;
+  swap_calldata: Uint8Array;
 };
 
 type RelayPostRequestAPI = {
