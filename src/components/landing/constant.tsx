@@ -89,23 +89,6 @@ export const TEAM: TeamMemberInfo[] = [
       { link: 'https://github.com', logo: Icons.github, label: 'GitHub' },
     ],
   },
-  {
-    id: 6,
-    fullName: 'Arman Omidi',
-    positions: ['Frontend Developer'],
-    avatar: {
-      src: '/assets/img/arman.png',
-      size: 21.5,
-      position: {
-        top: 48.75,
-        left: 66,
-      },
-    },
-    socials: [
-      { link: 'https://x.com', logo: Icons.x, label: '' },
-      { link: 'https://github.com/arman94', logo: Icons.github, label: 'GitHub' },
-    ],
-  },
 ];
 
 export const HOW_IT_WORKS: HowItWorksContent[] = [
@@ -175,17 +158,31 @@ export const ROADMAP: Roadmap[] = [
     title: 'Burrow Testnet',
     deadline: 'Q4 2025',
     description: 'The third testnet involves BETH/ETH market and staking.',
-    status: 'active',
+    status: 'passed',
   },
   {
     order: 7,
     title: 'Trusted Setup',
-    deadline: 'Q1 2026',
+    deadline: 'Q4 2025',
     description: 'Trusted Setup of our Groth16 circuits.',
-    status: 'not-yet',
+    status: 'passed',
   },
   {
     order: 8,
+    title: 'Launch of Wormal Punks',
+    deadline: 'Q1 2026',
+    description: 'Minting 7503 cypherpunk WORMs to grow the ecosystem.',
+    status: 'active',
+  },
+  {
+    order: 9,
+    title: 'Token auction',
+    deadline: 'Q1 2026',
+    description: 'Liquidity bootstrapping on Uniswap CCA.',
+    status: 'not-yet',
+  },
+  {
+    order: 10,
     title: 'Mainnet launch',
     deadline: 'Q1 2026',
     description: 'Launching BETH/WORM tokens on mainnet.',
