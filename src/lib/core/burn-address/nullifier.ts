@@ -7,7 +7,7 @@ export const calculateNullifier = (burnKey: bigint): bigint => {
   try {
     return poseidon2([toHex(NULLIFIER_PREFIX), toHex(burnKey)]);
   } catch (err) {
-    console.error('Error deriving burn address:', err);
-    throw new Error('Failed to derive burn address');
+    console.error('Error deriving nullifier:', err);
+    throw new Error('Failed to derive nullifier');
   }
 };
