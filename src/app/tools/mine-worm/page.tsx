@@ -5,6 +5,7 @@ import TabBar from '@/components/tools/tabbar';
 import TopBar from '@/components/tools/topbar';
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
 import EpochViewer from './epoch-viewer';
+import ParticipateInputs from './participate-inputs';
 
 export default function MineWorm() {
   return (
@@ -17,7 +18,7 @@ export default function MineWorm() {
           <div className="rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
             <div className="flex flex-row gap-6">
               <EpochViewer />
-              <div className="grow">Hello</div>
+              <ParticipateInputs />
             </div>
           </div>
         </div>
