@@ -18,6 +18,7 @@ const InputComponent = (props: InputComponentProps) => {
           className="flex-1 bg-transparent text-white placeholder-[#94A3B8] outline-none"
           placeholder={props.hint}
         />
+        {props.children}
         <span className={`ml-2 ${inputKindColor(props.inputKind)}`}>{props.inputKind ?? ''}</span>
       </div>
       {props.state.error && (
@@ -38,6 +39,7 @@ export type InputComponentProps = {
   inputType?: 'text' | 'number';
   inputKind?: InputKind;
   optional?: boolean;
+  children?: React.ReactNode;
 };
 type InputKind = 'ETH' | 'BETH' | 'Epoch';
 

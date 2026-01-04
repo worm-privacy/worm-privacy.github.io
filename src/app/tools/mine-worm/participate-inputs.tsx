@@ -6,7 +6,11 @@ export default function ParticipateInputs() {
   const bethAmount = useInput('', validateETHAmount);
   const numberOfEpochs = useInput('', validatePositiveInteger);
 
-  const bethBalance = 2.3;
+  const bethBalance = '2.3';
+
+  const onMaxClick = () => {
+    bethAmount.update(bethBalance);
+  };
 
   return (
     <div className="flex grow flex-col gap-2">
@@ -23,7 +27,11 @@ export default function ParticipateInputs() {
         inputKind="BETH"
         inputType="number"
         optional={false}
-      />
+      >
+        <button onClick={onMaxClick} className="mr-2 text-white">
+          MAX
+        </button>
+      </InputComponent>
 
       <InputComponent
         label="Number of epochs"
