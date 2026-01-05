@@ -1,19 +1,14 @@
 //TODO change this address
-export const BETHContractAddress = '0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1';
+export const WORMcontractAddress = '0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44';
 
-export const BETHContractABI = [
+export const WORMcontractABI = [
   {
     type: 'constructor',
     inputs: [
       {
-        name: '_proofOfBurnVerifier',
+        name: '_bethContract',
         type: 'address',
-        internalType: 'contract IVerifier',
-      },
-      {
-        name: '_spendVerifier',
-        type: 'address',
-        internalType: 'contract IVerifier',
+        internalType: 'contract IERC20',
       },
       {
         name: '_premineAddress',
@@ -37,32 +32,6 @@ export const BETHContractABI = [
         name: '',
         type: 'bytes32',
         internalType: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'MINT_CAP',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'POOL_SHARE_INV',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -117,6 +86,30 @@ export const BETHContractABI = [
   },
   {
     type: 'function',
+    name: 'approximate',
+    inputs: [
+      {
+        name: '_amountPerEpoch',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '_numEpochs',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'balanceOf',
     inputs: [
       {
@@ -136,26 +129,33 @@ export const BETHContractABI = [
   },
   {
     type: 'function',
-    name: 'coinOwner',
-    inputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
+    name: 'bethContract',
+    inputs: [],
     outputs: [
       {
         name: '',
         type: 'address',
-        internalType: 'address',
+        internalType: 'contract IERC20',
       },
     ],
     stateMutability: 'view',
   },
   {
     type: 'function',
-    name: 'coinRevealed',
+    name: 'cacheRewards',
+    inputs: [
+      {
+        name: 'epoch',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'cachedReward',
     inputs: [
       {
         name: '',
@@ -174,14 +174,81 @@ export const BETHContractABI = [
   },
   {
     type: 'function',
-    name: 'coinSource',
-    inputs: [
+    name: 'cachedRewardEpoch',
+    inputs: [],
+    outputs: [
       {
         name: '',
         type: 'uint256',
         internalType: 'uint256',
       },
     ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'calculateMintAmount',
+    inputs: [
+      {
+        name: '_startingEpoch',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '_numEpochs',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '_user',
+        type: 'address',
+        internalType: 'address',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'claim',
+    inputs: [
+      {
+        name: '_startingEpoch',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '_numEpochs',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'currentEpoch',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'currentReward',
+    inputs: [],
     outputs: [
       {
         name: '',
@@ -249,95 +316,191 @@ export const BETHContractABI = [
   },
   {
     type: 'function',
-    name: 'initRewardPool',
+    name: 'epochCount',
     inputs: [
       {
-        name: '_rewardPool',
-        type: 'address',
-        internalType: 'contract IRewardPool',
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
       },
     ],
-    outputs: [],
-    stateMutability: 'nonpayable',
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
   },
   {
     type: 'function',
-    name: 'mintCoin',
+    name: 'epochTotal',
     inputs: [
       {
-        name: '_mintParams',
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'epochUser',
+    inputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '',
+        type: 'address',
+        internalType: 'address',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'info',
+    inputs: [
+      {
+        name: 'user',
+        type: 'address',
+        internalType: 'address',
+      },
+      {
+        name: 'since',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'count',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
         type: 'tuple',
-        internalType: 'struct BETH.MintParams',
+        internalType: 'struct WORM.Info',
         components: [
           {
-            name: 'pA',
-            type: 'uint256[2]',
-            internalType: 'uint256[2]',
-          },
-          {
-            name: 'pB',
-            type: 'uint256[2][2]',
-            internalType: 'uint256[2][2]',
-          },
-          {
-            name: 'pC',
-            type: 'uint256[2]',
-            internalType: 'uint256[2]',
-          },
-          {
-            name: 'blockNumber',
+            name: 'totalWorm',
             type: 'uint256',
             internalType: 'uint256',
           },
           {
-            name: 'nullifier',
+            name: 'totalBeth',
             type: 'uint256',
             internalType: 'uint256',
           },
           {
-            name: 'remainingCoin',
+            name: 'currentEpoch',
             type: 'uint256',
             internalType: 'uint256',
           },
           {
-            name: 'broadcasterFee',
+            name: 'currentEpochReward',
             type: 'uint256',
             internalType: 'uint256',
           },
           {
-            name: 'broadcasterFeePostMintHook',
-            type: 'bytes',
-            internalType: 'bytes',
-          },
-          {
-            name: 'proverFee',
+            name: 'epochRemainingTime',
             type: 'uint256',
             internalType: 'uint256',
           },
           {
-            name: 'prover',
-            type: 'address',
-            internalType: 'address',
-          },
-          {
-            name: 'proverFeePostMintHook',
-            type: 'bytes',
-            internalType: 'bytes',
-          },
-          {
-            name: 'revealedAmount',
+            name: 'since',
             type: 'uint256',
             internalType: 'uint256',
           },
           {
-            name: 'revealedAmountReceiver',
-            type: 'address',
-            internalType: 'address',
+            name: 'userContribs',
+            type: 'uint256[]',
+            internalType: 'uint256[]',
           },
           {
-            name: 'receiverPostMintHook',
-            type: 'bytes',
-            internalType: 'bytes',
+            name: 'totalContribs',
+            type: 'uint256[]',
+            internalType: 'uint256[]',
+          },
+          {
+            name: 'countContribs',
+            type: 'uint256[]',
+            internalType: 'uint256[]',
+          },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'multiApproximate',
+    inputs: [
+      {
+        name: '_epochRanges',
+        type: 'tuple[]',
+        internalType: 'struct WORM.EpochRange[]',
+        components: [
+          {
+            name: 'startingEpoch',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'numEpochs',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+        ],
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'multiClaim',
+    inputs: [
+      {
+        name: '_epochRanges',
+        type: 'tuple[]',
+        internalType: 'struct WORM.EpochRange[]',
+        components: [
+          {
+            name: 'startingEpoch',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'numEpochs',
+            type: 'uint256',
+            internalType: 'uint256',
           },
         ],
       },
@@ -379,22 +542,21 @@ export const BETHContractABI = [
   },
   {
     type: 'function',
-    name: 'nullifiers',
+    name: 'participate',
     inputs: [
       {
-        name: '',
+        name: '_amountPerEpoch',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '_numEpochs',
         type: 'uint256',
         internalType: 'uint256',
       },
     ],
-    outputs: [
-      {
-        name: '',
-        type: 'bool',
-        internalType: 'bool',
-      },
-    ],
-    stateMutability: 'view',
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -441,84 +603,32 @@ export const BETHContractABI = [
   },
   {
     type: 'function',
-    name: 'proofOfBurnVerifier',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'address',
-        internalType: 'contract IVerifier',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'rewardPool',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'address',
-        internalType: 'contract IRewardPool',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'spendCoin',
+    name: 'rewardOf',
     inputs: [
       {
-        name: '_spendParams',
-        type: 'tuple',
-        internalType: 'struct BETH.SpendParams',
-        components: [
-          {
-            name: 'pA',
-            type: 'uint256[2]',
-            internalType: 'uint256[2]',
-          },
-          {
-            name: 'pB',
-            type: 'uint256[2][2]',
-            internalType: 'uint256[2][2]',
-          },
-          {
-            name: 'pC',
-            type: 'uint256[2]',
-            internalType: 'uint256[2]',
-          },
-          {
-            name: 'coin',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'revealedAmount',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'remainingCoin',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-        ],
+        name: 'epoch',
+        type: 'uint256',
+        internalType: 'uint256',
       },
     ],
-    outputs: [],
-    stateMutability: 'nonpayable',
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
   },
   {
     type: 'function',
-    name: 'spendVerifier',
+    name: 'startingTimestamp',
     inputs: [],
     outputs: [
       {
         name: '',
-        type: 'address',
-        internalType: 'contract IVerifier',
+        type: 'uint256',
+        internalType: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -629,19 +739,93 @@ export const BETHContractABI = [
   },
   {
     type: 'event',
+    name: 'Claimed',
+    inputs: [
+      {
+        name: 'claimant',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
+      {
+        name: 'fromEpoch',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+      {
+        name: 'numEpochs',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+      {
+        name: 'totalClaimed',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
     name: 'EIP712DomainChanged',
     inputs: [],
     anonymous: false,
   },
   {
     type: 'event',
-    name: 'HookFailure',
+    name: 'EpochContribution',
     inputs: [
       {
-        name: 'returnData',
-        type: 'bytes',
+        name: 'epoch',
+        type: 'uint256',
+        indexed: true,
+        internalType: 'uint256',
+      },
+      {
+        name: 'participant',
+        type: 'address',
         indexed: false,
-        internalType: 'bytes',
+        internalType: 'address',
+      },
+      {
+        name: 'amount',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'Participated',
+    inputs: [
+      {
+        name: 'participant',
+        type: 'address',
+        indexed: true,
+        internalType: 'address',
+      },
+      {
+        name: 'fromEpoch',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+      {
+        name: 'numEpochs',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+      {
+        name: 'amountPerEpoch',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
       },
     ],
     anonymous: false,
@@ -830,11 +1014,6 @@ export const BETHContractABI = [
   {
     type: 'error',
     name: 'InvalidShortString',
-    inputs: [],
-  },
-  {
-    type: 'error',
-    name: 'ReentrancyGuardReentrantCall',
     inputs: [],
   },
   {
