@@ -1,16 +1,29 @@
 import InputComponent from '@/components/tools/input-text';
+import LoadingComponent from '@/components/tools/loading';
 import { useInput } from '@/hooks/use-input';
+import { BETHContractABI, BETHContractAddress } from '@/lib/core/contracts/beth';
 import { validateETHAmount, validatePositiveInteger } from '@/lib/core/utils/validator';
+import { formatUnits } from 'viem';
+import { useConnection, useReadContract } from 'wagmi';
 
 export default function ParticipateInputs() {
   const bethAmount = useInput('', validateETHAmount);
   const numberOfEpochs = useInput('', validatePositiveInteger);
 
-  const bethBalance = '2.3';
+  const { address, isConnected } = useConnection();
+  const { data, isError, isLoading, error } = useReadContract({
+    address: BETHContractAddress,
+    abi: BETHContractABI,
+    functionName: 'balanceOf',
+    args: [address!],
+  });
+  if (isError) console.log('error:', error); // TODO error component
 
-  const onMaxClick = () => {
-    bethAmount.update(bethBalance);
-  };
+  if (isLoading) return <LoadingComponent />;
+
+  const bethBalance = data !== undefined ? parseFloat(formatUnits(data, Number(18))).toFixed(6) : 'loading';
+
+  const onMaxClick = () => bethAmount.update(bethBalance);
 
   return (
     <div className="flex grow flex-col gap-2">
