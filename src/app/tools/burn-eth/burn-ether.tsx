@@ -1,6 +1,7 @@
 import { Icons } from '@/components/ui/icons';
 import { useTransfer } from '@/hooks/use-transfer';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
+import { formatEther } from 'ethers';
 import { useState } from 'react';
 import { useBalance, UseBalanceReturnType, useConnection } from 'wagmi';
 
@@ -35,7 +36,7 @@ export const BurnETHLayout = (props: { burnAddress: BurnAddressContent; onBurnCo
   return (
     <div className=" flex h-[480px] w-full flex-col text-white">
       <div className="mb-6 text-[18px]">
-        Send <b>{props.burnAddress.revealAmount} ETH</b> to this burn address:
+        Send <b>{formatEther(props.burnAddress.revealAmount)} ETH</b> to this burn address:
       </div>
       <div className="mb-6 text-[18px] font-bold">{props.burnAddress.burnAddress}</div>
       <div>Balance</div>
