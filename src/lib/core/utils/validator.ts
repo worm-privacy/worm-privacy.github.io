@@ -27,6 +27,17 @@ export const validateNothing: InputValidator = (value: string): string | undefin
   return undefined;
 };
 
+export const validatePositiveInteger: InputValidator = (value: string): string | undefined => {
+  value = value.trim();
+  if (value == '') return 'Empty';
+  try {
+    if (parseInt(value) < 1) throw 'Should be positive';
+    return undefined; // OK
+  } catch (e) {
+    return 'Invalid amount';
+  }
+};
+
 export const validateAll = (...states: UserInputState[]): boolean => {
   let isValid = true;
   for (let state of states) if (!state.validate()) isValid = false;

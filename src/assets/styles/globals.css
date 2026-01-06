@@ -26,3 +26,13 @@ input[type='number']::-webkit-outer-spin-button {
 button {
   cursor: pointer;
 }
+
+.progress-bg {
+  background: linear-gradient(
+    to right,
+    #64748b1f 0%,
+    #64748b1f var(--progress, 0%),
+    #00000000 var(--progress, 0%),
+    #00000000 100%
+  );
+}
