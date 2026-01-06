@@ -9,6 +9,7 @@ import { calculateRemainingCoinHash } from '@/lib/core/burn-address/remaining_co
 import { proof_get_by_nullifier, RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
 import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-post';
 import { relay_post } from '@/lib/core/miner-api/relay_post';
+import Link from 'next/link';
 
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { usePublicClient } from 'wagmi';
@@ -225,11 +226,6 @@ const Submitted = (props: {}) => {
     console.error('not implemented');
   };
 
-  const onMineWormClick = () => {
-    // TODO
-    console.error('not implemented');
-  };
-
   return (
     <div className="flex w-full flex-col gap-6 text-white">
       <div className="text[24px] font-bold">Proof submitted successfully</div>
@@ -242,14 +238,12 @@ const Submitted = (props: {}) => {
           Backup proof data
         </button>
       </div>
-
-      <button
-        onClick={onMineWormClick}
-        className="flex w-full items-center justify-center rounded-lg bg-brand px-4 py-3 font-semibold text-black"
-      >
-        <Icons.target className="mr-2" />
-        Mine Worm
-      </button>
+      <Link href="/tools/mine-worm">
+        <button className="flex w-full items-center justify-center rounded-lg bg-brand px-4 py-3 font-semibold text-black">
+          <Icons.target className="mr-2" />
+          Mine Worm
+        </button>
+      </Link>
     </div>
   );
 };
