@@ -13,10 +13,11 @@ export default function EpochViewer() {
       inner = <div className="text-white">Loading...</div>;
       break;
     case 'loaded':
+      let epochProgress = Number(result.epochPassedTime) / (EPOCH_DURATION / 100);
       inner = (
         <>
           {result.epochs.map((epoch) => (
-            <EpochItem epoch={epoch} current={result.currentEpoch} key={epoch.num} />
+            <EpochItem epoch={epoch} current={result.currentEpoch} progress={epochProgress} key={epoch.num} />
           ))}
         </>
       );
@@ -32,14 +33,24 @@ export default function EpochViewer() {
   );
 }
 
-const EpochItem = (props: { epoch: Epoch; current: bigint }) => {
+// 10 minutes
+const EPOCH_DURATION = 600;
+
+const EpochItem = (props: { epoch: Epoch; current: bigint; progress: number }) => {
   let epoch = props.epoch;
+
+  let progress = Math.max(0, Math.min(100, props.progress));
   return (
     <div
       key={epoch.num}
+      style={
+        {
+          '--progress': `${progress}%`,
+        } as React.CSSProperties
+      }
       className={`rounded-xl border px-5 py-6 transition-all duration-300 ${
         props.current == epoch.num
-          ? 'border-[rgba(var(--brand-rgb),0.24)] shadow-[0px_0px_20px_3px_rgba(34,197,94,0.1)]'
+          ? 'progress-bg border-[rgba(var(--brand-rgb),0.24)] shadow-[0px_0px_20px_3px_rgba(34,197,94,0.1)]'
           : 'mx-[58px] border-gray-800 opacity-60 hover:border-gray-700'
       }`}
     >

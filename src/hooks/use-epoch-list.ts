@@ -42,7 +42,12 @@ export function useEpochList(): UseEpochListResult {
         });
       }
 
-      setResult({ status: 'loaded', currentEpoch: currentEpoch, epochs: epochs });
+      setResult({
+        status: 'loaded',
+        currentEpoch: currentEpoch,
+        epochs: epochs,
+        epochPassedTime: info.epochRemainingTime,
+      });
     } catch (e) {
       console.error(e);
       setResult({ status: 'error', error: 'Error reading chain data' });
@@ -68,6 +73,7 @@ export type UseEpochListResult =
       status: 'loaded';
       epochs: Epoch[];
       currentEpoch: bigint;
+      epochPassedTime: bigint; // seconds
     };
 
 const REWARD_DECAY_NUMERATOR = 9999966993045875n;
