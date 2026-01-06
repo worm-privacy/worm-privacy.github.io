@@ -1,8 +1,13 @@
 import { useEpochList } from '@/hooks/use-epoch-list';
 import { roundEther } from '@/lib/core/utils/round-ether';
+import { useEffect, useRef, useState } from 'react';
 
 export default function EpochViewer() {
-  const result = useEpochList();
+  const [result, refresh] = useEpochList();
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   let inner: React.ReactNode = undefined;
   switch (result.status) {
@@ -17,7 +22,13 @@ export default function EpochViewer() {
       inner = (
         <>
           {result.epochs.map((epoch) => (
-            <EpochItem epoch={epoch} current={result.currentEpoch} progress={epochProgress} key={epoch.num} />
+            <EpochItem
+              epoch={epoch}
+              current={result.currentEpoch}
+              progress={epochProgress}
+              refresh={refresh}
+              key={epoch.num}
+            />
           ))}
         </>
       );
@@ -33,19 +44,35 @@ export default function EpochViewer() {
   );
 }
 
-// 10 minutes
-const EPOCH_DURATION = 600;
+const EPOCH_DURATION = 600; //seconds
 
-const EpochItem = (props: { epoch: Epoch; current: bigint; progress: number }) => {
+const EpochItem = (props: { epoch: Epoch; current: bigint; progress: number; refresh: () => Promise<void> }) => {
   let epoch = props.epoch;
 
-  let progress = Math.max(0, Math.min(100, props.progress));
+  const [progress, setProgress] = useState(props.progress);
+  const intervalRef = useRef<number | null>(null); // holds interval ID
+
+  useEffect(() => {
+    if (props.epoch.num !== props.current) return;
+    intervalRef.current = window.setInterval(() => {
+      setProgress((prev) => {
+        if (prev > 100) props.refresh();
+        return prev + 1;
+      });
+    }, 6000); // Warning: do not change 6000 (every 6 second is 1%)
+
+    // Cleanup on unmount
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, []);
+
   return (
     <div
       key={epoch.num}
       style={
         {
-          '--progress': `${progress}%`,
+          '--progress': `${Math.max(0, Math.min(100, progress))}%`,
         } as React.CSSProperties
       }
       className={`rounded-xl border px-5 py-6 transition-all duration-300 ${

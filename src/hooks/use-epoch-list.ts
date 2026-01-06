@@ -1,11 +1,11 @@
 import { Epoch } from '@/app/tools/mine-worm/epoch-viewer';
 import { WORMcontractABI, WORMcontractAddress } from '@/lib/core/contracts/worm';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { readContract } from 'viem/actions';
 import { useClient, useConnection } from 'wagmi';
 
-/// returns [epochs, currentEpochNumber, error, loading]
-export function useEpochList(): UseEpochListResult {
+/// returns [result, refresh]
+export function useEpochList(): [UseEpochListResult, () => Promise<void>] {
   const [result, setResult] = useState<UseEpochListResult>({ status: 'loading' });
   const client = useClient();
   const { address } = useConnection();
@@ -56,11 +56,7 @@ export function useEpochList(): UseEpochListResult {
     }
   }, [client, address]);
 
-  useEffect(() => {
-    execute();
-  }, [execute]);
-
-  return result;
+  return [result, execute];
 }
 
 export type UseEpochListResult =
