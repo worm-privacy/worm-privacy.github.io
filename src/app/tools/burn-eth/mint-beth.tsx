@@ -1,19 +1,27 @@
 import LoadingComponent from '@/components/tools/loading';
+import { Icons } from '@/components/ui/icons';
 import { useInterval } from '@/hooks/use-interval';
-import { useNetwork } from '@/hooks/use-network';
+import { useNetwork, WormNetwork } from '@/hooks/use-network';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
 import { calculateNullifier } from '@/lib/core/burn-address/nullifier';
+import { calculateRemainingCoinHash } from '@/lib/core/burn-address/remaining_coin';
 
 import { proof_get_by_nullifier, RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
 import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-post';
+import { relay_post } from '@/lib/core/miner-api/relay_post';
 
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { usePublicClient } from 'wagmi';
 
 export const MintBETHLayout = (props: { mintAmount: string; burnAddress: BurnAddressContent }) => {
   const [isLoading, setIsLoading] = useState(false);
   let [flowState, setFlowState] = useState<FlowState>(FlowState.EndPoint);
   const [proof, setProof] = useState<RapidsnarkOutput | null>(null);
+  const [endPoint, setEndPoint] = useState(ENDPOINTS[0].url);
+  const [blockNumber, setBlockNumber] = useState(0n);
+  let network = useNetwork();
+
+  let nullifier = useMemo(() => calculateNullifier(props.burnAddress.burnKey), []);
 
   const onProofGenerated = (proof: RapidsnarkOutput) => {
     setProof(proof);
@@ -21,10 +29,39 @@ export const MintBETHLayout = (props: { mintAmount: string; burnAddress: BurnAdd
     setIsLoading(false);
   };
 
-  const onProofGenerationFailed = (msg: string) => {
+  const onError = (msg: string) => {
     //TODO show error
     console.error(msg);
     setIsLoading(false);
+  };
+
+  const onSubmitClick = async () => {
+    const remaining_coin = calculateRemainingCoinHash(
+      props.burnAddress.burnKey,
+      props.burnAddress.revealAmount,
+      props.burnAddress.revealAmount
+    );
+
+    try {
+      setIsLoading(true);
+      await relay_post(endPoint, {
+        network: network,
+        proof: proof!,
+        block_number: blockNumber,
+        nullifier: nullifier,
+        remaining_coin: remaining_coin,
+        broadcaster_fee: props.burnAddress.broadcasterFee,
+        reveal_amount: props.burnAddress.revealAmount,
+        receiver: props.burnAddress.receiverAddr,
+        prover_fee: props.burnAddress.proverFee,
+        swap_calldata: props.burnAddress.receiverHook,
+      });
+      setIsLoading(false);
+      setFlowState(FlowState.Submitted);
+    } catch (e) {
+      console.error(e);
+      onError(typeof e == 'string' ? e : 'unknown error');
+    }
   };
 
   if (isLoading) {
@@ -45,14 +82,19 @@ export const MintBETHLayout = (props: { mintAmount: string; burnAddress: BurnAdd
             setIsLoading={setIsLoading}
             setFlowState={setFlowState}
             onProofGenerated={onProofGenerated}
-            onProofGenerationFailed={onProofGenerationFailed}
+            onProofGenerationFailed={onError}
+            endPoint={endPoint}
+            setEndPoint={setEndPoint}
+            network={network}
+            nullifier={nullifier}
+            setBlockNumber={setBlockNumber}
           />
         </>
       );
     case FlowState.Generated:
       return (
         <>
-          <Generated burnAddress={props.burnAddress} />
+          <Generated burnAddress={props.burnAddress} onSubmitClick={onSubmitClick} />
         </>
       );
     case FlowState.Submitted:
@@ -74,17 +116,16 @@ const EndPointSelection = (props: {
   setFlowState: Dispatch<SetStateAction<FlowState>>;
   onProofGenerated: (proof: RapidsnarkOutput) => void;
   onProofGenerationFailed: (msg: string) => void;
+  endPoint: string;
+  setEndPoint: Dispatch<SetStateAction<string>>;
+  network: WormNetwork;
+  nullifier: bigint;
+  setBlockNumber: Dispatch<SetStateAction<bigint>>;
 }) => {
-  const [endPoint, setEndPoint] = useState(ENDPOINTS[0].url);
-  let network = useNetwork();
-
-  let nullifier = calculateNullifier(props.burnAddress.burnKey).toString(10);
-  console.log(`nullifier: ${nullifier}`);
-
   const fetchResultInterval = async () => {
     // keep polling until we get
     try {
-      const result = await proof_get_by_nullifier(endPoint, nullifier);
+      const result = await proof_get_by_nullifier(props.endPoint, props.nullifier.toString(10));
       if (result != 'waiting') {
         props.onProofGenerated(result);
         stopPolling();
@@ -106,6 +147,7 @@ const EndPointSelection = (props: {
     props.setIsLoading(true);
     try {
       let blockNumber = (await client!.getBlock()).number;
+      props.setBlockNumber(blockNumber);
       let proof = await client?.getProof({
         address: props.burnAddress.burnAddress as `0x${string}`,
         storageKeys: [],
@@ -114,10 +156,10 @@ const EndPointSelection = (props: {
 
       const burnAddress = props.burnAddress;
       await proof_post(
-        endPoint,
+        props.endPoint,
         createProofPostRequest(
           blockNumber,
-          network,
+          props.network,
           burnAddress.burnKey,
           burnAddress.receiverAddr,
           burnAddress.broadcasterFee,
@@ -144,9 +186,9 @@ const EndPointSelection = (props: {
       <select
         id="pet-select"
         className="appearance-none rounded-lg bg-[rgba(var(--neutral-low-rgb),0.36)] px-3 py-2.5"
-        value={endPoint}
+        value={props.endPoint}
         onChange={(e) => {
-          setEndPoint(e.target.value);
+          props.setEndPoint(e.target.value);
         }}
       >
         {ENDPOINTS.map((item) => (
@@ -164,17 +206,13 @@ const EndPointSelection = (props: {
   );
 };
 
-const Generated = (props: { burnAddress: BurnAddressContent }) => {
-  const onSubmitClicked = () => {
-    console.log('submit clicked');
-  };
-
+const Generated = (props: { burnAddress: BurnAddressContent; onSubmitClick: () => void }) => {
   return (
     <div className="flex w-full flex-col gap-6 text-white">
       <div className="text[24px]">Proof Generated</div>
       <div className="text[18px]">{props.burnAddress.burnAddress}</div>
       <div className="grow" />
-      <button onClick={onSubmitClicked} className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black">
+      <button onClick={props.onSubmitClick} className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black">
         Submit proof
       </button>
     </div>
@@ -182,7 +220,38 @@ const Generated = (props: { burnAddress: BurnAddressContent }) => {
 };
 
 const Submitted = (props: {}) => {
-  return <div> Submitted! </div>;
+  const onBackupProofDataClick = () => {
+    // TODO
+    console.error('not implemented');
+  };
+
+  const onMineWormClick = () => {
+    // TODO
+    console.error('not implemented');
+  };
+
+  return (
+    <div className="flex w-full flex-col gap-6 text-white">
+      <div className="text[24px] font-bold">Proof submitted successfully</div>
+      <div className="text[18px] font-normal">Now you can Mine WORM.</div>
+      <div className="grow" />
+
+      <div className="flex justify-center">
+        <button onClick={onBackupProofDataClick} className="flex items-center text-sm text-[14px] font-bold text-brand">
+          <Icons.backup className="mr-2" />
+          Backup proof data
+        </button>
+      </div>
+
+      <button
+        onClick={onMineWormClick}
+        className="flex w-full items-center justify-center rounded-lg bg-brand px-4 py-3 font-semibold text-black"
+      >
+        <Icons.target className="mr-2" />
+        Mine Worm
+      </button>
+    </div>
+  );
 };
 
 enum FlowState {
