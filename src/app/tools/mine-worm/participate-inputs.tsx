@@ -9,8 +9,10 @@ import { useState } from 'react';
 import { formatUnits, parseEther } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useClient, useConnection, useReadContract, useWriteContract } from 'wagmi';
+import Participated from './participated';
 
 export default function ParticipateInputs() {
+  const [participated, setParticipated] = useState(false);
   const bethAmount = useInput('', validateETHAmount);
   const numberOfEpochs = useInput('', validatePositiveInteger);
   const [participateLoading, setParticipateLoading] = useState(false);
@@ -36,6 +38,7 @@ export default function ParticipateInputs() {
     return <ErrorComponent title="Participate failed" details="error happens while doing participate" />;
   }
 
+  if (participated) return <Participated amount={bethAmount.value} numberOfEpochs={numberOfEpochs.value} />;
   if (balanceOfLoading) return <LoadingComponent />;
   if (participateLoading) return <LoadingComponent />;
 
@@ -82,6 +85,8 @@ export default function ParticipateInputs() {
       if (r.status == 'reverted') throw 'participate reverted';
 
       console.log('got approve receipt');
+
+      setParticipated(true);
     } catch (e) {
       // TODO show error to user
       console.error(e);

@@ -1,0 +1,33 @@
+import { Icons } from '@/components/ui/icons';
+import Link from 'next/link';
+
+export default function Participated(props: { amount: string; numberOfEpochs: string }) {
+  return (
+    <div className="flex grow flex-col gap-6 p-4 text-white">
+      <div className="text-[24px] font-bold">Participated successfully</div>
+      <div>
+        Congratulation! <br /> <br />
+        You successfully participate total <b>{props.amount} </b> <span className="text-[#FF47C0]">BETH </span>in next{' '}
+        <b>{props.numberOfEpochs} </b>epochs. <br /> <br />
+        Ready to claim your <span className="text-brand">WORM</span>s.
+      </div>
+
+      <div className="grow" />
+
+      {/* TODO handle click */}
+      <div className="flex justify-center">
+        <button className="flex items-center text-sm text-[14px] font-bold text-brand">
+          <Icons.backup className="mr-2" />
+          Backup participation data
+        </button>
+      </div>
+
+      <Link href="/tools/claim-worm">
+        <button className="flex w-full items-center justify-center rounded-lg bg-brand px-4 py-3 font-semibold text-black">
+          <Icons.target className="mr-2" />
+          Claim WORM
+        </button>
+      </Link>
+    </div>
+  );
+}
