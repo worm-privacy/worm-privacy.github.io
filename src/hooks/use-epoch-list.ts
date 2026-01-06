@@ -33,12 +33,14 @@ export function useEpochList(): UseEpochListResult {
 
       let epochs: Epoch[] = [];
       for (let i = 0; i < 5; i++) {
+        const share = info.totalContribs[i] === 0n ? 0 : Number((info.userContribs[i] / info.totalContribs[i]) * 100n);
+        const reward = rewardOf(since + BigInt(i), info.currentEpoch, info.currentEpochReward);
         epochs.push({
           num: since + BigInt(i),
           bethAmount: info.totalContribs[i],
-          wormAmount: rewardOf(since + BigInt(i), info.currentEpoch, info.currentEpochReward),
-          share: info.totalContribs[i] === 0n ? 0 : Number((info.userContribs[i] / info.totalContribs[i]) * 100n),
-          shareAmount: info.userContribs[i],
+          wormAmount: reward,
+          share: share,
+          shareAmount: (BigInt(share) / 100n) * reward,
         });
       }
 
