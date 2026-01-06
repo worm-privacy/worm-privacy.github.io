@@ -1,3 +1,4 @@
+import ErrorComponent from '@/components/tools/error-component';
 import InputComponent from '@/components/tools/input-text';
 import LoadingComponent from '@/components/tools/loading';
 import { useInput } from '@/hooks/use-input';
@@ -30,7 +31,10 @@ export default function ParticipateInputs() {
     functionName: 'balanceOf',
     args: [address!],
   });
-  if (isError) console.log('error:', error); // TODO error component
+  if (isError) {
+    console.log('error:', error);
+    return <ErrorComponent title="Participate failed" details="error happens while doing participate" />;
+  }
 
   if (balanceOfLoading) return <LoadingComponent />;
   if (participateLoading) return <LoadingComponent />;
