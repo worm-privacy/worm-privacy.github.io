@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useClient, useWriteContract } from 'wagmi';
 
-export default function TotalClaim(props: { result: UseClaimListResult }) {
+export default function TotalClaim(props: { result: UseClaimListResult; refresh: () => Promise<void> }) {
   let result = props.result;
 
   const { mutateAsync } = useWriteContract();
@@ -42,6 +42,7 @@ export default function TotalClaim(props: { result: UseClaimListResult }) {
       let r = await waitForTransactionReceipt(client!, { hash: approveTXHash });
       if (r.status == 'reverted') throw 'claim reverted';
       setClaimState('done');
+      await props.refresh();
     } catch (e) {
       setClaimState('error');
       console.log(e);

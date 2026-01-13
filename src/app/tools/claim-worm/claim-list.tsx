@@ -11,7 +11,7 @@ import { useClient, useWriteContract } from 'wagmi';
 const CARD_STYLE =
   'mx-auto flex w-[580px] min-h-[580px] flex-col gap-1 rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#010204] p-4 shadow-lg' as const;
 
-export default function ClaimList(props: { result: UseClaimListResult }) {
+export default function ClaimList(props: { result: UseClaimListResult; refresh: () => Promise<void> }) {
   const result = props.result;
   if (result.status == 'loading')
     return (
@@ -40,7 +40,7 @@ export default function ClaimList(props: { result: UseClaimListResult }) {
   return (
     <div className={CARD_STYLE}>
       {result.readyToClaim.map((c) => {
-        return <ReadyToClaimItem key={c.epochNum} epochNumber={c.epochNum} share={c.amount} />;
+        return <ReadyToClaimItem key={c.epochNum} epochNumber={c.epochNum} share={c.amount} refresh={props.refresh} />;
       })}
       <Divider />
       {result.upcoming.map((c) => {
@@ -50,7 +50,7 @@ export default function ClaimList(props: { result: UseClaimListResult }) {
   );
 }
 
-const ReadyToClaimItem = (props: { epochNumber: bigint; share: bigint }) => {
+const ReadyToClaimItem = (props: { epochNumber: bigint; share: bigint; refresh: () => Promise<void> }) => {
   const { mutateAsync } = useWriteContract();
   const client = useClient();
   const [claimState, setClaimState] = useState<'idle' | 'loading' | 'error' | 'done'>('idle');
@@ -70,6 +70,7 @@ const ReadyToClaimItem = (props: { epochNumber: bigint; share: bigint }) => {
       let r = await waitForTransactionReceipt(client!, { hash: approveTXHash });
       if (r.status == 'reverted') throw 'claim reverted';
       setClaimState('done');
+      await props.refresh();
     } catch (e) {
       setClaimState('error');
       console.log(e);
