@@ -1,18 +1,50 @@
+import { useClaimList } from '@/hooks/use-claim-list';
 import { roundEther } from '@/lib/core/utils/round-ether';
-import { parseEther } from 'ethers';
+import { useEffect } from 'react';
+
+const CARD_STYLE =
+  'mx-auto flex w-[580px] min-h-[580px] flex-col gap-1 rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#010204] p-4 shadow-lg' as const;
 
 export default function ClaimList() {
-  return (
-    <div className="mx-auto w-[580px]">
-      <div className="flex flex-col gap-1 rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#010204] p-4 shadow-lg">
-        <ReadyToClaimItem epochNumber={100n} share={parseEther('1.2')} />
-        <ReadyToClaimItem epochNumber={101n} share={parseEther('1.1')} />
-        <ReadyToClaimItem epochNumber={102n} share={parseEther('0.9')} />
-        <Divider />
-        <UpComingEpochItem epochNumber={103n} share={parseEther('0.2')} />
-        <UpComingEpochItem epochNumber={104n} share={parseEther('0.0')} />
-        <UpComingEpochItem epochNumber={105n} share={parseEther('0.5')} />
+  let [result, refresh] = useClaimList();
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
+
+  if (result.status == 'loading')
+    return (
+      <div className={CARD_STYLE}>
+        <div className="text-white">Loading...</div>
       </div>
+    );
+
+  if (result.status == 'error') {
+    console.error(result.error);
+    return (
+      <div className={CARD_STYLE}>
+        <div className="text-red-500">Error loading data</div>
+      </div>
+    );
+  }
+
+  if (result.readyToClaim.length == 0 && result.upcoming.length == 0) {
+    return (
+      <div className={CARD_STYLE}>
+        <div className="text-white">Nothing to claim</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={CARD_STYLE}>
+      {result.readyToClaim.map((c) => {
+        return <ReadyToClaimItem key={c.epochNum} epochNumber={c.epochNum} share={c.amount} />;
+      })}
+      <Divider />
+      {result.upcoming.map((c) => {
+        return <UpComingEpochItem key={c.epochNum} epochNumber={c.epochNum} share={c.amount} />;
+      })}
     </div>
   );
 }

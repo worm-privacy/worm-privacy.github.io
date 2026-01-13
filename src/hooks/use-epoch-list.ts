@@ -74,8 +74,8 @@ export type UseEpochListResult =
       epochPassedTime: bigint; // seconds
     };
 
-const REWARD_DECAY_NUMERATOR = 9999966993045875n;
-const REWARD_DECAY_DENOMINATOR = 10000000000000000n;
+export const REWARD_DECAY_NUMERATOR = 9999966993045875n;
+export const REWARD_DECAY_DENOMINATOR = 10000000000000000n;
 const rewardOf = (epoch: bigint, sampleEpoch: bigint, sampleEpochReward: bigint): bigint => {
   if (epoch == sampleEpoch) return sampleEpochReward;
 
