@@ -1,23 +1,18 @@
 import { Button, DialogTrigger } from '@/components/ui';
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog/dialog';
 import { Icons } from '@/components/ui/icons';
-import { useClaimList } from '@/hooks/use-claim-list';
+import { UseClaimListResult } from '@/hooks/use-claim-list';
 import { WORMcontractABI, WORMcontractAddress } from '@/lib/core/contracts/worm';
 import { roundEther } from '@/lib/core/utils/round-ether';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useClient, useWriteContract } from 'wagmi';
 
 const CARD_STYLE =
   'mx-auto flex w-[580px] min-h-[580px] flex-col gap-1 rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#010204] p-4 shadow-lg' as const;
 
-export default function ClaimList() {
-  let [result, refresh] = useClaimList();
-
-  useEffect(() => {
-    refresh();
-  }, [refresh]);
-
+export default function ClaimList(props: { result: UseClaimListResult }) {
+  const result = props.result;
   if (result.status == 'loading')
     return (
       <div className={CARD_STYLE}>
