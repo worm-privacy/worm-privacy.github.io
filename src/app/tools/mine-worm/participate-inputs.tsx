@@ -2,12 +2,11 @@ import ErrorComponent from '@/components/tools/error-component';
 import InputComponent from '@/components/tools/input-text';
 import LoadingComponent from '@/components/tools/loading';
 import { useInput } from '@/hooks/use-input';
-import { BETHContractABI, BETHContractAddress } from '@/lib/core/contracts/beth';
-import { WORMContract, WORMcontractAddress } from '@/lib/core/contracts/worm';
+import { BETHContract, BETHContractABI, BETHContractAddress } from '@/lib/core/contracts/beth';
+import { WORMContract } from '@/lib/core/contracts/worm';
 import { validateAll, validateETHAmount, validatePositiveInteger } from '@/lib/core/utils/validator';
 import { useState } from 'react';
 import { formatUnits, parseEther } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
 import { useClient, useConnection, useReadContract, useWriteContract } from 'wagmi';
 import Participated from './participated';
 
@@ -58,22 +57,8 @@ export default function ParticipateInputs() {
 
     setParticipateLoading(true);
     try {
-      console.log('calling approve');
-      const approveTXHash = await mutateAsync({
-        address: BETHContractAddress,
-        abi: BETHContractABI,
-        functionName: 'approve',
-        args: [WORMcontractAddress, beth],
-      });
-
-      console.log('waiting for receipt');
-      let r = await waitForTransactionReceipt(client!, { hash: approveTXHash });
-      if (r.status == 'reverted') throw 'allowance reverted';
-
-      console.log('got approve receipt');
-
+      await BETHContract.approve(mutateAsync, client!, beth);
       await WORMContract.participate(mutateAsync, client!, bethPerEpoch, epochs);
-
       setParticipated(true);
     } catch (e) {
       // TODO show error to user

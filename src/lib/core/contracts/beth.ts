@@ -1,5 +1,31 @@
+import { Client } from 'viem';
+import { waitForTransactionReceipt } from 'viem/actions';
+import { Config } from 'wagmi';
+import { WriteContractMutateAsync } from 'wagmi/query';
+import { WORMcontractAddress } from './worm';
+
 //TODO change this address
-export const BETHContractAddress = '0x4ed7c70F96B99c776995fB64377f0d4aB3B0e1C1';
+export const BETHContractAddress = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0';
+
+export namespace BETHContract {
+  export const approve = async (
+    mutateAsync: WriteContractMutateAsync<Config, unknown>,
+    client: Client,
+    amount: bigint
+  ) => {
+    console.log(`calling approve(${WORMcontractAddress}, ${amount})`);
+    const approveTXHash = await mutateAsync({
+      address: BETHContractAddress,
+      abi: BETHContractABI,
+      functionName: 'approve',
+      args: [WORMcontractAddress, amount],
+    });
+    console.log('waiting for receipt');
+    let r = await waitForTransactionReceipt(client!, { hash: approveTXHash });
+    if (r.status == 'reverted') throw 'allowance reverted';
+    console.log('got approve receipt');
+  };
+}
 
 export const BETHContractABI = [
   {
