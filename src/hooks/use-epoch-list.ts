@@ -1,5 +1,6 @@
 import { Epoch } from '@/app/tools/mine-worm/epoch-viewer';
 import { WORMcontractABI, WORMcontractAddress } from '@/lib/core/contracts/worm';
+import { rewardOfWithSample } from '@/lib/core/utils/reward-of';
 import { useCallback, useState } from 'react';
 import { readContract } from 'viem/actions';
 import { useClient, useConnection } from 'wagmi';
@@ -34,7 +35,7 @@ export function useEpochList(): [UseEpochListResult, () => Promise<void>] {
       let epochs: Epoch[] = [];
       for (let i = 0; i < 5; i++) {
         const share = info.totalContribs[i] === 0n ? 0 : Number((info.userContribs[i] / info.totalContribs[i]) * 100n);
-        const reward = rewardOf(since + BigInt(i), info.currentEpoch, info.currentEpochReward);
+        const reward = rewardOfWithSample(since + BigInt(i), info.currentEpoch, info.currentEpochReward);
         epochs.push({
           num: since + BigInt(i),
           bethAmount: info.totalContribs[i],
@@ -73,25 +74,3 @@ export type UseEpochListResult =
       currentEpoch: bigint;
       epochPassedTime: bigint; // seconds
     };
-
-export const REWARD_DECAY_NUMERATOR = 9999966993045875n;
-export const REWARD_DECAY_DENOMINATOR = 10000000000000000n;
-const rewardOf = (epoch: bigint, sampleEpoch: bigint, sampleEpochReward: bigint): bigint => {
-  if (epoch == sampleEpoch) return sampleEpochReward;
-
-  let i = sampleEpoch;
-  let reward = sampleEpochReward;
-  if (epoch > sampleEpoch) {
-    while (i !== epoch) {
-      reward = (reward * REWARD_DECAY_NUMERATOR) / REWARD_DECAY_DENOMINATOR;
-      i++;
-    }
-  } else {
-    while (i !== epoch) {
-      reward = (reward * REWARD_DECAY_DENOMINATOR) / REWARD_DECAY_NUMERATOR;
-      i--;
-    }
-  }
-
-  return reward;
-};

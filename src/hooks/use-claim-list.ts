@@ -1,8 +1,8 @@
 import { WORMcontractABI, WORMcontractAddress } from '@/lib/core/contracts/worm';
+import { rewardOf } from '@/lib/core/utils/reward-of';
 import { useCallback, useState } from 'react';
 import { getContractEvents, readContract } from 'viem/actions';
 import { useClient, useConnection } from 'wagmi';
-import { REWARD_DECAY_DENOMINATOR, REWARD_DECAY_NUMERATOR } from './use-epoch-list';
 
 /// returns [result, refresh]
 export function useClaimList(): [UseClaimListResult, () => Promise<void>] {
@@ -111,15 +111,4 @@ export type UseClaimListResult =
 export type ClaimModel = {
   epochNum: bigint;
   amount: bigint;
-};
-
-/// returns mint amount of epoch reward (WORM amount)
-const rewardOf = async (epoch: bigint): Promise<bigint> => {
-  let reward = 50000000000000000000n;
-  for (let i = 0n; i < epoch; i++) {
-    reward = (reward * REWARD_DECAY_NUMERATOR) / REWARD_DECAY_DENOMINATOR;
-    // giving up on CPU a lil bit to prevent lag
-    if (i % 10000n === 0n) await new Promise((resolve) => setTimeout(resolve, 0));
-  }
-  return reward;
 };
