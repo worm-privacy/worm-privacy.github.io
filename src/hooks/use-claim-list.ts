@@ -1,7 +1,6 @@
-import { WORMcontractABI, WORMcontractAddress } from '@/lib/core/contracts/worm';
+import { WORMContract } from '@/lib/core/contracts/worm';
 import { rewardOf } from '@/lib/core/utils/reward-of';
 import { useCallback, useState } from 'react';
-import { getContractEvents, readContract } from 'viem/actions';
 import { useClient, useConnection } from 'wagmi';
 
 /// returns [result, refresh]
@@ -16,30 +15,9 @@ export function useClaimList(): [UseClaimListResult, () => Promise<void>] {
     setResult({ status: 'loading' });
 
     try {
-      let currentEpoch = await readContract(client, {
-        address: WORMcontractAddress,
-        abi: WORMcontractABI,
-        functionName: 'currentEpoch',
-        args: [],
-      });
-
-      let participates = (
-        await getContractEvents(client, {
-          address: WORMcontractAddress,
-          abi: WORMcontractABI,
-          eventName: 'Participated',
-          args: { participant: address },
-        })
-      ).map((p) => p.args);
-
-      let claims = (
-        await getContractEvents(client, {
-          address: WORMcontractAddress,
-          abi: WORMcontractABI,
-          eventName: 'Claimed',
-          args: { claimant: address },
-        })
-      ).map((c) => c.args);
+      const currentEpoch = await WORMContract.currentEpoch(client);
+      const participates = (await WORMContract.ParticipatedEvent(client, address)).map((p) => p.args);
+      const claims = (await WORMContract.ClaimedEvent(client, address)).map((p) => p.args);
 
       let alreadyClaimedEpochs = new Set<bigint>();
       for (let claim of claims) {
@@ -62,12 +40,7 @@ export function useClaimList(): [UseClaimListResult, () => Promise<void>] {
       // notClaimed `amount` values are in BETH
       // We need to calculate worm mint amount
       for (let e of notClaimed) {
-        const totalBeth = await readContract(client, {
-          address: WORMcontractAddress,
-          abi: WORMcontractABI,
-          functionName: 'epochTotal',
-          args: [e.epochNum],
-        });
+        const totalBeth = await WORMContract.epochTotal(client, e.epochNum);
         const userBeth = e.amount;
         const wormMintAmount = ((await rewardOf(e.epochNum)) * userBeth) / totalBeth;
         e.amount = wormMintAmount; // So .amount is now converted to Worm

@@ -1,8 +1,7 @@
 import { Epoch } from '@/app/tools/mine-worm/epoch-viewer';
-import { WORMcontractABI, WORMcontractAddress } from '@/lib/core/contracts/worm';
+import { WORMContract } from '@/lib/core/contracts/worm';
 import { rewardOfWithSample } from '@/lib/core/utils/reward-of';
 import { useCallback, useState } from 'react';
-import { readContract } from 'viem/actions';
 import { useClient, useConnection } from 'wagmi';
 
 /// returns [result, refresh]
@@ -17,20 +16,9 @@ export function useEpochList(): [UseEpochListResult, () => Promise<void>] {
     setResult({ status: 'loading' });
 
     try {
-      let currentEpoch = await readContract(client, {
-        address: WORMcontractAddress,
-        abi: WORMcontractABI,
-        functionName: 'currentEpoch',
-        args: [],
-      });
-      let since = currentEpoch < 2 ? 0n : currentEpoch - 2n;
-
-      let info = await readContract(client, {
-        address: WORMcontractAddress,
-        abi: WORMcontractABI,
-        functionName: 'info',
-        args: [address, since, 5n],
-      });
+      const currentEpoch = await WORMContract.currentEpoch(client);
+      const since = currentEpoch < 2 ? 0n : currentEpoch - 2n;
+      const info = await WORMContract.info(client, address, since, 5n);
 
       let epochs: Epoch[] = [];
       for (let i = 0; i < 5; i++) {

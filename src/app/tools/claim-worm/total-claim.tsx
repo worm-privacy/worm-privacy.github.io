@@ -1,8 +1,7 @@
 import { UseClaimListResult } from '@/hooks/use-claim-list';
-import { WORMcontractABI, WORMcontractAddress } from '@/lib/core/contracts/worm';
+import { WORMContract } from '@/lib/core/contracts/worm';
 import { roundEther } from '@/lib/core/utils/round-ether';
 import { useState } from 'react';
-import { waitForTransactionReceipt } from 'viem/actions';
 import { useClient, useWriteContract } from 'wagmi';
 
 export default function TotalClaim(props: { result: UseClaimListResult; refresh: () => Promise<void> }) {
@@ -30,17 +29,7 @@ export default function TotalClaim(props: { result: UseClaimListResult; refresh:
 
     try {
       setClaimState('loading');
-      console.log(`calling claim(${start}, ${numberOfEpochs})`);
-      const approveTXHash = await mutateAsync({
-        address: WORMcontractAddress,
-        abi: WORMcontractABI,
-        functionName: 'claim',
-        args: [start, numberOfEpochs],
-      });
-
-      console.log('waiting for claim receipt');
-      let r = await waitForTransactionReceipt(client!, { hash: approveTXHash });
-      if (r.status == 'reverted') throw 'claim reverted';
+      await WORMContract.claim(mutateAsync, client!, start, numberOfEpochs);
       setClaimState('done');
       await props.refresh();
     } catch (e) {

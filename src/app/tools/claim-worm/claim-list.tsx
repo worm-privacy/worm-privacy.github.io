@@ -2,10 +2,9 @@ import { Button, DialogTrigger } from '@/components/ui';
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog/dialog';
 import { Icons } from '@/components/ui/icons';
 import { UseClaimListResult } from '@/hooks/use-claim-list';
-import { WORMcontractABI, WORMcontractAddress } from '@/lib/core/contracts/worm';
+import { WORMContract } from '@/lib/core/contracts/worm';
 import { roundEther } from '@/lib/core/utils/round-ether';
 import { useState } from 'react';
-import { waitForTransactionReceipt } from 'viem/actions';
 import { useClient, useWriteContract } from 'wagmi';
 
 const CARD_STYLE =
@@ -58,17 +57,7 @@ const ReadyToClaimItem = (props: { epochNumber: bigint; share: bigint; refresh: 
   const onClaimClicked = async () => {
     try {
       setClaimState('loading');
-      console.log(`calling claim(${props.epochNumber}, 1)`);
-      const approveTXHash = await mutateAsync({
-        address: WORMcontractAddress,
-        abi: WORMcontractABI,
-        functionName: 'claim',
-        args: [props.epochNumber, 1n],
-      });
-
-      console.log('waiting for claim receipt');
-      let r = await waitForTransactionReceipt(client!, { hash: approveTXHash });
-      if (r.status == 'reverted') throw 'claim reverted';
+      await WORMContract.claim(mutateAsync, client!, props.epochNumber, 1n);
       setClaimState('done');
       await props.refresh();
     } catch (e) {

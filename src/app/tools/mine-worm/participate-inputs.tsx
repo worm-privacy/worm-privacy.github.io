@@ -3,7 +3,7 @@ import InputComponent from '@/components/tools/input-text';
 import LoadingComponent from '@/components/tools/loading';
 import { useInput } from '@/hooks/use-input';
 import { BETHContractABI, BETHContractAddress } from '@/lib/core/contracts/beth';
-import { WORMcontractABI, WORMcontractAddress } from '@/lib/core/contracts/worm';
+import { WORMContract, WORMcontractAddress } from '@/lib/core/contracts/worm';
 import { validateAll, validateETHAmount, validatePositiveInteger } from '@/lib/core/utils/validator';
 import { useState } from 'react';
 import { formatUnits, parseEther } from 'viem';
@@ -72,19 +72,7 @@ export default function ParticipateInputs() {
 
       console.log('got approve receipt');
 
-      console.log('calling participate');
-      const participateTXHash = await mutateAsync({
-        address: WORMcontractAddress,
-        abi: WORMcontractABI,
-        functionName: 'participate',
-        args: [bethPerEpoch, epochs],
-      });
-
-      console.log('waiting for receipt');
-      r = await waitForTransactionReceipt(client!, { hash: participateTXHash });
-      if (r.status == 'reverted') throw 'participate reverted';
-
-      console.log('got approve receipt');
+      await WORMContract.participate(mutateAsync, client!, bethPerEpoch, epochs);
 
       setParticipated(true);
     } catch (e) {

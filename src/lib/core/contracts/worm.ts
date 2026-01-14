@@ -1,5 +1,95 @@
+import { Client } from 'viem';
+import { getContractEvents, readContract, waitForTransactionReceipt } from 'viem/actions';
+import { Config } from 'wagmi';
+import { WriteContractMutateAsync } from 'wagmi/query';
+
 //TODO change this address
-export const WORMcontractAddress = '0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44';
+export const WORMcontractAddress = '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9';
+
+export namespace WORMContract {
+  export const currentEpoch = async (client: Client): Promise<bigint> => {
+    return await readContract(client, {
+      address: WORMcontractAddress,
+      abi: WORMcontractABI,
+      functionName: 'currentEpoch',
+      args: [],
+    });
+  };
+
+  export const info = async (client: Client, user: `0x${string}`, since: bigint, count: bigint) => {
+    return await readContract(client, {
+      address: WORMcontractAddress,
+      abi: WORMcontractABI,
+      functionName: 'info',
+      args: [user, since, count],
+    });
+  };
+
+  export const epochTotal = async (client: Client, epochNum: bigint) => {
+    return await readContract(client, {
+      address: WORMcontractAddress,
+      abi: WORMcontractABI,
+      functionName: 'epochTotal',
+      args: [epochNum],
+    });
+  };
+
+  export const ParticipatedEvent = async (client: Client, address: `0x${string}`) => {
+    return await getContractEvents(client, {
+      address: WORMcontractAddress,
+      abi: WORMcontractABI,
+      eventName: 'Participated',
+      args: { participant: address },
+    });
+  };
+
+  export const ClaimedEvent = async (client: Client, address: `0x${string}`) => {
+    return await getContractEvents(client, {
+      address: WORMcontractAddress,
+      abi: WORMcontractABI,
+      eventName: 'Claimed',
+      args: { claimant: address },
+    });
+  };
+
+  export const participate = async (
+    mutateAsync: WriteContractMutateAsync<Config, unknown>,
+    client: Client,
+    amountPerEpoch: bigint,
+    numberOfEpochs: bigint
+  ) => {
+    console.log(`calling participate(${amountPerEpoch}, ${numberOfEpochs})`);
+    const participateTXHash = await mutateAsync({
+      address: WORMcontractAddress,
+      abi: WORMcontractABI,
+      functionName: 'participate',
+      args: [amountPerEpoch, numberOfEpochs],
+    });
+    console.log('waiting for receipt');
+    const r = await waitForTransactionReceipt(client, { hash: participateTXHash });
+    if (r.status == 'reverted') throw 'participate reverted';
+    console.log('got approve receipt');
+  };
+
+  export const claim = async (
+    mutateAsync: WriteContractMutateAsync<Config, unknown>,
+    client: Client,
+    start: bigint,
+    numberOfEpochs: bigint
+  ) => {
+    console.log(`calling claim(${start}, ${numberOfEpochs})`);
+    const participateTXHash = await mutateAsync({
+      address: WORMcontractAddress,
+      abi: WORMcontractABI,
+      functionName: 'claim',
+      args: [start, numberOfEpochs],
+    });
+    console.log('waiting for receipt');
+    const r = await waitForTransactionReceipt(client, { hash: participateTXHash });
+    if (r.status == 'reverted') throw 'claim reverted';
+    console.log('got approve receipt');
+  };
+}
 
 export const WORMcontractABI = [
   {
