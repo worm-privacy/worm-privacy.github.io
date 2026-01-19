@@ -2,12 +2,13 @@ import InputComponent from '@/components/tools/input-text';
 import { Icons } from '@/components/ui/icons';
 import { useInput, UserInputState } from '@/hooks/use-input';
 import { BurnAddressContent, generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
+import { calculateMintAmountStr } from '@/lib/core/utils/beth-amount-calculator';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
 import { parseEther } from 'ethers';
 import { Dispatch, SetStateAction, useState } from 'react';
 
 export const BurnAddressGeneratorLayout = (props: {
-  onBurnAddressGenerated: (burnAddress: BurnAddressContent) => void;
+  onBurnAddressGenerated: (burnAddress: BurnAddressContent, mintAmount: string) => void;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
 }) => {
@@ -23,6 +24,13 @@ export const BurnAddressGeneratorLayout = (props: {
   const broadcasterFee = useInput('0.001', validateETHAmount);
   const swapAmount = useInput('0.001', validateETHAmount);
 
+  const calculatedMintAmount = calculateMintAmountStr(
+    burnAmount.value,
+    swapAmount.value,
+    proverFee.value,
+    broadcasterFee.value
+  );
+
   const onGenerateAddressClicked = async () => {
     // Validation
     if (!validateAll(burnAmount, receiverAddress)) return;
@@ -35,9 +43,9 @@ export const BurnAddressGeneratorLayout = (props: {
         parseEther(proverFee.value),
         parseEther(broadcasterFee.value),
         parseEther(burnAmount.value),
-        new Uint8Array()
+        new Uint8Array() // TODO
       );
-      props.onBurnAddressGenerated(burnAddress);
+      props.onBurnAddressGenerated(burnAddress, calculatedMintAmount);
     } catch (e) {
       console.error(e);
     } finally {
@@ -71,6 +79,7 @@ export const BurnAddressGeneratorLayout = (props: {
           onGenerateBurnAddressClicked={onGenerateAddressClicked}
           onRecoverClicked={onRecoverClicked}
           setIsAdvancedOpen={setIsAdvancedOpen}
+          calculatedBeth={calculatedMintAmount}
         />
       )}
     </div>
@@ -80,6 +89,7 @@ export const BurnAddressGeneratorLayout = (props: {
 const MainLayout = (props: {
   burnAmount: UserInputState;
   receiverAddress: UserInputState;
+  calculatedBeth: string;
   setIsAdvancedOpen: Dispatch<SetStateAction<boolean>>;
   onGenerateBurnAddressClicked: () => void;
   onRecoverClicked: () => void;
@@ -107,7 +117,7 @@ const MainLayout = (props: {
           <div className="mb-1 text-white">You get</div>
           <div>
             {/* TODO calculate amounts */}
-            <span className="text-white">0.65 </span>
+            <span className="text-white">{props.calculatedBeth} </span>
             <span className="text-pink-400">BETH</span>
             <span className="text-white"> + </span>
             <span className="text-white">~0.05</span>
