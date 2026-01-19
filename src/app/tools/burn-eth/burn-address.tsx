@@ -1,17 +1,22 @@
 import InputComponent from '@/components/tools/input-text';
 import { Icons } from '@/components/ui/icons';
+import { useDebounceEffect } from '@/hooks/use-debounce-effect';
 import { useInput, UserInputState } from '@/hooks/use-input';
 import { BurnAddressContent, generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
+import { UniSwapContract } from '@/lib/core/contracts/uniswap';
 import { calculateMintAmountStr } from '@/lib/core/utils/beth-amount-calculator';
+import { roundEther } from '@/lib/core/utils/round-ether';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
 import { parseEther } from 'ethers';
 import { Dispatch, SetStateAction, useState } from 'react';
+import { useClient } from 'wagmi';
 
 export const BurnAddressGeneratorLayout = (props: {
   onBurnAddressGenerated: (burnAddress: BurnAddressContent, mintAmount: string) => void;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
 }) => {
+  const client = useClient();
   // Switch between main and advanced
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
 
@@ -23,6 +28,23 @@ export const BurnAddressGeneratorLayout = (props: {
   const proverFee = useInput('0.001', validateETHAmount);
   const broadcasterFee = useInput('0.001', validateETHAmount);
   const swapAmount = useInput('0.001', validateETHAmount);
+
+  const [estimatedETH, setEstimatedETH] = useState('N/A');
+
+  useDebounceEffect(
+    () => {
+      try {
+        const bethAmount = parseEther(swapAmount.value);
+        UniSwapContract.estimateETH(client!, bethAmount).then((estimatedAmount) => {
+          setEstimatedETH(roundEther(estimatedAmount, 2));
+        });
+      } catch {
+        setEstimatedETH('N/A');
+      }
+    },
+    1000,
+    [swapAmount]
+  );
 
   const calculatedMintAmount = calculateMintAmountStr(
     burnAmount.value,
@@ -67,6 +89,7 @@ export const BurnAddressGeneratorLayout = (props: {
     <div className="w-full">
       {isAdvancedOpen ? (
         <AdvancedLayout
+          estimatedETH={estimatedETH}
           broadcasterFee={broadcasterFee}
           proverFee={proverFee}
           swapAmount={swapAmount}
@@ -74,6 +97,7 @@ export const BurnAddressGeneratorLayout = (props: {
         />
       ) : (
         <MainLayout
+          estimatedETH={estimatedETH}
           burnAmount={burnAmount}
           receiverAddress={receiverAddress}
           proverFee={proverFee.value}
@@ -94,6 +118,7 @@ const MainLayout = (props: {
   calculatedBeth: string;
   proverFee: string;
   broadcasterFee: string;
+  estimatedETH: string;
   setIsAdvancedOpen: Dispatch<SetStateAction<boolean>>;
   onGenerateBurnAddressClicked: () => void;
   onRecoverClicked: () => void;
@@ -120,11 +145,10 @@ const MainLayout = (props: {
         <div className="text-[16px]">
           <div className="mb-1 text-white">You get</div>
           <div>
-            {/* TODO calculate amounts */}
             <span className="text-white">{props.calculatedBeth} </span>
             <span className="text-pink-400">BETH</span>
             <span className="text-white"> + </span>
-            <span className="text-white">~0.05</span>
+            <span className="text-white">~{props.estimatedETH}</span>
             <span className="text-blue-400"> ETH</span>
           </div>
         </div>
@@ -173,6 +197,7 @@ const AdvancedLayout = (props: {
   broadcasterFee: UserInputState;
   proverFee: UserInputState;
   swapAmount: UserInputState;
+  estimatedETH: string;
   onApplyClicked: () => void;
 }) => {
   return (
@@ -195,8 +220,7 @@ const AdvancedLayout = (props: {
           inputType="number"
         />
         <div className="flex flex-row">
-          {/* TODO calculate amount */}
-          <div className="mr-1 text-[#94A3B8]">You Will get: 0.09 </div>
+          <div className="mr-1 text-[#94A3B8]">You Will get: {props.estimatedETH} </div>
           <div className="text-[#6E7AF0]"> ETH </div>
         </div>
         <button
