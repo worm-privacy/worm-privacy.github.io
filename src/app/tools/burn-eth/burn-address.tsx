@@ -76,6 +76,8 @@ export const BurnAddressGeneratorLayout = (props: {
         <MainLayout
           burnAmount={burnAmount}
           receiverAddress={receiverAddress}
+          proverFee={proverFee.value}
+          broadcasterFee={broadcasterFee.value}
           onGenerateBurnAddressClicked={onGenerateAddressClicked}
           onRecoverClicked={onRecoverClicked}
           setIsAdvancedOpen={setIsAdvancedOpen}
@@ -90,6 +92,8 @@ const MainLayout = (props: {
   burnAmount: UserInputState;
   receiverAddress: UserInputState;
   calculatedBeth: string;
+  proverFee: string;
+  broadcasterFee: string;
   setIsAdvancedOpen: Dispatch<SetStateAction<boolean>>;
   onGenerateBurnAddressClicked: () => void;
   onRecoverClicked: () => void;
@@ -104,11 +108,11 @@ const MainLayout = (props: {
         <div className="space-y-1">
           <div className="flex justify-between text-[16px]">
             <span className="text-[#94A3B8]">Prover fee</span>
-            <span className="text-[#94A3B8]">0.2 BETH</span>
+            <span className="text-[#94A3B8]">{props.proverFee} BETH</span>
           </div>
           <div className="flex justify-between text-[16px]">
             <span className="text-[#94A3B8]">Broadcaster fee</span>
-            <span className="text-[#94A3B8]">0.1 BETH</span>
+            <span className="text-[#94A3B8]">{props.broadcasterFee} BETH</span>
           </div>
         </div>
 
