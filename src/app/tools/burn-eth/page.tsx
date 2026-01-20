@@ -20,11 +20,13 @@ export default function BurnETHRoot() {
   const [burnAddress, setBurnAddress] = useState<BurnAddressContent | undefined>(undefined);
   const [proof, setProof] = useState<RapidsnarkOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [mintAmount, setMintAmount] = useState('N/A');
 
-  const onAddressBurnGenerated = (address: BurnAddressContent) => {
+  const onAddressBurnGenerated = (address: BurnAddressContent, mintAmount: string) => {
     console.log(`burn address: ${address}`);
     setBurnAddress(address);
     setCurrentStep(1); // move to next step
+    setMintAmount(mintAmount);
   };
 
   const onBurnComplete = () => {
@@ -58,8 +60,7 @@ export default function BurnETHRoot() {
       case 1:
         return <BurnETHLayout burnAddress={burnAddress!} onBurnComplete={onBurnComplete} />;
       case 2:
-        // TODO mint amount
-        return <MintBETHLayout mintAmount="1" burnAddress={burnAddress!} proof={proof} setProof={setProof} />;
+        return <MintBETHLayout mintAmount={mintAmount} burnAddress={burnAddress!} proof={proof} setProof={setProof} />;
 
       default:
         throw 'unreachable';
