@@ -59,14 +59,14 @@ export namespace WORMContract {
     numberOfEpochs: bigint
   ) => {
     console.log(`calling participate(${amountPerEpoch}, ${numberOfEpochs})`);
-    const participateTXHash = await mutateAsync({
+    const trxHash = await mutateAsync({
       address: WORMcontractAddress,
       abi: WORMcontractABI,
       functionName: 'participate',
       args: [amountPerEpoch, numberOfEpochs],
     });
     console.log('waiting for receipt');
-    const r = await waitForTransactionReceipt(client, { hash: participateTXHash });
+    const r = await waitForTransactionReceipt(client, { hash: trxHash });
     if (r.status == 'reverted') throw 'participate reverted';
     console.log('got approve receipt');
   };
@@ -78,14 +78,14 @@ export namespace WORMContract {
     numberOfEpochs: bigint
   ) => {
     console.log(`calling claim(${start}, ${numberOfEpochs})`);
-    const participateTXHash = await mutateAsync({
+    const trxHash = await mutateAsync({
       address: WORMcontractAddress,
       abi: WORMcontractABI,
       functionName: 'claim',
       args: [start, numberOfEpochs],
     });
     console.log('waiting for receipt');
-    const r = await waitForTransactionReceipt(client, { hash: participateTXHash });
+    const r = await waitForTransactionReceipt(client, { hash: trxHash });
     if (r.status == 'reverted') throw 'claim reverted';
     console.log('got approve receipt');
   };
