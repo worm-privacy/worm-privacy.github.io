@@ -3,11 +3,13 @@ import { Icons } from '@/components/ui/icons';
 import { useInput, UserInputState } from '@/hooks/use-input';
 import { BurnAddressContent, generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
+import { loadJson } from '@/lib/utils/load-json';
 import { parseEther } from 'ethers';
 import { Dispatch, SetStateAction, useState } from 'react';
+import { hexToBigInt, hexToBytes } from 'viem';
 
 export const BurnAddressGeneratorLayout = (props: {
-  onBurnAddressGenerated: (burnAddress: BurnAddressContent) => void;
+  onBurnAddressGenerated: (burnAddress: BurnAddressContent, skipBurn: boolean) => void;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
 }) => {
@@ -35,9 +37,9 @@ export const BurnAddressGeneratorLayout = (props: {
         parseEther(proverFee.value),
         parseEther(broadcasterFee.value),
         parseEther(burnAmount.value),
-        new Uint8Array()
+        new Uint8Array() // TODO
       );
-      props.onBurnAddressGenerated(burnAddress);
+      props.onBurnAddressGenerated(burnAddress, false);
     } catch (e) {
       console.error(e);
     } finally {
@@ -51,8 +53,22 @@ export const BurnAddressGeneratorLayout = (props: {
     setIsAdvancedOpen(false);
   };
 
-  const onRecoverClicked = () => {
-    // TODO load json file
+  const onRecoverClicked = async () => {
+    let recover = await loadJson();
+    if (recover.burnKey) {
+      props.onBurnAddressGenerated(
+        {
+          burnKey: hexToBigInt(recover.burnKey),
+          receiverAddr: recover.receiverAddr,
+          proverFee: hexToBigInt(recover.proverFee),
+          broadcasterFee: hexToBigInt(recover.broadcasterFee),
+          revealAmount: hexToBigInt(recover.revealAmount),
+          receiverHook: hexToBytes(recover.receiverHook),
+          burnAddress: recover.burnAddress,
+        },
+        true // this skips burning step
+      );
+    }
   };
 
   return (

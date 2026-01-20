@@ -18,10 +18,10 @@ export default function BurnETHRoot() {
   const [burnAddress, setBurnAddress] = useState<BurnAddressContent | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
 
-  const onAddressBurnGenerated = (address: BurnAddressContent) => {
+  const onAddressBurnGenerated = (address: BurnAddressContent, skipBurn: boolean) => {
     console.log(`burn address: ${address}`);
-    setCurrentStep(1); // move to next step (transfer to burn address)
     setBurnAddress(address);
+    setCurrentStep(skipBurn ? 2 : 1); // move to next step
   };
 
   const onBurnComplete = () => {
