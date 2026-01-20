@@ -1,5 +1,5 @@
 import { Client } from 'viem';
-import { readContract, waitForTransactionReceipt } from 'viem/actions';
+import { getContractEvents, readContract, waitForTransactionReceipt } from 'viem/actions';
 import { Config } from 'wagmi';
 import { WriteContractMutateAsync } from 'wagmi/query';
 
@@ -22,6 +22,42 @@ export namespace StakingContract {
       abi: StakingContractABI,
       functionName: 'info',
       args: [address, since, count],
+    });
+  };
+
+  export const RewardDepositedEvent = async (client: Client, address: `0x${string}`) => {
+    return await getContractEvents(client, {
+      address: StakingContractAddress,
+      abi: StakingContractABI,
+      eventName: 'RewardDeposited',
+      args: { depositor: address },
+    });
+  };
+
+  export const StakedEvent = async (client: Client, address: `0x${string}`) => {
+    return await getContractEvents(client, {
+      address: StakingContractAddress,
+      abi: StakingContractABI,
+      eventName: 'Staked',
+      args: { user: address },
+    });
+  };
+
+  export const ReleasedEvent = async (client: Client, address: `0x${string}`) => {
+    return await getContractEvents(client, {
+      address: StakingContractAddress,
+      abi: StakingContractABI,
+      eventName: 'Released',
+      args: { user: address },
+    });
+  };
+
+  export const RewardClaimedEvent = async (client: Client, address: `0x${string}`) => {
+    return await getContractEvents(client, {
+      address: StakingContractAddress,
+      abi: StakingContractABI,
+      eventName: 'RewardClaimed',
+      args: { user: address },
     });
   };
 
