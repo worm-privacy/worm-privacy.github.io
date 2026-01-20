@@ -7,6 +7,8 @@ import TabBar from '@/components/tools/tabbar';
 import TopBar from '@/components/tools/topbar';
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
+import { RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
+import { RecoverData } from '@/lib/utils/recover-data';
 import { useState } from 'react';
 import { BurnAddressGeneratorLayout } from './burn-address';
 import { BurnETHLayout } from './burn-ether';
@@ -16,15 +18,29 @@ export default function BurnETHRoot() {
   // Layout switching states
   const [currentStep, setCurrentStep] = useState(0);
   const [burnAddress, setBurnAddress] = useState<BurnAddressContent | undefined>(undefined);
+  const [proof, setProof] = useState<RapidsnarkOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const onAddressBurnGenerated = (address: BurnAddressContent, skipBurn: boolean) => {
+  const onAddressBurnGenerated = (address: BurnAddressContent) => {
     console.log(`burn address: ${address}`);
     setBurnAddress(address);
-    setCurrentStep(skipBurn ? 2 : 1); // move to next step
+    setCurrentStep(1); // move to next step
   };
 
   const onBurnComplete = () => {
+    setCurrentStep(2);
+  };
+
+  const onRecover = (data: RecoverData) => {
+    switch (data.type) {
+      case 'burn':
+        setBurnAddress(data.burn);
+        break;
+      case 'proof':
+        setBurnAddress(data.burn);
+        setProof(data.proof);
+        break;
+    }
     setCurrentStep(2);
   };
 
@@ -36,13 +52,14 @@ export default function BurnETHRoot() {
             isLoading={isLoading}
             setIsLoading={setIsLoading}
             onBurnAddressGenerated={onAddressBurnGenerated}
+            onRecover={onRecover}
           />
         );
       case 1:
         return <BurnETHLayout burnAddress={burnAddress!} onBurnComplete={onBurnComplete} />;
       case 2:
         // TODO mint amount
-        return <MintBETHLayout mintAmount="1" burnAddress={burnAddress!} />;
+        return <MintBETHLayout mintAmount="1" burnAddress={burnAddress!} proof={proof} setProof={setProof} />;
 
       default:
         throw 'unreachable';

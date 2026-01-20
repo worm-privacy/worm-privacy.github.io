@@ -4,12 +4,13 @@ import { useInput, UserInputState } from '@/hooks/use-input';
 import { BurnAddressContent, generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
 import { loadJson } from '@/lib/utils/load-json';
+import { RecoverData, recoverDataFromJson } from '@/lib/utils/recover-data';
 import { parseEther } from 'ethers';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { hexToBigInt, hexToBytes } from 'viem';
 
 export const BurnAddressGeneratorLayout = (props: {
-  onBurnAddressGenerated: (burnAddress: BurnAddressContent, skipBurn: boolean) => void;
+  onBurnAddressGenerated: (burnAddress: BurnAddressContent) => void;
+  onRecover: (data: RecoverData) => void;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
 }) => {
@@ -39,7 +40,7 @@ export const BurnAddressGeneratorLayout = (props: {
         parseEther(burnAmount.value),
         new Uint8Array() // TODO
       );
-      props.onBurnAddressGenerated(burnAddress, false);
+      props.onBurnAddressGenerated(burnAddress);
     } catch (e) {
       console.error(e);
     } finally {
@@ -53,23 +54,7 @@ export const BurnAddressGeneratorLayout = (props: {
     setIsAdvancedOpen(false);
   };
 
-  const onRecoverClicked = async () => {
-    let recover = await loadJson();
-    if (recover.burnKey) {
-      props.onBurnAddressGenerated(
-        {
-          burnKey: hexToBigInt(recover.burnKey),
-          receiverAddr: recover.receiverAddr,
-          proverFee: hexToBigInt(recover.proverFee),
-          broadcasterFee: hexToBigInt(recover.broadcasterFee),
-          revealAmount: hexToBigInt(recover.revealAmount),
-          receiverHook: hexToBytes(recover.receiverHook),
-          burnAddress: recover.burnAddress,
-        },
-        true // this skips burning step
-      );
-    }
-  };
+  const onRecoverClicked = async () => props.onRecover(recoverDataFromJson(await loadJson()));
 
   return (
     <div className="w-full">

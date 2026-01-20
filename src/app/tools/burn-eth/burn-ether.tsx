@@ -1,10 +1,10 @@
 import { Icons } from '@/components/ui/icons';
 import { useTransfer } from '@/hooks/use-transfer';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
+import { newSavableRecoverData } from '@/lib/utils/recover-data';
 import { saveJson } from '@/lib/utils/save-json';
 import { formatEther } from 'ethers';
 import { useState } from 'react';
-import { toHex } from 'viem';
 import { useBalance, UseBalanceReturnType, useConnection } from 'wagmi';
 
 export const BurnETHLayout = (props: { burnAddress: BurnAddressContent; onBurnComplete: () => void }) => {
@@ -16,20 +16,8 @@ export const BurnETHLayout = (props: { burnAddress: BurnAddressContent; onBurnCo
   //TODO handle this error
   let { transferETH, status, error } = useTransfer();
 
-  const onBackupClick = () => {
-    saveJson(
-      {
-        burnKey: toHex(props.burnAddress.burnKey),
-        receiverAddr: props.burnAddress.receiverAddr,
-        proverFee: toHex(props.burnAddress.proverFee),
-        broadcasterFee: toHex(props.burnAddress.broadcasterFee),
-        revealAmount: toHex(props.burnAddress.revealAmount),
-        receiverHook: toHex(props.burnAddress.receiverHook),
-        burnAddress: props.burnAddress.burnAddress,
-      },
-      `backup_${props.burnAddress.burnAddress}.json`
-    );
-  };
+  const onBackupClick = () =>
+    saveJson(newSavableRecoverData(props.burnAddress), `burn_${props.burnAddress.burnAddress}_backup.json`);
 
   const onBurnClick = async () => {
     if (!confirmation) return setConfirmation(true);

@@ -9,15 +9,23 @@ import { calculateRemainingCoinHash } from '@/lib/core/burn-address/remaining_co
 import { proof_get_by_nullifier, RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
 import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-post';
 import { relay_post } from '@/lib/core/miner-api/relay_post';
+import { newSavableRecoverData } from '@/lib/utils/recover-data';
+import { saveJson } from '@/lib/utils/save-json';
 import Link from 'next/link';
 
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { usePublicClient } from 'wagmi';
 
-export const MintBETHLayout = (props: { mintAmount: string; burnAddress: BurnAddressContent }) => {
+export const MintBETHLayout = (props: {
+  mintAmount: string;
+  burnAddress: BurnAddressContent;
+  proof: RapidsnarkOutput | null;
+  setProof: Dispatch<SetStateAction<RapidsnarkOutput | null>>;
+}) => {
   const [isLoading, setIsLoading] = useState(false);
-  let [flowState, setFlowState] = useState<FlowState>(FlowState.EndPoint);
-  const [proof, setProof] = useState<RapidsnarkOutput | null>(null);
+
+  // skip endpoint selection flow if proof is already provided (by recover mechanism)
+  let [flowState, setFlowState] = useState<FlowState>(props.proof == null ? FlowState.EndPoint : FlowState.Generated);
   const [endPoint, setEndPoint] = useState(ENDPOINTS[0].url);
   const [blockNumber, setBlockNumber] = useState(0n);
   let network = useNetwork();
@@ -25,7 +33,7 @@ export const MintBETHLayout = (props: { mintAmount: string; burnAddress: BurnAdd
   let nullifier = useMemo(() => calculateNullifier(props.burnAddress.burnKey), []);
 
   const onProofGenerated = (proof: RapidsnarkOutput) => {
-    setProof(proof);
+    props.setProof(proof);
     setFlowState(FlowState.Generated);
     setIsLoading(false);
   };
@@ -35,6 +43,12 @@ export const MintBETHLayout = (props: { mintAmount: string; burnAddress: BurnAdd
     console.error(msg);
     setIsLoading(false);
   };
+
+  const onBackupProofDataClick = async () =>
+    saveJson(
+      newSavableRecoverData(props.burnAddress, props.proof!),
+      `proof_${props.burnAddress.burnAddress}_backup.json`
+    );
 
   const onSubmitClick = async () => {
     const remaining_coin = calculateRemainingCoinHash(
@@ -47,7 +61,7 @@ export const MintBETHLayout = (props: { mintAmount: string; burnAddress: BurnAdd
       setIsLoading(true);
       await relay_post(endPoint, {
         network: network,
-        proof: proof!,
+        proof: props.proof!,
         block_number: blockNumber,
         nullifier: nullifier,
         remaining_coin: remaining_coin,
@@ -95,7 +109,11 @@ export const MintBETHLayout = (props: { mintAmount: string; burnAddress: BurnAdd
     case FlowState.Generated:
       return (
         <>
-          <Generated burnAddress={props.burnAddress} onSubmitClick={onSubmitClick} />
+          <Generated
+            burnAddress={props.burnAddress}
+            onSubmitClick={onSubmitClick}
+            onBackupProofDataClick={onBackupProofDataClick}
+          />
         </>
       );
     case FlowState.Submitted:
@@ -207,12 +225,25 @@ const EndPointSelection = (props: {
   );
 };
 
-const Generated = (props: { burnAddress: BurnAddressContent; onSubmitClick: () => void }) => {
+const Generated = (props: {
+  burnAddress: BurnAddressContent;
+  onSubmitClick: () => void;
+  onBackupProofDataClick: () => void;
+}) => {
   return (
     <div className="flex w-full flex-col gap-6 text-white">
       <div className="text[24px]">Proof Generated</div>
-      <div className="text[18px]">{props.burnAddress.burnAddress}</div>
+      <div className="text[18px]">for burn address: {props.burnAddress.burnAddress}</div>
       <div className="grow" />
+      <div className="flex justify-center">
+        <button
+          onClick={props.onBackupProofDataClick}
+          className="flex items-center text-sm text-[14px] font-bold text-brand"
+        >
+          <Icons.backup className="mr-2" />
+          Backup proof data
+        </button>
+      </div>
       <button onClick={props.onSubmitClick} className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black">
         Submit proof
       </button>
@@ -220,24 +251,13 @@ const Generated = (props: { burnAddress: BurnAddressContent; onSubmitClick: () =
   );
 };
 
-const Submitted = (props: {}) => {
-  const onBackupProofDataClick = () => {
-    // TODO
-    console.error('not implemented');
-  };
-
+const Submitted = () => {
   return (
     <div className="flex w-full flex-col gap-6 text-white">
       <div className="text[24px] font-bold">Proof submitted successfully</div>
       <div className="text[18px] font-normal">Now you can Mine WORM.</div>
       <div className="grow" />
 
-      <div className="flex justify-center">
-        <button onClick={onBackupProofDataClick} className="flex items-center text-sm text-[14px] font-bold text-brand">
-          <Icons.backup className="mr-2" />
-          Backup proof data
-        </button>
-      </div>
       <Link href="/tools/mine-worm">
         <button className="flex w-full items-center justify-center rounded-lg bg-brand px-4 py-3 font-semibold text-black">
           <Icons.target className="mr-2" />
