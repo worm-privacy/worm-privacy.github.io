@@ -1,3 +1,5 @@
+import ErrorComponent from '@/components/tools/error-component';
+import LoadingComponent from '@/components/tools/loading';
 import { Icons } from '@/components/ui/icons';
 import { useTransfer } from '@/hooks/use-transfer';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
@@ -13,7 +15,6 @@ export const BurnETHLayout = (props: { burnAddress: BurnAddressContent; onBurnCo
 
   let [confirmation, setConfirmation] = useState(false);
 
-  //TODO handle this error
   let { transferETH, status, error } = useTransfer();
 
   const onBackupClick = () =>
@@ -33,6 +34,23 @@ export const BurnETHLayout = (props: { burnAddress: BurnAddressContent; onBurnCo
       console.error(`error while transferring: ${result.error}`);
     }
   };
+
+  if (status == 'pending') {
+    return (
+      <div className=" flex h-[480px] w-full flex-col text-white">
+        <LoadingComponent />
+      </div>
+    );
+  }
+
+  if (status == 'error') {
+    console.error('transfer error:', error);
+    return (
+      <div className="h-min w-full text-white">
+        <ErrorComponent title="Transfer error!" details="Error happened while transferring ETH to burn address" />
+      </div>
+    );
+  }
 
   return (
     <div className=" flex h-[480px] w-full flex-col text-white">
