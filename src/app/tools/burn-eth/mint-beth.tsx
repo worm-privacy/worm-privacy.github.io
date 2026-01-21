@@ -1,3 +1,4 @@
+import ErrorComponent from '@/components/tools/error-component';
 import LoadingComponent from '@/components/tools/loading';
 import { Icons } from '@/components/ui/icons';
 import { useInterval } from '@/hooks/use-interval';
@@ -23,6 +24,7 @@ export const MintBETHLayout = (props: {
   setProof: Dispatch<SetStateAction<RapidsnarkOutput | null>>;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // skip endpoint selection flow if proof is already provided (by recover mechanism)
   let [flowState, setFlowState] = useState<FlowState>(props.proof == null ? FlowState.EndPoint : FlowState.Generated);
@@ -39,8 +41,7 @@ export const MintBETHLayout = (props: {
   };
 
   const onError = (msg: string) => {
-    //TODO show error
-    console.error(msg);
+    setError(msg);
     setIsLoading(false);
   };
 
@@ -59,6 +60,7 @@ export const MintBETHLayout = (props: {
 
     try {
       setIsLoading(true);
+      setError(null);
       await relay_post(endPoint, {
         network: network,
         proof: props.proof!,
@@ -87,6 +89,14 @@ export const MintBETHLayout = (props: {
     );
   }
 
+  if (error) {
+    return (
+      <>
+        <ErrorComponent title="Error" details="An error happened while doing your request" />
+      </>
+    );
+  }
+
   switch (flowState) {
     case FlowState.EndPoint:
       return (
@@ -95,6 +105,7 @@ export const MintBETHLayout = (props: {
             mintAmount={props.mintAmount}
             burnAddress={props.burnAddress}
             setIsLoading={setIsLoading}
+            setError={setError}
             setFlowState={setFlowState}
             onProofGenerated={onProofGenerated}
             onProofGenerationFailed={onError}
@@ -132,6 +143,7 @@ const EndPointSelection = (props: {
   mintAmount: string;
   burnAddress: BurnAddressContent;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setError: Dispatch<SetStateAction<string | null>>;
   setFlowState: Dispatch<SetStateAction<FlowState>>;
   onProofGenerated: (proof: RapidsnarkOutput) => void;
   onProofGenerationFailed: (msg: string) => void;
@@ -164,6 +176,7 @@ const EndPointSelection = (props: {
   const client = usePublicClient();
   const onGenerateClick = async () => {
     props.setIsLoading(true);
+    props.setError(null);
     try {
       let blockNumber = (await client!.getBlock()).number;
       props.setBlockNumber(blockNumber);
