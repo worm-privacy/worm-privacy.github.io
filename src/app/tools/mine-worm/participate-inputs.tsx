@@ -12,6 +12,7 @@ import Participated from './participated';
 
 export default function ParticipateInputs() {
   const [participated, setParticipated] = useState(false);
+  const [isParticipateError, setIsParticipateError] = useState(false);
   const bethAmount = useInput('', validateETHAmount);
   const numberOfEpochs = useInput('', validatePositiveInteger);
   const [participateLoading, setParticipateLoading] = useState(false);
@@ -22,24 +23,33 @@ export default function ParticipateInputs() {
   const { address, isConnected } = useConnection();
   const {
     data,
-    isError,
+    isError: balanceIsError,
     isLoading: balanceOfLoading,
-    error,
+    error: balanceReadError,
   } = useReadContract({
     address: BETHContractAddress,
     abi: BETHContractABI,
     functionName: 'balanceOf',
     args: [address!],
   });
-  if (isError) {
-    console.log('error:', error);
-    return <ErrorComponent title="Participate failed" details="error happens while doing participate" />;
+
+  if (balanceIsError) {
+    console.log('error:', balanceReadError);
+    return <ErrorComponent title="Balance Error" details="error happens while getting your balance" />;
   }
 
   if (!isConnected) {
     return (
       <>
         <ErrorComponent title="Wallet not connected" details="Plz connect your wallet to continue" />
+      </>
+    );
+  }
+
+  if (!isParticipateError) {
+    return (
+      <>
+        <ErrorComponent title="Participate failed" details="error happens while doing participate" />;
       </>
     );
   }
@@ -63,13 +73,14 @@ export default function ParticipateInputs() {
     }
 
     setParticipateLoading(true);
+    setIsParticipateError(false);
     try {
       await BETHContract.approve(mutateAsync, client!, beth);
       await WORMContract.participate(mutateAsync, client!, bethPerEpoch, epochs);
       setParticipated(true);
     } catch (e) {
-      // TODO show error to user
       console.error(e);
+      setIsParticipateError(true);
     } finally {
       setParticipateLoading(false);
     }
