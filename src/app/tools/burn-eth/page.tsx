@@ -72,7 +72,7 @@ export default function BurnETHRoot() {
       <TopBar />
       <TabBar />
       <div className="mt-6">
-        <div className="mx-auto px-[255px]">
+        <div className="m-auto max-w-310 px-5">
           <h1 className="mb-3 text-[24px] font-bold text-white">Burning ETHs and get BETH</h1>
           <div className="rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
             <div className="flex flex-row gap-6">

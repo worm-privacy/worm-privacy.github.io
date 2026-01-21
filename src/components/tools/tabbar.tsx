@@ -6,15 +6,15 @@ export default function TabBar() {
 
   return (
     <div className="text-white">
-      <div className="">
+      <div className="m-auto max-w-310 px-5">
         {/* Back Button */}
-        <button className="my-6 flex items-center space-x-2 px-[255px] text-gray-300 transition-colors hover:text-white">
+        <button className="my-6 flex items-center space-x-2  text-gray-300 transition-colors hover:text-white">
           <Icons.back className="block size-5 fill-white" />
           <span className="px-1.5 text-2xl">Back</span>
         </button>
 
         {/* Tab Selection */}
-        <div className="px-[255px]">
+        <div>
           <nav className="flex flex-row space-x-8">
             {TABS.map((tab) => (
               <button
