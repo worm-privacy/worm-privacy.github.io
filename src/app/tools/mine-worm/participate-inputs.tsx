@@ -20,7 +20,6 @@ export default function ParticipateInputs() {
   const { mutateAsync } = useWriteContract();
 
   const { address, isConnected } = useConnection();
-  //TODO handle if wallet is not connected
   const {
     data,
     isError,
@@ -35,6 +34,14 @@ export default function ParticipateInputs() {
   if (isError) {
     console.log('error:', error);
     return <ErrorComponent title="Participate failed" details="error happens while doing participate" />;
+  }
+
+  if (!isConnected) {
+    return (
+      <>
+        <ErrorComponent title="Wallet not connected" details="Plz connect your wallet to continue" />
+      </>
+    );
   }
 
   if (participated) return <Participated amount={bethAmount.value} numberOfEpochs={numberOfEpochs.value} />;
