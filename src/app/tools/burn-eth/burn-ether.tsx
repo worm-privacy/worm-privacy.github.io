@@ -1,13 +1,13 @@
 import ErrorComponent from '@/components/tools/error-component';
 import LoadingComponent from '@/components/tools/loading';
 import { Icons } from '@/components/ui/icons';
-import { useTransfer } from '@/hooks/use-transfer';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
+import { transferETH } from '@/lib/core/utils/transfer-eth';
 import { newSavableRecoverData } from '@/lib/utils/recover-data';
 import { saveJson } from '@/lib/utils/save-json';
 import { formatEther } from 'ethers';
 import { useState } from 'react';
-import { useBalance, UseBalanceReturnType, useConnection } from 'wagmi';
+import { useBalance, UseBalanceReturnType, useClient, useConnection, useSendTransaction } from 'wagmi';
 
 export const BurnETHLayout = (props: { burnAddress: BurnAddressContent; onBurnComplete: () => void }) => {
   let account = useConnection();
@@ -15,27 +15,30 @@ export const BurnETHLayout = (props: { burnAddress: BurnAddressContent; onBurnCo
 
   let [confirmation, setConfirmation] = useState(false);
 
-  let { transferETH, status, error } = useTransfer();
+  const { mutateAsync } = useSendTransaction();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const client = useClient();
 
   const onBackupClick = () =>
     saveJson(newSavableRecoverData(props.burnAddress), `burn_${props.burnAddress.burnAddress}_backup.json`);
 
   const onBurnClick = async () => {
     if (!confirmation) return setConfirmation(true);
-    let result = await transferETH({
-      to: props.burnAddress.burnAddress as `0x${string}`,
-      value: props.burnAddress.revealAmount,
-    });
-
-    if (result.status == 'success') {
-      console.log(`burn transfer hash: ${result.hash}`);
+    try {
+      setLoading(true);
+      setError(null);
+      await transferETH(mutateAsync, client!, props.burnAddress.revealAmount, props.burnAddress.burnAddress);
       props.onBurnComplete();
-    } else {
-      console.error(`error while transferring: ${result.error}`);
+      setLoading(false);
+    } catch (e) {
+      console.error(e);
+      setError('Error while transferring ETH');
+      setLoading(false);
     }
   };
 
-  if (status == 'pending') {
+  if (loading) {
     return (
       <div className=" flex h-[480px] w-full flex-col text-white">
         <LoadingComponent />
@@ -43,8 +46,7 @@ export const BurnETHLayout = (props: { burnAddress: BurnAddressContent; onBurnCo
     );
   }
 
-  if (status == 'error') {
-    console.error('transfer error:', error);
+  if (error) {
     return (
       <div className="h-min w-full text-white">
         <ErrorComponent title="Transfer error!" details="Error happened while transferring ETH to burn address" />

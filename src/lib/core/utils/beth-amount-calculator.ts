@@ -2,7 +2,7 @@ import { parseEther } from 'ethers';
 import { roundEther } from './round-ether';
 
 /// this 0.5% goes to stakers
-const POOL_SHARE_INV = 200n as const; // 0.5$
+const POOL_SHARE_INV = 200n as const; // 0.5%
 
 /// returns amount of BETH user will get
 export const calculateMintAmountStr = (
