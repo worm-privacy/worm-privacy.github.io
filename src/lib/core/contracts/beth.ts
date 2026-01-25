@@ -6,7 +6,7 @@ import { RapidsnarkOutput } from '../miner-api/proof-get-by-nullifier';
 import { WORMcontractAddress } from './worm';
 
 //TODO change this address
-export const BETHContractAddress = '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0';
+export const BETHContractAddress = '0x1a0cb44C7DcB767DD6f819DA0Ae16485B57C4738';
 
 export namespace BETHContract {
   export const approve = async (
