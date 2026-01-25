@@ -28,4 +28,5 @@ type RapidsnarkProof = {
 export type RapidsnarkOutput = {
   proof: RapidsnarkProof;
   public: string[];
+  target_block: string;
 };

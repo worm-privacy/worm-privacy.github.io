@@ -29,7 +29,6 @@ export const MintBETHLayout = (props: {
   // skip endpoint selection flow if proof is already provided (by recover mechanism)
   let [flowState, setFlowState] = useState<FlowState>(props.proof == null ? FlowState.EndPoint : FlowState.Generated);
   const [endPoint, setEndPoint] = useState(ENDPOINTS[0].url);
-  const [blockNumber, setBlockNumber] = useState(0n);
   let network = useNetwork();
 
   let nullifier = useMemo(() => calculateNullifier(props.burnAddress.burnKey), []);
@@ -64,7 +63,6 @@ export const MintBETHLayout = (props: {
       await relay_post(endPoint, {
         network: network,
         proof: props.proof!,
-        block_number: blockNumber,
         nullifier: nullifier,
         remaining_coin: remaining_coin,
         broadcaster_fee: props.burnAddress.broadcasterFee,
@@ -113,7 +111,6 @@ export const MintBETHLayout = (props: {
             setEndPoint={setEndPoint}
             network={network}
             nullifier={nullifier}
-            setBlockNumber={setBlockNumber}
           />
         </>
       );
@@ -151,7 +148,6 @@ const EndPointSelection = (props: {
   setEndPoint: Dispatch<SetStateAction<string>>;
   network: WormNetwork;
   nullifier: bigint;
-  setBlockNumber: Dispatch<SetStateAction<bigint>>;
 }) => {
   const fetchResultInterval = async () => {
     // keep polling until we get
@@ -179,7 +175,6 @@ const EndPointSelection = (props: {
     props.setError(null);
     try {
       let blockNumber = (await client!.getBlock()).number;
-      props.setBlockNumber(blockNumber);
       let proof = await client?.getProof({
         address: props.burnAddress.burnAddress as `0x${string}`,
         storageKeys: [],

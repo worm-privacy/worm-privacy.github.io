@@ -8,7 +8,6 @@ export const relay_post = async (serverURL: string, payload: RelayPostRequest): 
   let body: RelayPostRequestAPI = {
     network: payload.network,
     proof: payload.proof,
-    block_number: toHex(payload.block_number),
     nullifier: toHex(payload.nullifier),
     remaining_coin: toHex(payload.remaining_coin),
     broadcaster_fee: formatEther(payload.broadcaster_fee),
@@ -35,7 +34,6 @@ export const relay_post = async (serverURL: string, payload: RelayPostRequest): 
 export type RelayPostRequest = {
   network: WormNetwork;
   proof: RapidsnarkOutput;
-  block_number: bigint;
   nullifier: bigint;
 
   // poseidon3(prefix, burn_key, amount-spend)
@@ -52,7 +50,6 @@ export type RelayPostRequest = {
 type RelayPostRequestAPI = {
   network: WormNetwork;
   proof: RapidsnarkOutput;
-  block_number: string;
   nullifier: string;
 
   // poseidon3(prefix, burn_key, amount-spend)

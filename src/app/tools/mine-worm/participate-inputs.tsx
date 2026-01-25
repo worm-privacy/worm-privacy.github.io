@@ -46,7 +46,7 @@ export default function ParticipateInputs() {
     );
   }
 
-  if (!isParticipateError) {
+  if (isParticipateError) {
     return (
       <>
         <ErrorComponent title="Participate failed" details="error happens while doing participate" />;
