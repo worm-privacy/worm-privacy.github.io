@@ -90,13 +90,24 @@ const ReadyToClaimItem = (props: { epochNumber: bigint; share: bigint; refresh: 
           </Button>
         </DialogClose>
         <DialogHeader>
-          <DialogTitle>Claim an epoch</DialogTitle>
+          <DialogTitle>Claim WORM</DialogTitle>
         </DialogHeader>
         <div className="satoshi-body2 max-h-61.5 px-8 pt-2 pb-6 text-white">
           {claimState == 'idle' && (
-            <button onClick={onClaimClicked} className="w-full rounded-lg bg-brand px-4 py-3 text-black">
-              Claim
-            </button>
+            <div className="flex flex-col">
+              <div className="mb-5 opacity-70">Epoch number {props.epochNumber}</div>
+              <div className="mb-1">Your reward share: </div>
+              <div className="flex flex-row">
+                <div className="mr-2 font-bold text-white">{roundEther(props.share, 4)}</div>
+                <div className="font-bold text-brand">WORM</div>
+              </div>
+              <button
+                onClick={onClaimClicked}
+                className="mt-5 w-full rounded-lg bg-brand px-4 py-3 font-bold text-black"
+              >
+                Claim reward
+              </button>
+            </div>
           )}
           {claimState == 'loading' && <div className="w-full px-4 py-3 text-white">Hold on a sec...</div>}
           {claimState == 'error' && <div className="w-full px-4 py-3 text-red-500">Error</div>}
