@@ -40,6 +40,8 @@ export namespace WORMContract {
       abi: WORMcontractABI,
       eventName: 'Participated',
       args: { participant: address },
+      fromBlock: 0n,
+      toBlock: 'latest',
     });
   };
 
