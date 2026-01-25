@@ -11,7 +11,7 @@ export default function StakeWorm() {
       <TopBar />
       <TabBar />
       <main className="flex size-full flex-col items-center justify-center gap-2.5 md:pt-22 lg:px-40">
-        "Stake Worm"
+        <div className="text-[30px] text-white">Coming Soon...</div>
       </main>
       <Footer />
     </SmoothScroll>
