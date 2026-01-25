@@ -4,7 +4,6 @@ import { darkTheme, getDefaultConfig, RainbowKitProvider } from '@rainbow-me/rai
 import '@rainbow-me/rainbowkit/styles.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
-import { mainnet } from 'wagmi/chains';
 
 const RainbowKitRoot = ({
   children,
@@ -24,9 +23,9 @@ export default RainbowKitRoot;
 
 const queryClient = new QueryClient();
 
-import { anvil, sepolia } from 'viem/chains';
+import { sepolia } from 'viem/chains';
 const config = getDefaultConfig({
   appName: 'Worm',
   projectId: 'ff488caeeb8e5b10e03f4fe7ba2fda00',
-  chains: [mainnet, sepolia, anvil],
+  chains: [sepolia],
 });
