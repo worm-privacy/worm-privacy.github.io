@@ -31,6 +31,8 @@ export namespace StakingContract {
       abi: StakingContractABI,
       eventName: 'RewardDeposited',
       args: { depositor: address },
+      fromBlock: 0n,
+      toBlock: 'latest',
     });
   };
 
@@ -40,6 +42,8 @@ export namespace StakingContract {
       abi: StakingContractABI,
       eventName: 'Staked',
       args: { user: address },
+      fromBlock: 0n,
+      toBlock: 'latest',
     });
   };
 
@@ -49,6 +53,8 @@ export namespace StakingContract {
       abi: StakingContractABI,
       eventName: 'Released',
       args: { user: address },
+      fromBlock: 0n,
+      toBlock: 'latest',
     });
   };
 
@@ -58,6 +64,8 @@ export namespace StakingContract {
       abi: StakingContractABI,
       eventName: 'RewardClaimed',
       args: { user: address },
+      fromBlock: 0n,
+      toBlock: 'latest',
     });
   };
 

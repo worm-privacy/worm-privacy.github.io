@@ -51,6 +51,8 @@ export namespace WORMContract {
       abi: WORMcontractABI,
       eventName: 'Claimed',
       args: { claimant: address },
+      fromBlock: 0n,
+      toBlock: 'latest',
     });
   };
 
