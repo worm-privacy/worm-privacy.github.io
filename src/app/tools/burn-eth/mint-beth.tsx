@@ -304,8 +304,6 @@ enum FlowState {
 }
 
 const ENDPOINTS = [
+  { name: 'Worm Server 1', url: 'https://prover-1.worm.cx' },
   { name: 'My Machine', url: 'http://localhost:8080' },
-  // TODO
-  { name: 'Worm Server 1', url: 'https://TODO1.com' },
-  { name: 'Worm Server 2', url: 'https://TODO2.com' },
 ];
