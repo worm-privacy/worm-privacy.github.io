@@ -14,14 +14,6 @@ export default function Participated(props: { amount: string; numberOfEpochs: st
 
       <div className="grow" />
 
-      {/* TODO handle click */}
-      <div className="flex justify-center">
-        <button className="flex items-center text-sm text-[14px] font-bold text-brand">
-          <Icons.backup className="mr-2" />
-          Backup participation data
-        </button>
-      </div>
-
       <Link href="/tools/claim-worm">
         <button className="flex w-full items-center justify-center rounded-lg bg-brand px-4 py-3 font-semibold text-black">
           <Icons.target className="mr-2" />
