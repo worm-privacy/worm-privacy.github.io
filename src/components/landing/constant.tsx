@@ -40,10 +40,10 @@ export const TEAM: TeamMemberInfo[] = [
   },
   {
     id: 3,
-    fullName: 'Shahriar Ebrahimi',
-    positions: ['Cryptography Advisor'],
+    fullName: 'Ali Ghahremani',
+    positions: ['Developer'],
     avatar: {
-      src: '/assets/img/shahriar.png',
+      src: '/assets/img/ali77gh.jpg',
       size: 38.25,
       position: {
         top: 10,
@@ -51,8 +51,8 @@ export const TEAM: TeamMemberInfo[] = [
       },
     },
     socials: [
-      { link: 'https://x.com/lovely_necro', logo: Icons.x, label: '' },
-      { link: 'https://github.com/lovely-necromancer', logo: Icons.github, label: 'GitHub' },
+      { link: 'https://x.com/Ali98developer', logo: Icons.x, label: '' },
+      { link: 'https://github.com/ali77gh', logo: Icons.github, label: 'GitHub' },
     ],
   },
   {
@@ -85,7 +85,7 @@ export const TEAM: TeamMemberInfo[] = [
       },
     },
     socials: [
-      { link: 'https://x.com', logo: Icons.x, label: '' },
+      { link: 'https://x.com/ThisIsGandalff', logo: Icons.x, label: '' },
       { link: 'https://github.com', logo: Icons.github, label: 'GitHub' },
     ],
   },
@@ -217,17 +217,19 @@ export const SOCIALS: SocialMedia[] = [
 export const TOKENOMICS: TokenomicsContent[] = [
   {
     title: 'Mine-able',
-    stats: [{ share: 1, label: 'Mine-able through Private-Proof-of-Burn mining' }],
+    stats: [{ share: '100%', label: 'Mine-able through Private-Proof-of-Burn mining' }],
   },
   {
     title: 'Premine',
     stats: [
-      { label: 'Private investors', share: 0.15 },
-      { label: 'Team / Founders', share: 0.2 },
-      { label: 'Advisors', share: 0.05 },
-      { label: 'Community / Ecosystem Rewards', share: 0.25 },
-      { label: 'Foundation / Treasury', share: 0.2 },
-      { label: 'Public Sale', share: 0.15 },
+      { label: 'Uniswap CCA', share: '30%' },
+      { label: 'Core Team', share: '29%' },
+      { label: 'Advisors', share: '1%' },
+      { label: 'Private investors', share: '10%' },
+      { label: 'Foundation Treasury', share: '15%' },
+      { label: 'Donors (Juicebox)', share: '9%' },
+      { label: 'Testnet Participants', share: '5.5%' },
+      { label: 'Community Activities / Airdrops', share: '0.5%' },
     ],
   },
 ];

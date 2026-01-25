@@ -34,7 +34,7 @@ export type HowItWorksContent = {
 export type TokenomicsContent = {
   title: string;
   stats: {
-    share: number;
+    share: string;
     label: string;
   }[];
 };
