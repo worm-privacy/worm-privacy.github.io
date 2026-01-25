@@ -6,16 +6,17 @@ import { useNetwork, WormNetwork } from '@/hooks/use-network';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
 import { calculateNullifier } from '@/lib/core/burn-address/nullifier';
 import { calculateRemainingCoinHash } from '@/lib/core/burn-address/remaining_coin';
+import { BETHContract } from '@/lib/core/contracts/beth';
+import { proof_get } from '@/lib/core/miner-api/proof-get';
 
 import { proof_get_by_nullifier, RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
 import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-post';
-import { relay_post } from '@/lib/core/miner-api/relay_post';
 import { newSavableRecoverData } from '@/lib/utils/recover-data';
 import { saveJson } from '@/lib/utils/save-json';
 import Link from 'next/link';
 
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
-import { usePublicClient } from 'wagmi';
+import { useClient, usePublicClient, useWriteContract } from 'wagmi';
 
 export const MintBETHLayout = (props: {
   mintAmount: string;
@@ -30,6 +31,9 @@ export const MintBETHLayout = (props: {
   let [flowState, setFlowState] = useState<FlowState>(props.proof == null ? FlowState.EndPoint : FlowState.Generated);
   const [endPoint, setEndPoint] = useState(ENDPOINTS[0].url);
   let network = useNetwork();
+
+  const client = useClient();
+  const { mutateAsync } = useWriteContract();
 
   let nullifier = useMemo(() => calculateNullifier(props.burnAddress.burnKey), []);
 
@@ -60,17 +64,34 @@ export const MintBETHLayout = (props: {
     try {
       setIsLoading(true);
       setError(null);
-      await relay_post(endPoint, {
-        network: network,
-        proof: props.proof!,
-        nullifier: nullifier,
-        remaining_coin: remaining_coin,
-        broadcaster_fee: props.burnAddress.broadcasterFee,
-        reveal_amount: props.burnAddress.revealAmount,
-        receiver: props.burnAddress.receiverAddr,
-        prover_fee: props.burnAddress.proverFee,
-        swap_calldata: props.burnAddress.receiverHook,
-      });
+
+      const response = await proof_get(endPoint);
+
+      await BETHContract.mintCoin(
+        mutateAsync,
+        client!,
+        props.proof!,
+        nullifier,
+        remaining_coin,
+        props.burnAddress.broadcasterFee,
+        props.burnAddress.revealAmount,
+        props.burnAddress.receiverAddr as `0x${string}`,
+        props.burnAddress.proverFee,
+        response.prover_address
+      );
+
+      // this uses relay for broadcasting
+      // await relay_post(endPoint, {
+      //   network: network,
+      //   proof: props.proof!,
+      //   nullifier: nullifier,
+      //   remaining_coin: remaining_coin,
+      //   broadcaster_fee: props.burnAddress.broadcasterFee,
+      //   reveal_amount: props.burnAddress.revealAmount,
+      //   receiver: props.burnAddress.receiverAddr,
+      //   prover_fee: props.burnAddress.proverFee,
+      //   swap_calldata: props.burnAddress.receiverHook,
+      // });
       setIsLoading(false);
       setFlowState(FlowState.Submitted);
     } catch (e) {

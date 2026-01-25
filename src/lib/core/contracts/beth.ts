@@ -1,7 +1,8 @@
-import { Client } from 'viem';
+import { Client, hexToBigInt } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { Config } from 'wagmi';
 import { WriteContractMutateAsync } from 'wagmi/query';
+import { RapidsnarkOutput } from '../miner-api/proof-get-by-nullifier';
 import { WORMcontractAddress } from './worm';
 
 //TODO change this address
@@ -24,6 +25,56 @@ export namespace BETHContract {
     let r = await waitForTransactionReceipt(client!, { hash: approveTXHash });
     if (r.status == 'reverted') throw 'allowance reverted';
     console.log('got approve receipt');
+  };
+
+  export const mintCoin = async (
+    mutateAsync: WriteContractMutateAsync<Config, unknown>,
+    client: Client,
+    proof: RapidsnarkOutput,
+    nullifier: bigint,
+    remaining_coin_hash: bigint,
+    broadcaster_fee: bigint,
+    spend: bigint,
+    receiver: `0x${string}`,
+    prover_fee: bigint,
+    prover: `0x${string}`
+  ) => {
+    const trxHash = await mutateAsync({
+      address: BETHContractAddress,
+      abi: BETHContractABI,
+      functionName: 'mintCoin',
+      args: [
+        {
+          pA: [hexToBigInt(proof.proof.pi_a[0] as `0x${string}`), hexToBigInt(proof.proof.pi_a[1] as `0x${string}`)],
+          pB: [
+            [
+              hexToBigInt(proof.proof.pi_b[0][1] as `0x${string}`),
+              hexToBigInt(proof.proof.pi_b[0][0] as `0x${string}`),
+            ],
+            [
+              hexToBigInt(proof.proof.pi_b[1][1] as `0x${string}`),
+              hexToBigInt(proof.proof.pi_b[1][0] as `0x${string}`),
+            ],
+          ],
+          pC: [hexToBigInt(proof.proof.pi_c[0] as `0x${string}`), hexToBigInt(proof.proof.pi_c[1] as `0x${string}`)],
+          blockNumber: hexToBigInt(proof.target_block as `0x${string}`),
+          nullifier,
+          remainingCoin: remaining_coin_hash,
+          broadcasterFee: broadcaster_fee,
+          revealedAmount: spend,
+          revealedAmountReceiver: receiver,
+          proverFee: prover_fee,
+          prover,
+          receiverPostMintHook: '0x',
+          broadcasterFeePostMintHook: '0x',
+          proverFeePostMintHook: '0x',
+        },
+      ],
+    });
+    console.log('waiting for receipt');
+    let r = await waitForTransactionReceipt(client!, { hash: trxHash });
+    if (r.status == 'reverted') throw 'mintCoin reverted';
+    console.log('got receipt');
   };
 }
 
