@@ -1,3 +1,5 @@
+import ErrorComponent from '@/components/tools/error-component';
+import LoadingComponent from '@/components/tools/loading';
 import { UseClaimListResult } from '@/hooks/use-claim-list';
 import { WORMContract } from '@/lib/core/contracts/worm';
 import { roundEther } from '@/lib/core/utils/round-ether';
@@ -18,8 +20,13 @@ export default function TotalClaim(props: { result: UseClaimListResult; refresh:
     return <div className="grow text-red-500">Error loading data</div>;
   }
 
-  if (result.readyToClaim.length == 0) return <div className="grow text-white">Nothing to claim</div>;
-
+  if (result.readyToClaim.length == 0)
+    return (
+      <div className="flex h-full grow flex-col text-white">
+        <div className="mb-3 text-[24px] font-bold">gWorm!</div>
+        <div className="text-[16px] opacity-70">No WORM reward available</div>
+      </div>
+    );
   const totalClaimAmount = result.readyToClaim.map((e) => e.amount).reduce((a, c) => a + c);
 
   const onClaimClick = async () => {
@@ -40,15 +47,23 @@ export default function TotalClaim(props: { result: UseClaimListResult; refresh:
 
   return (
     <div className="flex grow flex-col gap-2">
-      <div className="text-white">Total Claim: {roundEther(totalClaimAmount, 4)} WORM</div>
-
       {claimState == 'idle' && (
-        <button onClick={onClaimClick} className="w-full rounded-lg bg-brand px-4 py-3 text-black">
-          Claim everything
-        </button>
+        <div className="flex h-full flex-col text-white">
+          <div className="text-[24px] font-bold">gWorm!</div>
+          <div className="text-[24px] font-bold">Rewards are ready</div>
+          <div className="mt-5 text-white opacity-80">Total Claimable reward: </div>
+          <div className="flex flex-row items-center gap-2">
+            <div className="text-[24px] font-bold text-white">{roundEther(totalClaimAmount, 4)} </div>
+            <div className="text-[24px] text-brand">WORM </div>
+          </div>
+          <div className="grow" />
+          <button onClick={onClaimClick} className="w-full rounded-lg bg-brand px-4 py-3 text-black">
+            Claim everything
+          </button>
+        </div>
       )}
-      {claimState == 'loading' && <div className="w-full px-4 py-3 text-white">Hold on a sec...</div>}
-      {claimState == 'error' && <div className="w-full px-4 py-3 text-red-500">Error</div>}
+      {claimState == 'loading' && <LoadingComponent />}
+      {claimState == 'error' && <ErrorComponent title="Error while Claiming reward" hFull={false} />}
       {claimState == 'done' && <div className="w-full px-4 py-3 text-white">Claimed Successfully</div>}
 
       <div className="grow" />
