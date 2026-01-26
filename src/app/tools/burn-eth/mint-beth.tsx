@@ -227,7 +227,7 @@ const EndPointSelection = (props: {
 
   return (
     <div className="flex w-full flex-col text-white">
-      <div className="mb-5 font-normal">{props.mintAmount} BETH is going to minted for address</div>
+      <div className="mb-5 font-normal">{props.mintAmount} BETH is going to be minted for address</div>
       <div className="mb-5 text-[18px] font-bold">{props.burnAddress.receiverAddr}</div>
 
       <div className=" text-[14px] font-normal">Proving Endpoint</div>
@@ -305,5 +305,6 @@ enum FlowState {
 
 const ENDPOINTS = [
   { name: 'WORM public prover #1', url: 'https://prover-1.worm.cx' },
+  { name: 'Metatarz prover', url: 'https://worm-testnet.metatarz.xyz' },
   { name: 'Local machine', url: 'http://localhost:8080' },
 ];
