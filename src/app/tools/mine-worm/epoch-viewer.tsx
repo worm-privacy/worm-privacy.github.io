@@ -1,15 +1,10 @@
-import { useEpochList } from '@/hooks/use-epoch-list';
+import { UseEpochListResult } from '@/hooks/use-epoch-list';
 import { roundEther } from '@/lib/core/utils/round-ether';
 import { useEffect, useRef, useState } from 'react';
 
-export default function EpochViewer() {
-  const [result, refresh] = useEpochList();
-
-  useEffect(() => {
-    refresh();
-  }, [refresh]);
-
+export default function EpochViewer(props: { result: UseEpochListResult; refresh: () => Promise<void> }) {
   let inner: React.ReactNode = undefined;
+  const result = props.result;
   switch (result.status) {
     case 'error':
       inner = <div className="text-red-500">{result.error}</div>;
@@ -26,7 +21,7 @@ export default function EpochViewer() {
               epoch={epoch}
               current={result.currentEpoch}
               progress={epochProgress}
-              refresh={refresh}
+              refresh={props.refresh}
               key={epoch.num}
             />
           ))}

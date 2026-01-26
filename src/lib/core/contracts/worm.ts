@@ -1,4 +1,5 @@
-import { Client } from 'viem';
+import { participationLogsRepo } from '@/lib/data/participation-logs-repo';
+import { Client, parseEventLogs } from 'viem';
 import { getContractEvents, readContract, waitForTransactionReceipt } from 'viem/actions';
 import { Config } from 'wagmi';
 import { WriteContractMutateAsync } from 'wagmi/query';
@@ -72,6 +73,8 @@ export namespace WORMContract {
     console.log('waiting for receipt');
     const r = await waitForTransactionReceipt(client, { hash: trxHash });
     if (r.status == 'reverted') throw 'participate reverted';
+    let event = parseEventLogs({ abi: WORMcontractABI, logs: r.logs }).filter((e) => e.eventName == 'Participated')[0];
+    participationLogsRepo.addItem({ fromEpoch: Number(event.args.fromEpoch), numberOfEpochs: Number(numberOfEpochs) });
     console.log('got approve receipt');
   };
 

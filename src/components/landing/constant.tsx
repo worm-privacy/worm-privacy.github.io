@@ -110,7 +110,7 @@ export const HOW_IT_WORKS: HowItWorksContent[] = [
     description: 'Consume your BETH across WORM epochs, and earn WORM!',
     color: 'green',
     action: (
-      <Link className={buttonVariants({ variant: 'primary', className: 'w-full' })} href="/app/mine">
+      <Link className={buttonVariants({ variant: 'primary', className: 'w-full' })} href="/tools/burn-eth">
         Get WORM
       </Link>
     ),
@@ -205,11 +205,11 @@ export const TOKENOMICS: TokenomicsContent[] = [
   {
     title: 'Premine',
     stats: [
-      { label: 'Uniswap CCA', share: '30%' },
-      { label: 'Core Team', share: '29%' },
+      { label: 'LP / ICO', share: '40%' },
+      { label: 'Core Team', share: '24%' },
       { label: 'Advisors', share: '1%' },
-      { label: 'Private investors', share: '10%' },
-      { label: 'Foundation Treasury', share: '15%' },
+      { label: 'Private investors', share: '8%' },
+      { label: 'Foundation Treasury', share: '12%' },
       { label: 'Donors (Juicebox)', share: '9%' },
       { label: 'Testnet Participants', share: '5.5%' },
       { label: 'Community Activities / Airdrops', share: '0.5%' },

@@ -19,7 +19,7 @@ export const calculateMintAmountStr = (
       parseEther(broadcasterFee)
     );
 
-    return roundEther(bethAmount, 2);
+    return roundEther(bethAmount, 4);
   } catch {
     return 'N/A';
   }

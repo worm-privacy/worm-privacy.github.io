@@ -4,10 +4,18 @@ import { Footer } from '@/components/landing';
 import TabBar from '@/components/tools/tabbar';
 import TopBar from '@/components/tools/topbar';
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
+import { useEpochList } from '@/hooks/use-epoch-list';
+import { useEffect } from 'react';
 import EpochViewer from './epoch-viewer';
 import ParticipateInputs from './participate-inputs';
 
 export default function MineWorm() {
+  const [result, refresh] = useEpochList();
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
+
   return (
     <SmoothScroll>
       <TopBar />
@@ -17,8 +25,8 @@ export default function MineWorm() {
           <h1 className="mb-3 text-[24px] font-bold text-white">Participating in WORM epoch</h1>
           <div className="rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
             <div className="flex flex-row gap-6">
-              <EpochViewer />
-              <ParticipateInputs />
+              <EpochViewer result={result} refresh={refresh} />
+              <ParticipateInputs result={result} refresh={refresh} />
             </div>
           </div>
         </div>
