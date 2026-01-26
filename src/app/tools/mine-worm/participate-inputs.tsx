@@ -98,7 +98,7 @@ export default function ParticipateInputs(props: { result: UseEpochListResult; r
 
       <InputComponent
         label="BETH amount to participate"
-        hint="for example 2"
+        hint="e.g. 0.1"
         state={bethAmount}
         inputKind="BETH"
         inputType="number"

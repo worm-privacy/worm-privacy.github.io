@@ -141,7 +141,7 @@ const UpComingEpochItem = (props: { epochNumber: bigint; share: bigint }) => {
 const Divider = () => {
   return (
     <div className="m-1 flex flex-row">
-      <div className="text-[#94A3B8]">Up coming epochs</div>
+      <div className="text-[#94A3B8]">Upcoming epochs</div>
       <div className="mx-2 my-auto  h-px grow bg-[#94A3B830]" />
     </div>
   );
