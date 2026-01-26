@@ -130,7 +130,7 @@ const UpComingEpochItem = (props: { epochNumber: bigint; share: bigint }) => {
       ) : (
         <>
           <div className="text-[14px]">Your share: ~</div>
-          <div className="font-orbitron">{roundEther(props.share, 1)}</div>
+          <div className="font-orbitron">{roundEther(props.share, 4)}</div>
           <div className=" text-[14px] text-brand">WORM</div>
         </>
       )}
