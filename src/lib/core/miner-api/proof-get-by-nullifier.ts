@@ -2,16 +2,21 @@
 export const proof_get_by_nullifier = async (
   serverURL: string,
   nullifier: string
-): Promise<RapidsnarkOutput | 'waiting'> => {
+): Promise<ProofGetByNullifierResponse> => {
   const response = await fetch(`${serverURL}/proof/${nullifier}`);
 
   switch (response.status) {
     case 200:
       // proof is ready
-      return await response.json();
+      return { status: 'done', proof: await response.json() };
     case 404:
       // proof is running or waiting in queue
-      return 'waiting';
+      try {
+        const inQueue = parseInt((await response.json()).error);
+        return { status: 'waiting', inQueue };
+      } catch {
+        //TODO
+      }
     default:
       const error = await response.json().catch(() => ({}));
       throw new Error(error.error);
@@ -30,3 +35,7 @@ export type RapidsnarkOutput = {
   public: string[];
   target_block: string;
 };
+
+export type ProofGetByNullifierResponse =
+  | { status: 'done'; proof: RapidsnarkOutput }
+  | { status: 'waiting'; inQueue: number };

@@ -1,5 +1,4 @@
 import ErrorComponent from '@/components/tools/error-component';
-import LoadingComponent from '@/components/tools/loading';
 import { Icons } from '@/components/ui/icons';
 import { useInterval } from '@/hooks/use-interval';
 import { useNetwork, WormNetwork } from '@/hooks/use-network';
@@ -30,6 +29,7 @@ export const MintBETHLayout = (props: {
   // skip endpoint selection flow if proof is already provided (by recover mechanism)
   let [flowState, setFlowState] = useState<FlowState>(props.proof == null ? FlowState.EndPoint : FlowState.Generated);
   const [endPoint, setEndPoint] = useState(ENDPOINTS[0].url);
+  const [inQueue, setInQueue] = useState<number | null>(null);
   let network = useNetwork();
 
   const client = useClient();
@@ -102,9 +102,11 @@ export const MintBETHLayout = (props: {
 
   if (isLoading) {
     return (
-      <>
-        <LoadingComponent />
-      </>
+      <div className="grow text-white">
+        <div className="mb-6 text-[24px]">Hold on a sec</div>
+        <div className="text-[18px]">Server is generating proofs!</div>
+        {inQueue && <div className="text-[18px]">You are number {inQueue} in the queue...</div>}
+      </div>
     );
   }
 
@@ -132,6 +134,7 @@ export const MintBETHLayout = (props: {
             setEndPoint={setEndPoint}
             network={network}
             nullifier={nullifier}
+            setInQueue={setInQueue}
           />
         </>
       );
@@ -169,14 +172,17 @@ const EndPointSelection = (props: {
   setEndPoint: Dispatch<SetStateAction<string>>;
   network: WormNetwork;
   nullifier: bigint;
+  setInQueue: Dispatch<SetStateAction<number | null>>;
 }) => {
   const fetchResultInterval = async () => {
     // keep polling until we get
     try {
       const result = await proof_get_by_nullifier(props.endPoint, props.nullifier.toString(10));
-      if (result != 'waiting') {
-        props.onProofGenerated(result);
+      if (result.status === 'done') {
+        props.onProofGenerated(result.proof);
         stopPolling();
+      } else {
+        props.setInQueue(result.inQueue);
       }
     } catch (e) {
       console.error(e);
