@@ -1,6 +1,7 @@
 import ErrorComponent from '@/components/tools/error-component';
 import InputComponent from '@/components/tools/input-text';
 import LoadingComponent from '@/components/tools/loading';
+import { UseEpochListResult } from '@/hooks/use-epoch-list';
 import { useInput } from '@/hooks/use-input';
 import { BETHContract, BETHContractABI, BETHContractAddress } from '@/lib/core/contracts/beth';
 import { WORMContract } from '@/lib/core/contracts/worm';
@@ -10,7 +11,7 @@ import { formatUnits, parseEther } from 'viem';
 import { useClient, useConnection, useReadContract, useWriteContract } from 'wagmi';
 import Participated from './participated';
 
-export default function ParticipateInputs() {
+export default function ParticipateInputs(props: { result: UseEpochListResult; refresh: () => Promise<void> }) {
   const [participated, setParticipated] = useState(false);
   const [isParticipateError, setIsParticipateError] = useState(false);
   const bethAmount = useInput('', validateETHAmount);
@@ -77,6 +78,7 @@ export default function ParticipateInputs() {
     try {
       await BETHContract.approve(mutateAsync, client!, beth);
       await WORMContract.participate(mutateAsync, client!, bethPerEpoch, epochs);
+      props.refresh();
       setParticipated(true);
     } catch (e) {
       console.error(e);
