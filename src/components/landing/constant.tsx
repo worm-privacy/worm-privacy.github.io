@@ -127,7 +127,7 @@ export const HOW_IT_WORKS: HowItWorksContent[] = [
     description: 'Consume your BETH across WORM epochs, and earn WORM!',
     color: 'green',
     action: (
-      <Link className={buttonVariants({ variant: 'primary', className: 'w-full' })} href="/app/mine">
+      <Link className={buttonVariants({ variant: 'primary', className: 'w-full' })} href="/tools/burn-eth">
         Get WORM
       </Link>
     ),

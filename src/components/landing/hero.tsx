@@ -163,7 +163,7 @@ export function HeroSection() {
         </span>
 
         <div className="grid w-full grid-cols-2 gap-4 md:flex md:items-center md:justify-start">
-          <Link className={buttonVariants({ className: 'w-full md:w-max' })} href="/app/mine">
+          <Link className={buttonVariants({ className: 'w-full md:w-max' })} href="/tools/burn-eth">
             Get WORM
           </Link>
 

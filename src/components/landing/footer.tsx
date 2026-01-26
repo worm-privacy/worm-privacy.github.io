@@ -40,7 +40,7 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/app/mine" className={buttonVariants({ variant: 'link', className: 'px-3! py-2.5!' })}>
+              <Link href="/tools/burn-eth" className={buttonVariants({ variant: 'link', className: 'px-3! py-2.5!' })}>
                 Mine WORM
               </Link>
             </li>
