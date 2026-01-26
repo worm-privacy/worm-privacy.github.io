@@ -13,8 +13,6 @@ export const BurnETHLayout = (props: { burnAddress: BurnAddressContent; onBurnCo
   let account = useConnection();
   let balance = useBalance({ address: account.address });
 
-  let [confirmation, setConfirmation] = useState(false);
-
   const { mutateAsync } = useSendTransaction();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -24,7 +22,6 @@ export const BurnETHLayout = (props: { burnAddress: BurnAddressContent; onBurnCo
     saveJson(newSavableRecoverData(props.burnAddress), `burn_${props.burnAddress.burnAddress}_backup.json`);
 
   const onBurnClick = async () => {
-    if (!confirmation) return setConfirmation(true);
     try {
       setLoading(true);
       setError(null);
@@ -70,16 +67,15 @@ export const BurnETHLayout = (props: { burnAddress: BurnAddressContent; onBurnCo
       <div className="grow" />
 
       {/* Buttons */}
-      {!confirmation && (
-        <div className="mb-4 flex h-10 justify-center text-[14px] font-bold text-brand">
-          <button onClick={onBackupClick} className="flex items-center ">
-            <Icons.backup className="mr-2" />
-            Backup minting data
-          </button>
-        </div>
-      )}
+      
+      <div className="mb-4 flex h-10 justify-center text-[14px] font-bold text-brand">
+        <button onClick={onBackupClick} className="flex items-center ">
+          <Icons.backup className="mr-2" />
+          Backup minting data
+        </button>
+      </div>
       <button onClick={onBurnClick} className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black">
-        {confirmation ? 'Continue' : 'Burn ETH'}
+        Burn ETH
       </button>
     </div>
   );
