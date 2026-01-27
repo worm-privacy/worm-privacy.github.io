@@ -23,7 +23,7 @@ export const MintBETHLayout = (props: {
   proof: RapidsnarkOutput | null;
   setProof: Dispatch<SetStateAction<RapidsnarkOutput | null>>;
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<'submit' | 'proof' | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // skip endpoint selection flow if proof is already provided (by recover mechanism)
@@ -40,12 +40,12 @@ export const MintBETHLayout = (props: {
   const onProofGenerated = (proof: RapidsnarkOutput) => {
     props.setProof(proof);
     setFlowState(FlowState.Generated);
-    setIsLoading(false);
+    setIsLoading(null);
   };
 
   const onError = (msg: string) => {
     setError(msg);
-    setIsLoading(false);
+    setIsLoading(null);
   };
 
   const onBackupProofDataClick = async () =>
@@ -62,7 +62,7 @@ export const MintBETHLayout = (props: {
     );
 
     try {
-      setIsLoading(true);
+      setIsLoading('submit');
       setError(null);
 
       const response = await proof_get(endPoint);
@@ -92,7 +92,7 @@ export const MintBETHLayout = (props: {
       //   prover_fee: props.burnAddress.proverFee,
       //   swap_calldata: props.burnAddress.receiverHook,
       // });
-      setIsLoading(false);
+      setIsLoading(null);
       setFlowState(FlowState.Submitted);
     } catch (e) {
       console.error(e);
@@ -100,12 +100,27 @@ export const MintBETHLayout = (props: {
     }
   };
 
-  if (isLoading) {
+  if (isLoading == 'proof') {
     return (
       <div className="grow text-white">
         <div className="mb-6 text-[24px]">Hold on a sec</div>
         <div className="text-[18px]">Server is generating proofs!</div>
-        {inQueue && <div className="text-[18px]">You are number {inQueue} in the queue...</div>}
+        {inQueue == null ? (
+          <></>
+        ) : inQueue == 0 ? (
+          <div className="text-[18px]">It's your turn now</div>
+        ) : (
+          <div className="text-[18px]">You are number {inQueue} in the queue...</div>
+        )}
+      </div>
+    );
+  }
+
+  if (isLoading == 'submit') {
+    return (
+      <div className="grow text-white">
+        <div className="mb-6 text-[24px]">Hold on a sec</div>
+        <div className="text-[18px]">Submitting proof...</div>
       </div>
     );
   }
@@ -163,7 +178,7 @@ const GET_PROOF_RESULT_POLLING_INTERVAL = 5000;
 const EndPointSelection = (props: {
   mintAmount: string;
   burnAddress: BurnAddressContent;
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setIsLoading: Dispatch<SetStateAction<'submit' | 'proof' | null>>;
   setError: Dispatch<SetStateAction<string | null>>;
   setFlowState: Dispatch<SetStateAction<FlowState>>;
   onProofGenerated: (proof: RapidsnarkOutput) => void;
@@ -198,7 +213,7 @@ const EndPointSelection = (props: {
 
   const client = usePublicClient();
   const onGenerateClick = async () => {
-    props.setIsLoading(true);
+    props.setIsLoading('proof');
     props.setError(null);
     try {
       let blockNumber = (await client!.getBlock()).number;
@@ -268,7 +283,7 @@ const Generated = (props: {
   return (
     <div className="flex w-full flex-col gap-6 text-white">
       <div className="text[24px]">Proof Generated</div>
-      <div className="text[18px]">for burn address: {props.burnAddress.burnAddress}</div>
+      <div className="text[18px]">For burn address: {props.burnAddress.burnAddress}</div>
       <div className="grow" />
       <div className="flex justify-center">
         <button
