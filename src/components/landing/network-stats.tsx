@@ -2,45 +2,12 @@
 
 import { Progress } from '@/components/ui/progress';
 import { useIsMobile } from '@/hooks/use-is-mobile';
+import { WORMcontractABI, WORMcontractAddress } from '@/lib/core/contracts/worm';
 import { cn } from '@/lib/utils';
 import { Contract, JsonRpcProvider } from 'ethers';
 import { useEffect, useState } from 'react';
 
-const CONTRACT_ADDRESS = '0xcBdF9890B5935F01B2f21583d1885CdC8389eb5F';
-const RPC_URL = "https://sepolia.drpc.org";
-
-const CONTRACT_ABI = [
-  {
-    inputs: [
-      { name: 'user', type: 'address' },
-      { name: 'since', type: 'uint256' },
-      { name: 'count', type: 'uint256' },
-    ],
-    name: 'info',
-    outputs: [
-      {
-        components: [
-          { name: 'totalWorm', type: 'uint256' },
-          { name: 'totalBeth', type: 'uint256' },
-          { name: 'currentEpoch', type: 'uint256' },
-          { name: 'epochRemainingTime', type: 'uint256' },
-          { name: 'since', type: 'uint256' },
-          { name: 'userContribs', type: 'uint256[]' },
-          { name: 'totalContribs', type: 'uint256[]' },
-        ],
-        type: 'tuple',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    name: 'currentReward',
-    outputs: [{ type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-];
+const RPC_URL = 'https://sepolia.drpc.org';
 
 export function NetworkStats() {
   const isMobile = useIsMobile();
@@ -67,7 +34,7 @@ export function NetworkStats() {
           return;
         }
         const provider = new JsonRpcProvider(RPC_URL);
-        const contract = new Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
+        const contract = new Contract(WORMcontractAddress, WORMcontractABI, provider);
 
         const result = await contract.info('0x0000000000000000000000000000000000000000', 0n, 0n);
         const currentRewardResult = await contract.currentReward();
@@ -80,7 +47,8 @@ export function NetworkStats() {
 
         const wormPrice = epochBeth > 0n ? (epochBeth * BigInt(1e18)) / currentRewardResult : 0n;
 
-        const epochTimeInSeconds = Number(result.epochRemainingTime);
+        // result.epochRemainingTime is actually passedTime, wrong naming in contract
+        const epochPassedTimeInSeconds = Number(result.epochRemainingTime);
         setStats({
           totalWorm: result.totalWorm.toString(),
           totalBeth: result.totalBeth.toString(),
@@ -90,7 +58,7 @@ export function NetworkStats() {
           epochBeth: epochBeth.toString(),
           wormPrice: wormPrice.toString(),
         });
-        setRemainingTime(epochTimeInSeconds);
+        setRemainingTime(600 - epochPassedTimeInSeconds);
         setInitialEpochTime(600);
       } catch (error) {
         console.error('Error fetching network stats:', error);
@@ -179,7 +147,7 @@ export function NetworkStats() {
           </div>
 
           <p className="satoshi-h4 flex items-center gap-1 text-white">
-            {loading ? '...' : formatNumber(stats.wormPrice)}{' '}<span className="text-blue-400">ETH</span> ~ 1{' '}
+            {loading ? '...' : formatNumber(stats.wormPrice)} <span className="text-blue-400">ETH</span> ~ 1{' '}
             <span className="text-green-400">WORM</span>
           </p>
         </div>
