@@ -22,14 +22,15 @@ export function useEpochList(): [UseEpochListResult, () => Promise<void>] {
 
       let epochs: Epoch[] = [];
       for (let i = 0; i < 5; i++) {
-        const share = info.totalContribs[i] === 0n ? 0 : Number((info.userContribs[i] / info.totalContribs[i]) * 100n);
+        const share =
+          info.totalContribs[i] === 0n ? 0 : (Number(info.userContribs[i]) / Number(info.totalContribs[i])) * 100;
         const reward = rewardOfWithSample(since + BigInt(i), info.currentEpoch, info.currentEpochReward);
         epochs.push({
           num: since + BigInt(i),
           bethAmount: info.totalContribs[i],
           wormAmount: reward,
           share: share,
-          shareAmount: (BigInt(share) / 100n) * reward,
+          shareAmount: info.userContribs[i],
         });
       }
 
