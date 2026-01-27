@@ -1,5 +1,5 @@
 import { UseEpochListResult } from '@/hooks/use-epoch-list';
-import { roundEther } from '@/lib/core/utils/round-ether';
+import { roundEther, roundEtherF } from '@/lib/core/utils/round-ether';
 import { useEffect, useRef, useState } from 'react';
 
 export default function EpochViewer(props: { result: UseEpochListResult; refresh: () => Promise<void> }) {
@@ -97,7 +97,7 @@ const EpochItem = (props: { epoch: Epoch; current: bigint; progress: number; ref
         </div>
         <div className="flex items-center">
           <span className="mr-1 text-gray-400">Your share</span>
-          <span className="font-orbitron text-[16px] text-white">{epoch.share.toFixed(1)}</span>
+          <span className="font-orbitron text-[16px] text-white">{roundEtherF(epoch.share)}</span>
           <span className="mr-1 font-orbitron text-[16px] text-brand">%</span>
           <span className="text-gray-400">({roundEther(epoch.shareAmount)})</span>
         </div>
