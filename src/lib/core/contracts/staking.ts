@@ -72,15 +72,15 @@ export namespace StakingContract {
   export const lock = async (
     mutateAsync: WriteContractMutateAsync<Config, unknown>,
     client: Client,
-    amountPerEpoch: bigint,
+    amount: bigint,
     numberOfEpochs: bigint
   ) => {
-    console.log(`calling lock(${amountPerEpoch}, ${numberOfEpochs})`);
+    console.log(`calling lock(${amount}, ${numberOfEpochs})`);
     const trxHash = await mutateAsync({
       address: StakingContractAddress,
       abi: StakingContractABI,
       functionName: 'lock',
-      args: [amountPerEpoch, numberOfEpochs],
+      args: [amount, numberOfEpochs],
     });
     console.log('waiting for receipt');
     const r = await waitForTransactionReceipt(client, { hash: trxHash });
