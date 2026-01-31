@@ -3,6 +3,7 @@ import { Client, parseEventLogs } from 'viem';
 import { getContractEvents, readContract, waitForTransactionReceipt } from 'viem/actions';
 import { Config } from 'wagmi';
 import { WriteContractMutateAsync } from 'wagmi/query';
+import { StakingContractAddress } from './staking';
 
 //TODO change this address
 export const WORMcontractAddress = '0xa88EBF41b31e1A77a20E5c347648381355718E35';
@@ -94,6 +95,24 @@ export namespace WORMContract {
     console.log('waiting for receipt');
     const r = await waitForTransactionReceipt(client, { hash: trxHash });
     if (r.status == 'reverted') throw 'claim reverted';
+    console.log('got approve receipt');
+  };
+
+  export const approve = async (
+    mutateAsync: WriteContractMutateAsync<Config, unknown>,
+    client: Client,
+    amount: bigint
+  ) => {
+    console.log(`calling approve(${StakingContractAddress}, ${amount})`);
+    const trxHash = await mutateAsync({
+      address: WORMcontractAddress,
+      abi: WORMcontractABI,
+      functionName: 'approve',
+      args: [StakingContractAddress, amount],
+    });
+    console.log('waiting for receipt');
+    let r = await waitForTransactionReceipt(client!, { hash: trxHash });
+    if (r.status == 'reverted') throw 'allowance reverted';
     console.log('got approve receipt');
   };
 }

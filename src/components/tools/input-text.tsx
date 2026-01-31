@@ -44,7 +44,7 @@ export type InputComponentProps = {
   disabled?: boolean;
   children?: React.ReactNode;
 };
-type InputKind = 'ETH' | 'BETH' | 'Epoch';
+type InputKind = 'ETH' | 'BETH' | 'Epoch' | 'Weeks' | 'WORM';
 
 const inputKindColor = (inputKind: InputKind | undefined) => {
   switch (inputKind) {
@@ -54,6 +54,8 @@ const inputKindColor = (inputKind: InputKind | undefined) => {
       return 'text-[#FF47C0]';
     case 'Epoch':
       return 'text-[#94A3B8]';
+    case 'WORM':
+      return 'text-brand';
     default:
       return 'text-[#94A3B8]';
   }
