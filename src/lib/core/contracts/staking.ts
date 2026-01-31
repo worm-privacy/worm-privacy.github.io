@@ -1,4 +1,5 @@
-import { Client } from 'viem';
+import { stakingLogsRepo } from '@/lib/data/staking-logs-repo';
+import { Client, parseEventLogs } from 'viem';
 import { getContractEvents, readContract, waitForTransactionReceipt } from 'viem/actions';
 import { Config } from 'wagmi';
 import { WriteContractMutateAsync } from 'wagmi/query';
@@ -86,6 +87,8 @@ export namespace StakingContract {
     const r = await waitForTransactionReceipt(client, { hash: trxHash });
     if (r.status == 'reverted') throw 'lock reverted';
     console.log('got approve receipt');
+    let event = parseEventLogs({ abi: StakingContractABI, logs: r.logs }).filter((e) => e.eventName == 'Staked')[0];
+    stakingLogsRepo.addItem({ fromEpoch: Number(event.args.startingEpoch), numberOfEpochs: Number(numberOfEpochs) });
   };
 
   export const release = async (
