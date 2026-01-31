@@ -158,6 +158,14 @@ function ShareDetails(props: {
             <span className="text-[#FFD080]">Not Revealed</span>
           )}
         </div>
+        {share.shareData.note && 
+          <div className="flex flex-row justify-between">
+            <span className="opacity-70">Note</span>
+            <span>
+              <span>{share.shareData.note}</span>
+            </span>
+          </div>
+        }
         
         <div className="my-2 h-px bg-white/20" />
 
