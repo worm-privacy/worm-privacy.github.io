@@ -1,5 +1,6 @@
+import { StakingContract } from '@/lib/core/contracts/staking';
+import { stakingLogsRepo } from '@/lib/data/staking-logs-repo';
 import { useCallback, useState } from 'react';
-import { parseEther } from 'viem';
 import { useClient, useConnection } from 'wagmi';
 
 /// returns [result, refresh]
@@ -13,20 +14,42 @@ export function useStakingList(): [UseStakingListResult, () => Promise<void>] {
 
     setResult({ status: 'loading' });
 
-    //TODO remove this, this is only for testing UI
-    await new Promise((resolve) => setTimeout(resolve, 1000));
     try {
-      setResult({
-        status: 'loaded',
-        readyToClaim: [
-          { weekNumber: 5n, totalReward: parseEther('1.1'), shareAmount: parseEther('0.01'), sharePercentage: 0.1 },
-          { weekNumber: 6n, totalReward: parseEther('50.1'), shareAmount: parseEther('1'), sharePercentage: 50 },
-        ],
-        upcoming: [
-          { weekNumber: 5n, totalReward: parseEther('1.1'), shareAmount: parseEther('0.01'), sharePercentage: 0.1 },
-          { weekNumber: 6n, totalReward: parseEther('50.1'), shareAmount: parseEther('1'), sharePercentage: 50 },
-        ],
-      });
+      let currentWeek = 0n;
+      let notClaimed: StakingItem[] = [];
+
+      for (let stakingLog of stakingLogsRepo.getItems()) {
+        let info = await StakingContract.info(
+          client!,
+          address,
+          BigInt(stakingLog.fromEpoch),
+          BigInt(stakingLog.numberOfEpochs)
+        );
+        currentWeek = info.currentEpoch;
+        for (let i = 0; i < info.userLocks.length; i++) {
+          const weekNumber = BigInt(i + stakingLog.fromEpoch);
+          if (info.userLocks[i] !== 0n) {
+            if (notClaimed.findIndex((e) => e.weekNumber === weekNumber) === -1) {
+              const sharePercentage =
+                info.totalLocks[i] === 0n ? 0 : (Number(info.userLocks[i]) / Number(info.totalLocks[i])) * 100;
+              notClaimed.push({
+                weekNumber,
+                totalReward: info.totalLocks[i],
+                shareAmount: info.userLocks[i],
+                sharePercentage,
+              });
+            }
+          }
+        }
+      }
+
+      let readyToClaim: StakingItem[] = [];
+      let upcoming: StakingItem[] = [];
+      for (let claim of notClaimed) {
+        if (claim.weekNumber < currentWeek) readyToClaim.push(claim);
+        else upcoming.push(claim);
+      }
+      setResult({ status: 'loaded', readyToClaim, upcoming });
     } catch (e) {
       console.error(e);
       setResult({ status: 'error', error: 'Error reading chain data' });
