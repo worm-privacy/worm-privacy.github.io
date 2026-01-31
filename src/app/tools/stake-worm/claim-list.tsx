@@ -74,7 +74,7 @@ const ReadyToClaimItem = (props: { staking: StakingItem; refresh: () => Promise<
           <div className="flex flex-col items-start">
             <div className="flex flex-row items-center">
               <span className="text-[#727E8F]">
-                Week <span className="font-orbitron text-[12px]">{staking.weekNumber} </span>
+                Week <span className="font-orbitron text-[16px]">{staking.weekNumber} </span>
               </span>
               <div className="ml-2 rounded-4xl bg-[rgba(var(--brand-rgb),0.12)] px-3 py-1 text-[12px] text-[#96FAD1] ">
                 Ready to claim
@@ -91,9 +91,9 @@ const ReadyToClaimItem = (props: { staking: StakingItem; refresh: () => Promise<
           <div className="flex w-2/5 flex-col items-start">
             <div className="text-[#727E8F]">Your share</div>
             <div>
-              <span className="font-orbitron">{staking.sharePercentage} </span>
+              <span className="font-orbitron">{staking.sharePercentage.toFixed(2)} </span>
               <span className="text-[#727E8F]">% </span>
-              <span className="ml-1">(~{roundEther(staking.totalReward)}</span>
+              <span className="ml-1">(~{roundEther(staking.shareAmount)}</span>
               <span className="ml-1 text-[#FF47C0]">BETH</span>)
             </div>
           </div>
@@ -107,16 +107,21 @@ const ReadyToClaimItem = (props: { staking: StakingItem; refresh: () => Promise<
           </Button>
         </DialogClose>
         <DialogHeader>
-          <DialogTitle>Claim WORM</DialogTitle>
+          <DialogTitle>Claim staking reward</DialogTitle>
         </DialogHeader>
         <div className="satoshi-body2 max-h-61.5 px-8 pt-2 pb-6 text-white">
           {claimState == 'idle' && (
             <div className="flex flex-col">
-              <div className="mb-5 opacity-70">Epoch number {staking.weekNumber}</div>
+              <div className="mb-5 opacity-70">Week number {staking.weekNumber}</div>
               <div className="mb-1">Your reward share: </div>
               <div className="flex flex-row">
-                <div className="mr-2 font-bold text-white">{roundEther(staking.shareAmount, 4)}</div>
-                <div className="font-bold text-brand">WORM</div>
+                <div className="mr-2 text-[24px] font-bold text-white">{roundEther(staking.shareAmount, 4)}</div>
+                <div className="text-[#FF47C0]">BETH</div>
+              </div>
+              <div className="mt-5 mb-1">Total reward share: </div>
+              <div className="flex flex-row">
+                <div className="mr-2 text-[24px] font-bold text-white">{roundEther(staking.totalReward, 4)}</div>
+                <div className="text-[#FF47C0]">BETH</div>
               </div>
               <button
                 onClick={onClaimClicked}
@@ -142,7 +147,7 @@ const UpComingEpochItem = (props: { staking: StakingItem }) => {
       <div className="flex flex-col items-start">
         <div className="flex flex-row items-center">
           <span className="text-[#727E8F]">
-            Week <span className="font-orbitron text-[12px]">{staking.weekNumber} </span>
+            Week <span className="font-orbitron text-[16px]">{staking.weekNumber} </span>
           </span>
         </div>
 
@@ -156,9 +161,9 @@ const UpComingEpochItem = (props: { staking: StakingItem }) => {
       <div className="flex w-2/5 flex-col items-start">
         <div className="text-[#727E8F]">Your share</div>
         <div>
-          <span className="font-orbitron">{staking.sharePercentage} </span>
+          <span className="font-orbitron">{staking.sharePercentage.toFixed(2)} </span>
           <span className="text-[#727E8F]">% </span>
-          <span className="ml-1">(~{roundEther(staking.totalReward)}</span>
+          <span className="ml-1">(~{roundEther(staking.shareAmount)}</span>
           <span className="ml-1 text-[#FF47C0]">BETH</span>)
         </div>
       </div>
