@@ -30,13 +30,14 @@ export function useStakingList(): [UseStakingListResult, () => Promise<void>] {
           const weekNumber = BigInt(i + stakingLog.fromEpoch);
           if (info.userLocks[i] !== 0n) {
             if (notClaimed.findIndex((e) => e.weekNumber === weekNumber) === -1) {
-              const sharePercentage =
-                info.totalLocks[i] === 0n ? 0 : (Number(info.userLocks[i]) / Number(info.totalLocks[i])) * 100;
+              // 1 > share > 0
+              const share = info.totalLocks[i] === 0n ? 0 : Number(info.userLocks[i]) / Number(info.totalLocks[i]);
+              const shareAmount = BigInt(Number(info.rewards[i]) * share);
               notClaimed.push({
                 weekNumber,
-                totalReward: info.totalLocks[i],
-                shareAmount: info.userLocks[i],
-                sharePercentage,
+                totalReward: info.rewards[i],
+                shareAmount: shareAmount,
+                sharePercentage: share * 100,
               });
             }
           }
