@@ -5,6 +5,7 @@ import LoadingComponent from '@/components/tools/loading';
 import StepsComponent, { StepItem } from '@/components/tools/steps';
 import TabBar from '@/components/tools/tabbar';
 import TopBar from '@/components/tools/topbar';
+import { WalletNotConnectedContainer } from '@/components/tools/wallet-not-connected';
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
 import { RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
@@ -69,20 +70,25 @@ export default function BurnETHRoot() {
 
   return (
     <SmoothScroll>
-      <TopBar />
-      <TabBar />
-      <div className="mt-6">
-        <div className="m-auto max-w-310 px-5">
-          <h1 className="mb-3 text-[24px] font-bold text-white">Burn ETH and get BETH</h1>
-          <div className="rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
-            <div className="flex flex-row gap-6">
-              <StepsComponent steps={BURN_ETH_STEPS} selected={currentStep} />
-              {isLoading ? <LoadingComponent /> : <LayoutMapping index={currentStep} />}
+      <div className="flex h-svh grow flex-col overflow-y-scroll">
+        <TopBar />
+        <TabBar />
+        <WalletNotConnectedContainer>
+          <div className="mt-6">
+            <div className="m-auto max-w-310 px-5">
+              <h1 className="mb-3 text-[24px] font-bold text-white">Burn ETH and get BETH</h1>
+              <div className="rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
+                <div className="flex flex-row gap-6">
+                  <StepsComponent steps={BURN_ETH_STEPS} selected={currentStep} />
+                  {isLoading ? <LoadingComponent /> : <LayoutMapping index={currentStep} />}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </WalletNotConnectedContainer>
+        <div className="grow" />
+        <Footer />
       </div>
-      <Footer />
     </SmoothScroll>
   );
 }
