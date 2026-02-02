@@ -34,3 +34,11 @@ export const calculateMintAmount = (
   const poolFee = burnAmount / POOL_SHARE_INV;
   return burnAmount - swapAmount - proverFee - broadcasterFee - poolFee;
 };
+
+export const calculateProtocolFee = (burnAmount: string): string => {
+  try {
+    return formatEther(parseEther(burnAmount) / POOL_SHARE_INV);
+  } catch {
+    return 'N/A';
+  }
+};
