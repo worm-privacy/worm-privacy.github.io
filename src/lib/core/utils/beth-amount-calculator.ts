@@ -1,5 +1,4 @@
-import { parseEther } from 'ethers';
-import { roundEther } from './round-ether';
+import { formatEther, parseEther } from 'ethers';
 
 /// this 0.5% goes to stakers
 const POOL_SHARE_INV = 200n as const; // 0.5%
@@ -19,7 +18,7 @@ export const calculateMintAmountStr = (
       parseEther(broadcasterFee)
     );
 
-    return roundEther(bethAmount, 4);
+    return formatEther(bethAmount);
   } catch {
     return 'N/A';
   }
@@ -34,4 +33,12 @@ export const calculateMintAmount = (
 ): bigint => {
   const poolFee = burnAmount / POOL_SHARE_INV;
   return burnAmount - swapAmount - proverFee - broadcasterFee - poolFee;
+};
+
+export const calculateProtocolFee = (burnAmount: string): string => {
+  try {
+    return formatEther(parseEther(burnAmount) / POOL_SHARE_INV);
+  } catch {
+    return 'N/A';
+  }
 };

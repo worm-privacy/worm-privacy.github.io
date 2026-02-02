@@ -2,7 +2,7 @@ import InputComponent from '@/components/tools/input-text';
 import { Icons } from '@/components/ui/icons';
 import { useInput, UserInputState } from '@/hooks/use-input';
 import { BurnAddressContent, generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
-import { calculateMintAmountStr } from '@/lib/core/utils/beth-amount-calculator';
+import { calculateMintAmountStr, calculateProtocolFee } from '@/lib/core/utils/beth-amount-calculator';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
 import { loadJson } from '@/lib/utils/load-json';
 import { RecoverData, recoverDataFromJson } from '@/lib/utils/recover-data';
@@ -126,9 +126,11 @@ const MainLayout = (props: {
   onGenerateBurnAddressClicked: () => void;
   onRecoverClicked: () => void;
 }) => {
+  const protocolFee = calculateProtocolFee(props.burnAmount.value);
+
   return (
-    <div className="rounded-lg p-6">
-      <div className="space-y-4">
+    <div className="rounded-lg">
+      <div className="flex flex-col space-y-4">
         <InputComponent label="Burn amount" hint="0.0" state={props.burnAmount} inputType="number" inputKind="ETH" />
         <InputComponent label="Receiver address" hint="0xf3...fd23" state={props.receiverAddress} />
 
@@ -142,19 +144,27 @@ const MainLayout = (props: {
             <span className="text-[#94A3B8]">Broadcaster fee</span>
             <span className="text-[#94A3B8]">{props.broadcasterFee} BETH</span>
           </div>
+          <div className="flex justify-between text-[16px]">
+            <span className="text-[#94A3B8]">Protocol fee</span>
+            <span className="text-[#94A3B8]">{protocolFee} BETH</span>
+          </div>
         </div>
 
         {/* You Get Section */}
         <div className="text-[16px]">
-          <div className="mb-1 text-white">You get</div>
-          <div>
-            <span className="text-white">{props.calculatedBeth} </span>
-            <span className="text-pink-400">BETH</span>
-            {/* TODO we don't have swap hook feature yet */}
-            {/* <span className="text-white"> + </span>
-            <span className="text-white">~{props.estimatedETH}</span>
-            <span className="text-blue-400"> ETH</span> */}
-          </div>
+          {props.calculatedBeth !== 'N/A' ? (
+            <>
+              <div className="mb-1 text-white">You get</div>
+              <div>
+                <span className="text-white">{props.calculatedBeth} </span>
+                <span className="text-pink-400">BETH</span>
+                {/* TODO we don't have swap hook feature yet */}
+                {/* <span className="text-white"> + </span>
+                    <span className="text-white">~{props.estimatedETH}</span>
+                    <span className="text-blue-400"> ETH</span> */}
+              </div>
+            </>
+          ) : undefined}
         </div>
 
         {/* Advanced Options */}
@@ -176,6 +186,7 @@ const MainLayout = (props: {
           </button>
         </div>
 
+        <div className="grow" />
         {/* Action Buttons */}
         <div className="space-y-4">
           <button
