@@ -9,10 +9,7 @@ import { useState } from 'react';
 import { formatEther } from 'viem';
 import { useClient, useWriteContract } from 'wagmi';
 
-export default function AirdropShareInfo(props: {
-  result: UseAirdropSharesResult;
-  refresh: () => Promise<void>;
-}) {
+export default function AirdropShareInfo(props: { result: UseAirdropSharesResult; refresh: () => Promise<void> }) {
   const result = props.result;
   const { mutateAsync } = useWriteContract();
   const client = useClient();
@@ -22,9 +19,7 @@ export default function AirdropShareInfo(props: {
     return (
       <div className="flex grow flex-col text-white">
         <div className="text-[24px] font-bold">Airdrop</div>
-        <div className="mt-4 text-[16px] opacity-70">
-          Connect your wallet to view and claim your airdrop shares
-        </div>
+        <div className="mt-4 text-[16px] opacity-70">Connect your wallet to view and claim your airdrop shares</div>
       </div>
     );
   }
@@ -89,20 +84,13 @@ export default function AirdropShareInfo(props: {
   return (
     <div className="flex grow flex-col gap-2">
       {actionState === 'idle' && (
-        <ShareDetails
-          share={selectedShare}
-          onRevealClick={onRevealClick}
-          onClaimClick={onClaimClick}
-        />
+        <ShareDetails share={selectedShare} onRevealClick={onRevealClick} onClaimClick={onClaimClick} />
       )}
       {actionState === 'loading' && <LoadingComponent />}
       {actionState === 'error' && (
         <div className="flex flex-col">
           <ErrorComponent title="Error performing action" hFull={false} />
-          <button
-            onClick={resetState}
-            className="mt-4 w-full rounded-lg bg-[#64748B30] px-4 py-3 text-white"
-          >
+          <button onClick={resetState} className="mt-4 w-full rounded-lg bg-[#64748B30] px-4 py-3 text-white">
             Try Again
           </button>
         </div>
@@ -111,10 +99,7 @@ export default function AirdropShareInfo(props: {
         <div className="flex flex-col text-white">
           <div className="text-[24px] font-bold text-brand">Success!</div>
           <div className="mt-2 text-[16px]">Transaction completed successfully</div>
-          <button
-            onClick={resetState}
-            className="mt-4 w-full rounded-lg bg-brand px-4 py-3 text-black"
-          >
+          <button onClick={resetState} className="mt-4 w-full rounded-lg bg-brand px-4 py-3 text-black">
             Continue
           </button>
         </div>
@@ -123,11 +108,7 @@ export default function AirdropShareInfo(props: {
   );
 }
 
-function ShareDetails(props: {
-  share: AirdropShareModel;
-  onRevealClick: () => void;
-  onClaimClick: () => void;
-}) {
+function ShareDetails(props: { share: AirdropShareModel; onRevealClick: () => void; onClaimClick: () => void }) {
   const { share, onRevealClick, onClaimClick } = props;
   const shareData = share.shareData;
 
@@ -135,7 +116,7 @@ function ShareDetails(props: {
   const initialAmount = roundEther(BigInt(shareData.initialAmount), 4);
   const totalCap = roundEther(BigInt(shareData.totalCap), 4);
   // Format amount per second properly to avoid scientific notation
-  const amountPerDayRaw = formatEther(BigInt(shareData.amountPerSecond * 3600 * 24));
+  const amountPerDayRaw = formatEther(BigInt(shareData.amountPerSecond) * 3600n * 24n);
   const startTime = new Date(Number(shareData.startTime) * 1000).toLocaleString();
 
   // Format claimable amounts for revealed shares
@@ -158,15 +139,15 @@ function ShareDetails(props: {
             <span className="text-[#FFD080]">Not Revealed</span>
           )}
         </div>
-        {share.shareData.note && 
+        {share.shareData.note && (
           <div className="flex flex-row justify-between">
             <span className="opacity-70">Note</span>
             <span>
               <span>{share.shareData.note}</span>
             </span>
           </div>
-        }
-        
+        )}
+
         <div className="my-2 h-px bg-white/20" />
 
         <div className="flex flex-row justify-between">
