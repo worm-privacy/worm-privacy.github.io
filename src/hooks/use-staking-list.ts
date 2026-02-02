@@ -32,7 +32,7 @@ export function useStakingList(): [UseStakingListResult, () => Promise<void>] {
             if (notClaimed.findIndex((e) => e.weekNumber === weekNumber) === -1) {
               // 1 > share > 0
               const share = info.totalLocks[i] === 0n ? 0 : Number(info.userLocks[i]) / Number(info.totalLocks[i]);
-              const shareAmount = BigInt(Number(info.rewards[i]) * share);
+              const shareAmount = BigInt(Math.round(Number(info.rewards[i]) * share));
               notClaimed.push({
                 weekNumber,
                 totalReward: info.rewards[i],
