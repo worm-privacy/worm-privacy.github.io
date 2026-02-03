@@ -24,6 +24,7 @@ export default function StakingInputs(props: { result: UseStakingListResult; ref
     isError: balanceIsError,
     isLoading: balanceOfLoading,
     error: balanceReadError,
+    refetch: refetchBalance,
   } = useReadContract({
     address: WORMcontractAddress,
     abi: WORMcontractABI,
@@ -81,6 +82,9 @@ export default function StakingInputs(props: { result: UseStakingListResult; ref
       await WORMContract.approve(mutateAsync, client!, worm);
       await StakingContract.lock(mutateAsync, client!, worm, weeks);
       props.refresh();
+      refetchBalance();
+      wormAmount.update('');
+      numberOfWeeks.update('');
     } catch (e) {
       console.error(e);
       setIsStakeError(true);
