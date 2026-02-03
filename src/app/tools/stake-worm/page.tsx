@@ -35,7 +35,7 @@ export default function StakeWorm() {
             </div>
           </div>
         </WalletNotConnectedContainer>
-        <div className="grow" />
+        <div className="min-h-[105px] grow" />
         <Footer />
       </div>
     </SmoothScroll>
