@@ -109,15 +109,15 @@ export default function StakingInputs(props: { result: UseStakingListResult; ref
       </InputComponent>
 
       <InputComponent
-        label="Staking weeks"
+        label="Staking days"
         hint="e.g. 3"
         state={numberOfWeeks}
-        inputKind="Weeks"
+        inputKind="Days"
         inputType="number"
         optional={false}
       />
 
-      <div className="text-white opacity-60">Your delegation start from next week</div>
+      <div className="text-white opacity-60">Your delegation start from next day</div>
 
       <div className="grow" />
 
