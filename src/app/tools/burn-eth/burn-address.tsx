@@ -62,6 +62,11 @@ export const BurnAddressGeneratorLayout = (props: {
       return;
     }
 
+    if (parseEther(burnAmount.value) > BigInt('10000000000000000000')) {
+      burnAmount.setError('You can not burn more then 10 ETH');
+      return;
+    }
+
     if (props.isLoading) return;
     props.setIsLoading(true);
     try {
