@@ -48,5 +48,5 @@ const TABS = [
   { path: '/tools/claim-worm', label: 'Claim WORM' },
   { path: '/tools/buy-sell-worm', label: 'Buy/Sell WORM' },
   { path: '/tools/stake-worm', label: 'Stake WORM' },
-  //{ path: '/tools/airdrop', label: 'TGE' },
+  { path: '/tools/airdrop', label: 'TGE' },
 ];

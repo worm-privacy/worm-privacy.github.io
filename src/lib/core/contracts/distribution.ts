@@ -4,7 +4,7 @@ import { Config } from 'wagmi';
 import { WriteContractMutateAsync } from 'wagmi/query';
 
 // TODO: Update this address when deployed
-export const DistributionContractAddress = '0x64661203b9b4B44Ea364bB1b59204e4a4c702A88';
+export const DistributionContractAddress = '0xc98331493088676B4644fA43500d2C22CEf9202b';
 
 export type ShareData = {
   id: string;

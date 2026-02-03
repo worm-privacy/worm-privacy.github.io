@@ -6,7 +6,7 @@ import { WriteContractMutateAsync } from 'wagmi/query';
 import { StakingContractAddress } from './staking';
 
 //TODO change this address
-export const WORMcontractAddress = '0xa88EBF41b31e1A77a20E5c347648381355718E35';
+export const WORMcontractAddress = '0x0eD61b3696F0dafFaE01E7EEA22711E7860b1118';
 
 export namespace WORMContract {
   export const currentEpoch = async (client: Client): Promise<bigint> => {

@@ -15,6 +15,7 @@ const InputComponent = (props: InputComponentProps) => {
         <input
           type={inputType}
           disabled={disabled}
+          onWheel={(e) => (e.target as any).blur()}
           value={props.state.value}
           onChange={(e) => props.state.update(e.target.value)}
           className="flex-1 bg-transparent text-white placeholder-[#94A3B8] outline-none"
