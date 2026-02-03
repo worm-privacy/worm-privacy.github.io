@@ -7,7 +7,7 @@ import { BETHContract, BETHContractABI, BETHContractAddress } from '@/lib/core/c
 import { WORMContract } from '@/lib/core/contracts/worm';
 import { validateAll, validateETHAmount, validatePositiveInteger } from '@/lib/core/utils/validator';
 import { useState } from 'react';
-import { formatUnits, parseEther } from 'viem';
+import { formatEther, parseEther } from 'viem';
 import { useClient, useConnection, useReadContract, useWriteContract } from 'wagmi';
 import Participated from './participated';
 
@@ -23,7 +23,7 @@ export default function ParticipateInputs(props: { result: UseEpochListResult; r
 
   const { address, isConnected } = useConnection();
   const {
-    data,
+    data: bethBalance,
     isError: balanceIsError,
     isLoading: balanceOfLoading,
     error: balanceReadError,
@@ -59,9 +59,9 @@ export default function ParticipateInputs(props: { result: UseEpochListResult; r
   if (balanceOfLoading) return <LoadingComponent />;
   if (participateLoading) return <LoadingComponent />;
 
-  const bethBalance = data !== undefined ? parseFloat(formatUnits(data, Number(18))).toFixed(6) : 'loading';
+  const bethBalanceStr = bethBalance !== undefined ? formatEther(bethBalance) : 'loading';
 
-  const onMaxClick = () => bethAmount.update(bethBalance);
+  const onMaxClick = () => bethAmount.update(bethBalanceStr);
 
   const onParticipateClick = async () => {
     if (!validateAll(bethAmount, numberOfEpochs)) return;
@@ -92,7 +92,7 @@ export default function ParticipateInputs(props: { result: UseEpochListResult; r
     <div className="flex grow flex-col gap-2">
       <div className="text-[14px] text-white">BETH balance</div>
       <div className="mb-3 flex flex-row gap-1 text-[16px]">
-        <div className="font-bold text-white">{bethBalance}</div>
+        <div className="font-bold text-white">{bethBalanceStr}</div>
         <div className="text-[#FF47C0]">BETH</div>
       </div>
 
