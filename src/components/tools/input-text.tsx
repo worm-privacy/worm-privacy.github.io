@@ -45,7 +45,7 @@ export type InputComponentProps = {
   disabled?: boolean;
   children?: React.ReactNode;
 };
-type InputKind = 'ETH' | 'BETH' | 'Epoch' | 'Weeks' | 'WORM';
+type InputKind = 'ETH' | 'BETH' | 'Epoch' | 'Weeks' | 'WORM' | 'Days';
 
 const inputKindColor = (inputKind: InputKind | undefined) => {
   switch (inputKind) {
