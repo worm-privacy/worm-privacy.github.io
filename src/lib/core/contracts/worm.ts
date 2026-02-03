@@ -494,6 +494,45 @@ export const WORMcontractABI = [
   },
   {
     type: 'function',
+    name: 'epochsWithNonZeroRewards',
+    inputs: [
+      {
+        name: '_fromEpoch',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '_numEpochs',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '_user',
+        type: 'address',
+        internalType: 'address',
+      },
+      {
+        name: '_maxFound',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: 'nextEpochToSearch',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'epochs',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'info',
     inputs: [
       {

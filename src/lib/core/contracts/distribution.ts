@@ -30,12 +30,22 @@ export type OnChainShare = {
 
 export namespace DistributionContract {
   export const getShare = async (client: Client, shareId: bigint): Promise<OnChainShare> => {
-    return readContract(client, {
+    const tuple = await readContract(client, {
       address: DistributionContractAddress,
       abi: DistributionContractABI,
       functionName: 'shares',
       args: [shareId],
-    }) as Promise<OnChainShare>;
+    });
+
+    return {
+      id: tuple[0],
+      owner: tuple[1],
+      tge: tuple[2],
+      startTime: tuple[3],
+      initialAmount: tuple[4],
+      amountPerSecond: tuple[5],
+      totalCap: tuple[6],
+    };
   };
 
   export const calculateClaimable = async (client: Client, shareId: bigint): Promise<bigint> => {
@@ -106,6 +116,27 @@ export namespace DistributionContract {
 
 export const DistributionContractABI = [
   {
+    type: 'constructor',
+    inputs: [
+      {
+        name: '_token',
+        type: 'address',
+        internalType: 'contract IERC20',
+      },
+      {
+        name: '_deadlineTimestamp',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '_master',
+        type: 'address',
+        internalType: 'address',
+      },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
     type: 'function',
     name: 'calculateClaimable',
     inputs: [
@@ -126,14 +157,26 @@ export const DistributionContractABI = [
   },
   {
     type: 'function',
-    name: 'shareClaimed',
+    name: 'changeOwner',
     inputs: [
       {
         name: '_shareId',
         type: 'uint256',
         internalType: 'uint256',
       },
+      {
+        name: '_newOwner',
+        type: 'address',
+        internalType: 'address',
+      },
     ],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'deadlineTimestamp',
+    inputs: [],
     outputs: [
       {
         name: '',
@@ -145,56 +188,13 @@ export const DistributionContractABI = [
   },
   {
     type: 'function',
-    name: 'shares',
-    inputs: [
-      {
-        name: '_shareId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
+    name: 'master',
+    inputs: [],
     outputs: [
       {
         name: '',
-        type: 'tuple',
-        internalType: 'struct Distribution.Share',
-        components: [
-          {
-            name: 'id',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'owner',
-            type: 'address',
-            internalType: 'address',
-          },
-          {
-            name: 'tge',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'startTime',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'initialAmount',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'amountPerSecond',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-          {
-            name: 'totalCap',
-            type: 'uint256',
-            internalType: 'uint256',
-          },
-        ],
+        type: 'address',
+        internalType: 'address',
       },
     ],
     stateMutability: 'view',
@@ -206,7 +206,7 @@ export const DistributionContractABI = [
       {
         name: '_share',
         type: 'tuple',
-        internalType: 'struct Distribution.Share',
+        internalType: 'struct Distributor.Share',
         components: [
           {
             name: 'id',
@@ -256,6 +256,87 @@ export const DistributionContractABI = [
   },
   {
     type: 'function',
+    name: 'shareClaimed',
+    inputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'shares',
+    inputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: 'id',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'owner',
+        type: 'address',
+        internalType: 'address',
+      },
+      {
+        name: 'tge',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'startTime',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'initialAmount',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'amountPerSecond',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'totalCap',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'token',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'address',
+        internalType: 'contract IERC20',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'trigger',
     inputs: [
       {
@@ -266,5 +347,142 @@ export const DistributionContractABI = [
     ],
     outputs: [],
     stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    name: 'OwnerChanged',
+    inputs: [
+      {
+        name: 'shareId',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+      {
+        name: 'oldOwner',
+        type: 'address',
+        indexed: false,
+        internalType: 'address',
+      },
+      {
+        name: 'newOwner',
+        type: 'address',
+        indexed: false,
+        internalType: 'address',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'ShareRevealed',
+    inputs: [
+      {
+        name: 'share',
+        type: 'tuple',
+        indexed: false,
+        internalType: 'struct Distributor.Share',
+        components: [
+          {
+            name: 'id',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'owner',
+            type: 'address',
+            internalType: 'address',
+          },
+          {
+            name: 'tge',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'startTime',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'initialAmount',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'amountPerSecond',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'totalCap',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+        ],
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'Triggered',
+    inputs: [
+      {
+        name: 'shareId',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+      {
+        name: 'amountReleased',
+        type: 'uint256',
+        indexed: false,
+        internalType: 'uint256',
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'error',
+    name: 'ECDSAInvalidSignature',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'ECDSAInvalidSignatureLength',
+    inputs: [
+      {
+        name: 'length',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+  },
+  {
+    type: 'error',
+    name: 'ECDSAInvalidSignatureS',
+    inputs: [
+      {
+        name: 's',
+        type: 'bytes32',
+        internalType: 'bytes32',
+      },
+    ],
+  },
+  {
+    type: 'error',
+    name: 'ReentrancyGuardReentrantCall',
+    inputs: [],
+  },
+  {
+    type: 'error',
+    name: 'SafeERC20FailedOperation',
+    inputs: [
+      {
+        name: 'token',
+        type: 'address',
+        internalType: 'address',
+      },
+    ],
   },
 ] as const;
