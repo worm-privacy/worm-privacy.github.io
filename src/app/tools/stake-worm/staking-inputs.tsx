@@ -5,10 +5,9 @@ import { useInput } from '@/hooks/use-input';
 import { UseStakingListResult } from '@/hooks/use-staking-list';
 import { StakingContract } from '@/lib/core/contracts/staking';
 import { WORMContract, WORMcontractABI, WORMcontractAddress } from '@/lib/core/contracts/worm';
-import { roundEther } from '@/lib/core/utils/round-ether';
 import { validateAll, validateETHAmount, validatePositiveInteger } from '@/lib/core/utils/validator';
 import { useState } from 'react';
-import { parseEther } from 'viem';
+import { formatEther, parseEther } from 'viem';
 import { useClient, useConnection, useReadContract, useWriteContract } from 'wagmi';
 
 export default function StakingInputs(props: { result: UseStakingListResult; refresh: () => Promise<void> }) {
@@ -21,7 +20,7 @@ export default function StakingInputs(props: { result: UseStakingListResult; ref
   const { address, isConnected } = useConnection();
 
   const {
-    data,
+    data: wormBalance,
     isError: balanceIsError,
     isLoading: balanceOfLoading,
     error: balanceReadError,
@@ -56,14 +55,17 @@ export default function StakingInputs(props: { result: UseStakingListResult; ref
   if (balanceOfLoading) return <LoadingComponent />;
   if (stakeLoading) return <LoadingComponent />;
 
-  const wormBalance = data !== undefined ? roundEther(data, 4) : 'loading';
+  const wormBalanceStr = wormBalance !== undefined ? formatEther(wormBalance) : 'loading';
 
-  const onMaxClick = () => wormAmount.update(wormBalance);
+  const onMaxClick = () => wormAmount.update(wormBalanceStr);
 
   const onStakeClick = async () => {
     if (!validateAll(wormAmount, numberOfWeeks)) return;
-    const worm = parseEther(wormAmount.value);
+    let worm = parseEther(wormAmount.value);
     const weeks = BigInt(parseInt(numberOfWeeks.value));
+
+    worm = wormBalance! > worm ? worm : wormBalance!; // min
+
     if (worm == 0n) {
       wormAmount.setError("can't be zero");
       return;
@@ -91,7 +93,7 @@ export default function StakingInputs(props: { result: UseStakingListResult; ref
     <div className="flex grow flex-col gap-2">
       <div className="text-[14px] text-white">WORM balance</div>
       <div className="mb-3 flex flex-row gap-1 text-[16px]">
-        <div className="font-bold text-white">{wormBalance}</div>
+        <div className="font-bold text-white">{wormBalanceStr}</div>
         <div className="text-brand">WORM</div>
       </div>
 
