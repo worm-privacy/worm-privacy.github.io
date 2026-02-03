@@ -143,6 +143,11 @@ export const StakingContractABI = [
         type: 'address',
         internalType: 'contract IERC20',
       },
+      {
+        name: '_epochDuration',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
     stateMutability: 'nonpayable',
   },
@@ -189,6 +194,19 @@ export const StakingContractABI = [
     ],
     outputs: [],
     stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'epochDuration',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -239,6 +257,86 @@ export const StakingContractABI = [
       },
       {
         name: '',
+        type: 'address',
+        internalType: 'address',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getStakes',
+    inputs: [
+      {
+        name: '_owner',
+        type: 'address',
+        internalType: 'address',
+      },
+      {
+        name: '_fromIndex',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '_count',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'tuple[]',
+        internalType: 'struct Staking.Stake[]',
+        components: [
+          {
+            name: 'index',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'owner',
+            type: 'address',
+            internalType: 'address',
+          },
+          {
+            name: 'amount',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'startingEpoch',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'releaseEpoch',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
+            name: 'released',
+            type: 'bool',
+            internalType: 'bool',
+          },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getStakesLength',
+    inputs: [
+      {
+        name: '_owner',
         type: 'address',
         internalType: 'address',
       },
@@ -336,7 +434,7 @@ export const StakingContractABI = [
     name: 'release',
     inputs: [
       {
-        name: '_stakeId',
+        name: '_stakeIndex',
         type: 'uint256',
         internalType: 'uint256',
       },
@@ -363,11 +461,21 @@ export const StakingContractABI = [
     inputs: [
       {
         name: '',
+        type: 'address',
+        internalType: 'address',
+      },
+      {
+        name: '',
         type: 'uint256',
         internalType: 'uint256',
       },
     ],
     outputs: [
+      {
+        name: 'index',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
       {
         name: 'owner',
         type: 'address',
@@ -433,7 +541,7 @@ export const StakingContractABI = [
         internalType: 'address',
       },
       {
-        name: 'stakeId',
+        name: 'stakeIndex',
         type: 'uint256',
         indexed: true,
         internalType: 'uint256',
@@ -514,7 +622,7 @@ export const StakingContractABI = [
         internalType: 'address',
       },
       {
-        name: 'stakeId',
+        name: 'stakeIndex',
         type: 'uint256',
         indexed: true,
         internalType: 'uint256',
@@ -527,12 +635,6 @@ export const StakingContractABI = [
       },
       {
         name: 'startingEpoch',
-        type: 'uint256',
-        indexed: false,
-        internalType: 'uint256',
-      },
-      {
-        name: 'releaseEpoch',
         type: 'uint256',
         indexed: false,
         internalType: 'uint256',
