@@ -224,38 +224,38 @@ const AdvancedLayout = (props: {
   onApplyClicked: () => void;
 }) => {
   return (
-    <div className="rounded-lg p-6">
-      <div className="space-y-4">
-        <div className="text-[18px] text-white">Advanced</div>
-        <InputComponent label="Prover fee" hint="0.2" state={props.proverFee} inputKind="BETH" inputType="number" />
-        <InputComponent
-          label="Broadcaster fee"
-          hint="0.2"
-          state={props.broadcasterFee}
-          inputKind="BETH"
-          inputType="number"
-          disabled={true} // TODO user broadest it so it's 0 for now
-        />
-        <InputComponent
-          label="Sell BETH for ETH "
-          hint="0.2"
-          state={props.swapAmount}
-          inputKind="BETH"
-          inputType="number"
-          disabled={true} // TODO we do not have swap feature yet
-        />
-        {/* TODO we do not have swap hook feature yet */}
-        {/* <div className="flex flex-row">
+    <div className="flex h-full flex-col gap-4">
+      <div className="text-[18px] text-white">Advanced</div>
+      <InputComponent label="Prover fee" hint="0.2" state={props.proverFee} inputKind="BETH" inputType="number" />
+      <InputComponent
+        label="Broadcaster fee"
+        hint="0.2"
+        state={props.broadcasterFee}
+        inputKind="BETH"
+        inputType="number"
+        disabled={true} // TODO user broadest it so it's 0 for now
+      />
+      <InputComponent
+        label="Sell BETH for ETH "
+        hint="0.2"
+        state={props.swapAmount}
+        inputKind="BETH"
+        inputType="number"
+        disabled={true} // TODO we do not have swap feature yet
+      />
+      {/* TODO we do not have swap hook feature yet */}
+      {/* <div className="flex flex-row">
           <div className="mr-1 text-[#94A3B8]">You Will get: {props.estimatedETH} </div>
           <div className="text-[#6E7AF0]"> ETH </div>
         </div> */}
-        <button
-          onClick={() => props.onApplyClicked()}
-          className="mt-10 w-full rounded-lg bg-[rgba(var(--neutral-low-rgb),0.24)] px-4 py-3 font-semibold text-white"
-        >
-          Apply
-        </button>
-      </div>
+
+      <div className="grow" />
+      <button
+        onClick={() => props.onApplyClicked()}
+        className="mt-10 w-full rounded-lg bg-[rgba(var(--neutral-low-rgb),0.24)] px-4 py-3 font-semibold text-white"
+      >
+        Apply
+      </button>
     </div>
   );
 };
