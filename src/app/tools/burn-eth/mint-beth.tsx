@@ -248,24 +248,25 @@ const EndPointSelection = (props: {
 
   return (
     <div className="flex w-full flex-col text-white">
-      <div className="mb-5 font-normal">{props.mintAmount} BETH is going to be minted for address</div>
-      <div className="mb-5 text-[18px] font-bold">{props.burnAddress.receiverAddr}</div>
+      <div className="mb-6 text-[18px] font-normal">{props.mintAmount} BETH is going to be minted for address</div>
+      <div className="mb-6 text-[18px] font-bold">{props.burnAddress.receiverAddr}</div>
 
-      <div className=" text-[14px] font-normal">Proving Endpoint</div>
+      <div className="mb-2 text-[14px] font-normal">Proving Endpoint</div>
       <select
         id="pet-select"
-        className="appearance-none rounded-lg bg-[rgba(var(--neutral-low-rgb),0.36)] px-3 py-2.5"
+        className="h-10 appearance-none rounded-lg bg-[rgba(var(--neutral-low-rgb),0.36)] px-3 text-[14px] outline-none"
         value={props.endPoint}
         onChange={(e) => {
           props.setEndPoint(e.target.value);
         }}
       >
         {ENDPOINTS.map((item) => (
-          <option value={item.url} className="bg-[#05080F]" key={item.name}>
+          <option value={item.url} className="h-8 bg-[#05080F] text-[14px]" key={item.name}>
             {item.name} - {item.url}
           </option>
         ))}
       </select>
+
       <div className="grow" />
 
       <button onClick={onGenerateClick} className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black">
