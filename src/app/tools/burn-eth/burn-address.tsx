@@ -197,7 +197,7 @@ const MainLayout = (props: {
 
       <div className="grow" />
       {/* Action Buttons */}
-      <div className="space-y-4">
+      <div>
         <button
           onClick={props.onGenerateBurnAddressClicked}
           className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black"

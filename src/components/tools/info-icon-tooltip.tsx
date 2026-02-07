@@ -9,13 +9,13 @@ const InfoIconTooltip: React.FC<SimpleInfoIconTooltipProps> = ({ content }) => {
     <div className={`group relative inline-block h-5 w-5`}>
       <button
         type="button"
-        className="ml-1 flex h-5 w-5 items-center justify-center rounded-full pb-1.5 text-sm font-bold text-gray-600 ring-0 transition-colors outline-none "
+        className="ml-1 flex h-5 w-5 items-center justify-center rounded-full text-sm font-bold text-gray-600 ring-0 transition-colors outline-none "
       >
         <InfoIcon />
       </button>
 
       <div
-        className={`invisible absolute bottom-full left-1/2 z-10 mb-2 w-50 -translate-x-1/2 -translate-y-2 transform rounded-lg bg-gray-900 px-3 py-2 text-sm text-white opacity-0 shadow-lg transition-all duration-200 group-hover:visible group-hover:opacity-100`}
+        className={`invisible absolute bottom-full left-1/2 z-10 mb-2 w-55 -translate-x-1/2 -translate-y-2 transform rounded-lg bg-gray-900 px-3 py-2 text-sm text-white opacity-0 shadow-lg transition-all duration-200 group-hover:visible group-hover:opacity-100`}
         role="tooltip"
       >
         {content}
