@@ -9,8 +9,10 @@ import { WalletNotConnectedContainer } from '@/components/tools/wallet-not-conne
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
 import { RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
+import { calculateMintAmount } from '@/lib/core/utils/beth-amount-calculator';
 import { RecoverData } from '@/lib/utils/recover-data';
 import { useState } from 'react';
+import { formatEther } from 'viem';
 import { BurnAddressGeneratorLayout } from './burn-address';
 import { BurnETHLayout } from './burn-ether';
 import { MintBETHLayout } from './mint-beth';
@@ -45,6 +47,11 @@ export default function BurnETHRoot() {
         break;
     }
     setCurrentStep(2);
+
+    // TODO swap amount is not 0n
+    setMintAmount(
+      formatEther(calculateMintAmount(data.burn.revealAmount, 0n, data.burn.proverFee, data.burn.broadcasterFee))
+    );
   };
 
   const LayoutMapping = (props: { index: number }) => {
