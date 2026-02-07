@@ -137,7 +137,12 @@ const MainLayout = (props: {
     <div className="rounded-lg">
       <div className="flex flex-col space-y-4">
         <InputComponent label="Burn amount" hint="0.0" state={props.burnAmount} inputType="number" inputKind="ETH" />
-        <InputComponent label="Receiver address" hint="0xf3...fd23" state={props.receiverAddress} />
+        <InputComponent
+          label="Receiver address"
+          hint="0xf3...fd23"
+          state={props.receiverAddress}
+          info="This address will get BETH (make sure you have private key of this address)"
+        />
 
         {/* Fees Section */}
         <div className="space-y-1">
