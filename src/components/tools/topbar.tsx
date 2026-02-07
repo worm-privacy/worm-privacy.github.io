@@ -15,7 +15,7 @@ const TopBar = () => {
 
   return (
     <div className="h-[72px] rounded-b-3xl border border-[rgba(var(--brand-rgb),0.24)] bg-surface1">
-      <div className="m-auto flex max-w-310 flex-row items-center px-5">
+      <div className="m-auto flex max-w-310 flex-row items-center">
         {/* Logo */}
         <div className="flex items-center space-x-2">
           <Icons.logo className="h-16" />

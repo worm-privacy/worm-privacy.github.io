@@ -9,7 +9,7 @@ export default function TabBar() {
 
   return (
     <div className="text-white">
-      <div className="m-auto max-w-310 px-5">
+      <div className="m-auto max-w-310">
         {/* Back Button */}
         <button
           onClick={onBackClick}
