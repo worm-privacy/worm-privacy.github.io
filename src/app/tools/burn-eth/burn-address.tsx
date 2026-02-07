@@ -134,84 +134,82 @@ const MainLayout = (props: {
   const protocolFee = calculateProtocolFee(props.burnAmount.value);
 
   return (
-    <div className="rounded-lg">
-      <div className="flex flex-col space-y-4">
-        <InputComponent label="Burn amount" hint="0.0" state={props.burnAmount} inputType="number" inputKind="ETH" />
-        <InputComponent
-          label="Receiver address"
-          hint="0xf3...fd23"
-          state={props.receiverAddress}
-          info="This address will get BETH (make sure you have private key of this address)"
-        />
+    <div className="flex h-full flex-col gap-4">
+      <InputComponent label="Burn amount" hint="0.0" state={props.burnAmount} inputType="number" inputKind="ETH" />
+      <InputComponent
+        label="Receiver address"
+        hint="0xf3...fd23"
+        state={props.receiverAddress}
+        info="This address will get BETH (make sure you have private key of this address)"
+      />
 
-        {/* Fees Section */}
-        <div className="space-y-1">
-          <div className="flex justify-between text-[16px]">
-            <span className="text-[#94A3B8]">Prover fee</span>
-            <span className="text-[#94A3B8]">{props.proverFee} BETH</span>
-          </div>
-          <div className="flex justify-between text-[16px]">
-            <span className="text-[#94A3B8]">Broadcaster fee</span>
-            <span className="text-[#94A3B8]">{props.broadcasterFee} BETH</span>
-          </div>
-          <div className="flex justify-between text-[16px]">
-            <span className="text-[#94A3B8]">Protocol fee</span>
-            <span className="text-[#94A3B8]">{protocolFee} BETH</span>
-          </div>
+      {/* Fees Section */}
+      <div className="space-y-1">
+        <div className="flex justify-between text-[16px]">
+          <span className="text-[#94A3B8]">Prover fee</span>
+          <span className="text-[#94A3B8]">{props.proverFee} BETH</span>
         </div>
+        <div className="flex justify-between text-[16px]">
+          <span className="text-[#94A3B8]">Broadcaster fee</span>
+          <span className="text-[#94A3B8]">{props.broadcasterFee} BETH</span>
+        </div>
+        <div className="flex justify-between text-[16px]">
+          <span className="text-[#94A3B8]">Protocol fee</span>
+          <span className="text-[#94A3B8]">{protocolFee} BETH</span>
+        </div>
+      </div>
 
-        {/* You Get Section */}
-        <div className="text-[16px]">
-          {props.calculatedBeth !== 'N/A' ? (
-            <>
-              <div className="mb-1 text-white">You get</div>
-              <div>
-                <span className="text-white">{props.calculatedBeth} </span>
-                <span className="text-pink-400">BETH</span>
-                {/* TODO we don't have swap hook feature yet */}
-                {/* <span className="text-white"> + </span>
+      {/* You Get Section */}
+      <div className="text-[16px]">
+        {props.calculatedBeth !== 'N/A' ? (
+          <>
+            <div className="mb-1 text-white">You get</div>
+            <div>
+              <span className="text-white">{props.calculatedBeth} </span>
+              <span className="text-pink-400">BETH</span>
+              {/* TODO we don't have swap hook feature yet */}
+              {/* <span className="text-white"> + </span>
                     <span className="text-white">~{props.estimatedETH}</span>
                     <span className="text-blue-400"> ETH</span> */}
-              </div>
-            </>
-          ) : undefined}
-        </div>
+            </div>
+          </>
+        ) : undefined}
+      </div>
 
-        {/* Advanced Options */}
-        <div className="flex justify-center pt-2">
-          <button
-            onClick={() => props.setIsAdvancedOpen(true)}
-            className="mb-4 flex items-center text-sm font-medium text-white"
+      {/* Advanced Options */}
+      <div className="flex justify-center">
+        <button
+          onClick={() => props.setIsAdvancedOpen(true)}
+          className="flex items-center text-sm font-medium text-white"
+        >
+          <span>Advanced</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className={'ml-1 h-4 w-4 transition-transform'}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
           >
-            <span>Advanced</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className={'ml-1 h-4 w-4 transition-transform'}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-        </div>
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+      </div>
 
-        <div className="grow" />
-        {/* Action Buttons */}
-        <div className="space-y-4">
-          <button
-            onClick={props.onGenerateBurnAddressClicked}
-            className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black"
-          >
-            Generate burn address
-          </button>
+      <div className="grow" />
+      {/* Action Buttons */}
+      <div className="space-y-4">
+        <button
+          onClick={props.onGenerateBurnAddressClicked}
+          className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black"
+        >
+          Generate burn address
+        </button>
 
-          <div className="flex justify-center">
-            <button onClick={props.onRecoverClicked} className="flex items-center text-sm font-medium text-brand">
-              <Icons.recover className="mr-2" />
-              Recover
-            </button>
-          </div>
+        <div className="flex justify-center">
+          <button onClick={props.onRecoverClicked} className="flex items-center py-3 text-sm font-medium text-brand">
+            <Icons.recover className="mr-2" />
+            Recover
+          </button>
         </div>
       </div>
     </div>
