@@ -1,5 +1,5 @@
 import { participationLogsRepo } from '@/lib/data/participation-logs-repo';
-import { Client, parseEventLogs } from 'viem';
+import { Address, Client, parseEventLogs } from 'viem';
 import { getContractEvents, readContract, waitForTransactionReceipt } from 'viem/actions';
 import { Config } from 'wagmi';
 import { WriteContractMutateAsync } from 'wagmi/query';
@@ -24,6 +24,21 @@ export namespace WORMContract {
       abi: WORMcontractABI,
       functionName: 'info',
       args: [user, since, count],
+    });
+  };
+
+  export const epochsWithNonZeroRewards = async (
+    client: Client,
+    fromEpoch: bigint,
+    numEpochs: bigint,
+    user: Address,
+    maxFound: bigint
+  ) => {
+    return await readContract(client, {
+      address: WORMcontractAddress,
+      abi: WORMcontractABI,
+      functionName: 'epochsWithNonZeroRewards',
+      args: [fromEpoch, numEpochs, user, maxFound],
     });
   };
 
