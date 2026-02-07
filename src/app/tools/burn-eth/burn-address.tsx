@@ -205,12 +205,13 @@ const MainLayout = (props: {
           Generate burn address
         </button>
 
-        <div className="flex justify-center">
-          <button onClick={props.onRecoverClicked} className="flex items-center py-3 text-sm font-medium text-brand">
-            <Icons.recover className="mr-2" />
-            Recover
-          </button>
-        </div>
+        <button
+          onClick={props.onRecoverClicked}
+          className="flex w-full flex-row items-center justify-center py-3 text-sm font-medium text-brand"
+        >
+          <Icons.recover className="mr-2" />
+          Recover
+        </button>
       </div>
     </div>
   );

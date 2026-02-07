@@ -289,7 +289,7 @@ const Generated = (props: {
       <div className="flex justify-center">
         <button
           onClick={props.onBackupProofDataClick}
-          className="flex items-center text-sm text-[14px] font-bold text-brand"
+          className="flex w-full items-center justify-center text-sm text-[14px] font-bold text-brand"
         >
           <Icons.backup className="mr-2" />
           Backup proof data
