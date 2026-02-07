@@ -5,7 +5,7 @@ import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import { PropsWithChildren, useCallback, useLayoutEffect, useRef, useState } from 'react';
 import ResizeObserver from 'resize-observer-polyfill';
 
-function SmoothScroll({ children }: PropsWithChildren) {
+function SmoothScroll({ children, slideUpOnLoad = false }: PropsWithChildren & { slideUpOnLoad: boolean }) {
   const scrollRef = useRef(null);
   const isMobile = useIsMobile();
 
@@ -30,7 +30,7 @@ function SmoothScroll({ children }: PropsWithChildren) {
 
   return isMobile ? (
     <motion.div
-      initial={{ opacity: 0, y: '100vh' }}
+      initial={{ opacity: 0, y: slideUpOnLoad ? '100vh' : 0 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
         type: 'spring',
@@ -46,7 +46,7 @@ function SmoothScroll({ children }: PropsWithChildren) {
     <>
       <motion.div
         ref={scrollRef}
-        initial={{ top: '100%', opacity: 0 }}
+        initial={{ top: slideUpOnLoad ? '100%' : '0%', opacity: 0 }}
         animate={{ top: '0%', opacity: 1 }}
         transition={{
           type: 'spring',
