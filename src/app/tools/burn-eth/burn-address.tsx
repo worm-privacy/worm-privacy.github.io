@@ -134,17 +134,21 @@ const MainLayout = (props: {
   const protocolFee = calculateProtocolFee(props.burnAmount.value);
 
   return (
-    <div className="flex h-full flex-col gap-4">
-      <InputComponent label="Burn amount" hint="0.0" state={props.burnAmount} inputType="number" inputKind="ETH" />
-      <InputComponent
-        label="Receiver address"
-        hint="0xf3...fd23"
-        state={props.receiverAddress}
-        info="This address will get BETH (make sure you have private key of this address)"
-      />
+    <div className="flex h-full flex-col">
+      <div className="mb-4">
+        <InputComponent label="Burn amount" hint="0.0" state={props.burnAmount} inputType="number" inputKind="ETH" />
+      </div>
+      <div className="mb-4">
+        <InputComponent
+          label="Receiver address"
+          hint="0xf3...fd23"
+          state={props.receiverAddress}
+          info="This address will get BETH (make sure you have private key of this address)"
+        />
+      </div>
 
       {/* Fees Section */}
-      <div className="space-y-1">
+      <div className="mb-4 space-y-1">
         <div className="flex justify-between text-[16px]">
           <span className="text-[#94A3B8]">Prover fee</span>
           <span className="text-[#94A3B8]">{props.proverFee} BETH</span>
@@ -177,23 +181,21 @@ const MainLayout = (props: {
       </div>
 
       {/* Advanced Options */}
-      <div className="flex justify-center">
-        <button
-          onClick={() => props.setIsAdvancedOpen(true)}
-          className="flex items-center text-sm font-medium text-white"
+      <button
+        onClick={() => props.setIsAdvancedOpen(true)}
+        className="my-2 flex items-center justify-center py-2 text-sm font-medium text-white"
+      >
+        <span>Advanced</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className={'ml-1 h-4 w-4 transition-transform'}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
         >
-          <span>Advanced</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className={'ml-1 h-4 w-4 transition-transform'}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
-      </div>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
 
       <div className="grow" />
       {/* Action Buttons */}
@@ -207,7 +209,7 @@ const MainLayout = (props: {
 
         <button
           onClick={props.onRecoverClicked}
-          className="flex w-full flex-row items-center justify-center py-3 text-sm font-medium text-brand"
+          className="mt-2 flex w-full flex-row items-center justify-center py-3 text-sm font-medium text-brand"
         >
           <Icons.recover className="mr-2" />
           Recover
