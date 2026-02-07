@@ -14,7 +14,7 @@ export default function BuySellWorm() {
         <main className="flex size-full flex-col items-center justify-center gap-2.5 md:pt-22 lg:px-40">
           <div className="text-[30px] text-white">Coming Soon...</div>
         </main>
-        <div className="min-h-[105px] grow" />
+        <div className="min-h-12 grow" />
         <Footer />
       </div>
     </SmoothScroll>

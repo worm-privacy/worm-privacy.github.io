@@ -34,7 +34,7 @@ export default function ClaimWorm() {
             </div>
           </div>
         </WalletNotConnectedContainer>
-        <div className="min-h-[105px] grow" />
+        <div className="min-h-12 grow" />
         <Footer />
       </div>
     </SmoothScroll>
