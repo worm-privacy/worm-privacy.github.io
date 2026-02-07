@@ -9,8 +9,10 @@ import { WalletNotConnectedContainer } from '@/components/tools/wallet-not-conne
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
 import { RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
+import { calculateMintAmount } from '@/lib/core/utils/beth-amount-calculator';
 import { RecoverData } from '@/lib/utils/recover-data';
 import { useState } from 'react';
+import { formatEther } from 'viem';
 import { BurnAddressGeneratorLayout } from './burn-address';
 import { BurnETHLayout } from './burn-ether';
 import { MintBETHLayout } from './mint-beth';
@@ -45,6 +47,11 @@ export default function BurnETHRoot() {
         break;
     }
     setCurrentStep(2);
+
+    // TODO swap amount is not 0n
+    setMintAmount(
+      formatEther(calculateMintAmount(data.burn.revealAmount, 0n, data.burn.proverFee, data.burn.broadcasterFee))
+    );
   };
 
   const LayoutMapping = (props: { index: number }) => {
@@ -74,9 +81,9 @@ export default function BurnETHRoot() {
         <TopBar />
         <TabBar />
         <WalletNotConnectedContainer>
-          <div className="mt-6">
-            <div className="m-auto max-w-310 px-5">
-              <h1 className="mb-3 text-[24px] font-bold text-white">Burn ETH and get BETH</h1>
+          <div>
+            <div className="m-auto max-w-310">
+              <div className="mt-6 mb-3 text-[24px] font-bold text-white">Burn ETH and get BETH</div>
               <div className="rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
                 <div className="flex flex-row gap-6">
                   <StepsComponent steps={BURN_ETH_STEPS} selected={currentStep} />
@@ -86,7 +93,7 @@ export default function BurnETHRoot() {
             </div>
           </div>
         </WalletNotConnectedContainer>
-        <div className="grow" />
+        <div className="min-h-12 grow" />
         <Footer />
       </div>
     </SmoothScroll>

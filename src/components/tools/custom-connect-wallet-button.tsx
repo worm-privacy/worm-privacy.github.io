@@ -24,7 +24,7 @@ export const CustomConnectWalletButton = () => {
                 return (
                   <button
                     onClick={openConnectModal}
-                    className="flex items-center rounded-lg  bg-brand px-4 py-3 font-satoshi text-[14px] font-medium text-black transition-colors duration-200"
+                    className="flex h-10 items-center rounded-lg bg-brand px-4 py-3 font-satoshi text-[14px] font-medium text-black transition-colors duration-200"
                   >
                     Connect Wallet
                   </button>
@@ -40,34 +40,12 @@ export const CustomConnectWalletButton = () => {
               }
 
               return (
-                <div style={{ display: 'flex', gap: 12 }}>
-                  {/* <button onClick={openChainModal} style={{ display: 'flex', alignItems: 'center' }} type="button">
-                    {chain.hasIcon && (
-                      <div
-                        style={{
-                          background: chain.iconBackground,
-                          width: 12,
-                          height: 12,
-                          borderRadius: 999,
-                          overflow: 'hidden',
-                          marginRight: 4,
-                        }}
-                      >
-                        {chain.iconUrl && (
-                          <img alt={chain.name ?? 'Chain icon'} src={chain.iconUrl} style={{ width: 12, height: 12 }} />
-                        )}
-                      </div>
-                    )}
-                    {chain.name}
-                  </button> */}
-
-                  <button
-                    onClick={openAccountModal}
-                    className="flex items-center rounded-lg border border-[rgba(var(--brand-rgb),0.24)] px-8 py-3 font-satoshi text-[14px] font-medium text-brand transition-colors duration-200"
-                  >
-                    {account.displayName}
-                  </button>
-                </div>
+                <button
+                  onClick={openAccountModal}
+                  className="flex h-10 items-center rounded-lg border border-[rgba(var(--brand-rgb),0.24)] px-4 py-3 font-satoshi text-[14px] font-medium text-brand transition-colors duration-200"
+                >
+                  {account.displayName}
+                </button>
               );
             })()}
           </div>

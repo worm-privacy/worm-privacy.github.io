@@ -60,12 +60,13 @@ export const BurnETHLayout = (props: { burnAddress: BurnAddressContent; onBurnCo
 
       {/* Buttons */}
 
-      <div className="mb-4 flex h-10 justify-center text-[14px] font-bold text-brand">
-        <button onClick={onBackupClick} className="flex items-center ">
-          <Icons.backup className="mr-2" />
-          Backup minting data
-        </button>
-      </div>
+      <button
+        onClick={onBackupClick}
+        className="mb-4 flex h-10 items-center justify-center text-[14px] font-bold text-brand"
+      >
+        <Icons.backup className="mr-2" />
+        Backup minting data
+      </button>
       <button onClick={onBurnClick} className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black">
         Burn ETH
       </button>

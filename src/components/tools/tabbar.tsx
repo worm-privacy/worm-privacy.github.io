@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Icons } from '../ui/icons';
 
@@ -5,19 +6,14 @@ export default function TabBar() {
   let path = usePathname();
   const router = useRouter();
 
-  const onBackClick = () => router.back();
-
   return (
     <div className="text-white">
-      <div className="m-auto max-w-310 px-5">
+      <div className="m-auto max-w-310">
         {/* Back Button */}
-        <button
-          onClick={onBackClick}
-          className="my-6 flex items-center space-x-2  text-gray-300 transition-colors hover:text-white"
-        >
+        <Link href="/" className="my-6 flex items-center space-x-2 text-white transition-colors">
           <Icons.back className="block size-5 fill-white" />
           <span className="px-1.5 text-2xl">Back</span>
-        </button>
+        </Link>
 
         {/* Tab Selection */}
         <div>

@@ -33,7 +33,7 @@ export default function Home() {
   return !loaded ? (
     <Preloader setLoaded={setLoaded} />
   ) : (
-    <SmoothScroll>
+    <SmoothScroll slideUpOnLoad={true}>
       <main className="flex size-full flex-col items-center justify-center gap-2.5 md:pt-22 lg:px-40">
         <HeroSection />
         <SloganSection />

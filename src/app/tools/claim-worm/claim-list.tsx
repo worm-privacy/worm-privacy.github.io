@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useClient, useWriteContract } from 'wagmi';
 
 const CARD_STYLE =
-  'mx-auto flex w-[580px] min-h-[580px] flex-col gap-1 rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#010204] p-4 shadow-lg' as const;
+  'mx-auto flex w-[580px] h-[550px] overflow-y-scroll scrollbar-hide flex-col gap-1 rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#010204] p-4 shadow-lg' as const;
 
 export default function ClaimList(props: { result: UseClaimListResult; refresh: () => Promise<void> }) {
   const result = props.result;
