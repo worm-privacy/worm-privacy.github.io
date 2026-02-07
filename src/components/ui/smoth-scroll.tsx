@@ -5,7 +5,7 @@ import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import { PropsWithChildren, useCallback, useLayoutEffect, useRef, useState } from 'react';
 import ResizeObserver from 'resize-observer-polyfill';
 
-function SmoothScroll({ children, slideUpOnLoad = false }: PropsWithChildren & { slideUpOnLoad: boolean }) {
+function SmoothScroll({ children, slideUpOnLoad = false }: PropsWithChildren & { slideUpOnLoad?: boolean }) {
   const scrollRef = useRef(null);
   const isMobile = useIsMobile();
 
