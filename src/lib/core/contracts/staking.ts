@@ -26,6 +26,29 @@ export namespace StakingContract {
     });
   };
 
+  export const getStakesLength = async (client: Client, address: `0x${string}`) => {
+    return await readContract(client, {
+      address: StakingContractAddress,
+      abi: StakingContractABI,
+      functionName: 'getStakesLength',
+      args: [address],
+    });
+  };
+
+  export const getStakes = async (client: Client, address: `0x${string}`, fromIndex: bigint, count: bigint) => {
+    return await readContract(client, {
+      address: StakingContractAddress,
+      abi: StakingContractABI,
+      functionName: 'getStakes',
+      args: [address, fromIndex, count],
+    });
+  };
+
+  export const getAllStakes = async (client: Client, address: `0x${string}`) => {
+    const len = await StakingContract.getStakesLength(client, address);
+    return await StakingContract.getStakes(client, address, 0n, len);
+  };
+
   export const RewardDepositedEvent = async (client: Client, address: `0x${string}`) => {
     return await getContractEvents(client, {
       address: StakingContractAddress,
