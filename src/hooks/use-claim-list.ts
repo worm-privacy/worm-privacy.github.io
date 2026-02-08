@@ -15,16 +15,20 @@ export function useClaimList(): [UseClaimListResult, () => Promise<void>] {
     setResult({ status: 'loading' });
 
     try {
-      let currentEpoch = 0n;
+      let currentEpoch = await WORMContract.currentEpoch(client);
       let notClaimed: ClaimModel[] = [];
+      let nonZeros: readonly bigint[] = [];
 
-      let [_, nonZeros] = await WORMContract.epochsWithNonZeroRewards(client, 0n, 5000n, address, 50n);
+      let from = 0n;
+      const max = currentEpoch + 100n;
+      while (from < max && nonZeros.length === 0) {
+        [from, nonZeros] = await WORMContract.epochsWithNonZeroRewards(client, from, 5000n, address, 50n);
+      }
 
       let ranges = findRanges(nonZeros);
 
       for (let range of ranges) {
         const info = await WORMContract.info(client, address, range.from, range.size);
-        currentEpoch = info.currentEpoch; // overrides
 
         for (let i = 0; i < info.totalContribs.length; i++) {
           const epoch = BigInt(i) + range.from;
