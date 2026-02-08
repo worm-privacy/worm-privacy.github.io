@@ -6,7 +6,7 @@ export type InputValidator = (value: string) => string | undefined;
 
 export const validateETHAmount: InputValidator = (value: string): string | undefined => {
   value = value.trim();
-  if (value == '') return 'Empty';
+  if (value == '') return 'Required';
   try {
     parseEther(value);
     return undefined; // OK
@@ -17,7 +17,7 @@ export const validateETHAmount: InputValidator = (value: string): string | undef
 
 export const validateAddress: InputValidator = (value: string): string | undefined => {
   value = value.trim();
-  if (value == '') return 'Empty';
+  if (value == '') return 'Required';
   if (!/^0x[0-9a-fA-F]{40}$/.test(value)) return 'Invalid address';
 
   return undefined; //OK
@@ -29,7 +29,7 @@ export const validateNothing: InputValidator = (value: string): string | undefin
 
 export const validatePositiveInteger: InputValidator = (value: string): string | undefined => {
   value = value.trim();
-  if (value == '') return 'Empty';
+  if (value == '') return 'Required';
   try {
     if (parseInt(value) < 1) throw 'Should be positive';
     return undefined; // OK

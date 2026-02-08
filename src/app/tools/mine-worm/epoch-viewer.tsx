@@ -3,6 +3,14 @@ import { roundEther, roundEtherF } from '@/lib/core/utils/round-ether';
 import { useEffect, useRef, useState } from 'react';
 
 export default function EpochViewer(props: { result: UseEpochListResult; refresh: () => Promise<void> }) {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = (scrollRef.current.scrollHeight - scrollRef.current.clientHeight) / 2;
+    }
+  }, [props.result]);
+
   let inner: React.ReactNode = undefined;
   const result = props.result;
   switch (result.status) {
@@ -31,8 +39,11 @@ export default function EpochViewer(props: { result: UseEpochListResult; refresh
   }
 
   return (
-    <div className="mx-auto w-[580px]">
-      <div className="rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#010204] p-4 shadow-lg">
+    <div className="mx-auto h-[540px] w-[580px]">
+      <div
+        ref={scrollRef}
+        className="scrollbar-hide h-full snap-y overflow-y-scroll rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#010204] p-4 shadow-lg"
+      >
         <div className="space-y-5">{inner}</div>
       </div>
     </div>
@@ -70,10 +81,10 @@ const EpochItem = (props: { epoch: Epoch; current: bigint; progress: number; ref
           '--progress': `${Math.max(0, Math.min(100, progress))}%`,
         } as React.CSSProperties
       }
-      className={`rounded-xl border px-5 py-6 transition-all duration-300 ${
+      className={`snap-center rounded-xl border px-5 py-6 transition-all duration-300 ${
         props.current == epoch.num
-          ? 'progress-bg border-[rgba(var(--brand-rgb),0.24)] shadow-[0px_0px_20px_3px_rgba(34,197,94,0.1)]'
-          : 'mx-[58px] border-gray-800 opacity-60 hover:border-gray-700'
+          ? 'progress-bg border-[rgba(var(--brand-rgb),0.24)] shadow-[0px_0px_20px_3px_rgba(34,197,94,0.3)]'
+          : 'mx-[38px] border-gray-800 opacity-80 hover:border-gray-700'
       }`}
     >
       <div className="flex flex-row justify-between gap-4">
