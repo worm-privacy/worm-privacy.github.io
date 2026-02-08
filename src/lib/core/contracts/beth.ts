@@ -339,6 +339,19 @@ export const BETHContractABI = [
   },
   {
     type: 'function',
+    name: 'initializer',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'address',
+        internalType: 'address',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'mintCoin',
     inputs: [
       {

@@ -1,5 +1,4 @@
 import { StakingContract } from '@/lib/core/contracts/staking';
-import { stakingLogsRepo } from '@/lib/data/staking-logs-repo';
 import { useCallback, useState } from 'react';
 import { useClient, useConnection } from 'wagmi';
 
@@ -18,16 +17,17 @@ export function useStakingList(): [UseStakingListResult, () => Promise<void>] {
       let currentWeek = 0n;
       let notClaimed: StakingItem[] = [];
 
-      for (let stakingLog of stakingLogsRepo.getItems()) {
+      let stakes = await StakingContract.getAllStakes(client, address);
+      for (let stakingLog of stakes) {
         let info = await StakingContract.info(
           client!,
           address,
-          BigInt(stakingLog.fromEpoch),
-          BigInt(stakingLog.numberOfEpochs)
+          BigInt(stakingLog.startingEpoch),
+          BigInt(stakingLog.releaseEpoch - stakingLog.startingEpoch)
         );
         currentWeek = info.currentEpoch;
         for (let i = 0; i < info.userLocks.length; i++) {
-          const weekNumber = BigInt(i + stakingLog.fromEpoch);
+          const weekNumber = BigInt(i) + stakingLog.startingEpoch;
           if (info.userLocks[i] !== 0n) {
             if (notClaimed.findIndex((e) => e.weekNumber === weekNumber) === -1) {
               // 1 > share > 0
