@@ -151,6 +151,16 @@ export const WORMcontractABI = [
         type: 'uint256',
         internalType: 'uint256',
       },
+      {
+        name: '_startingTimestamp',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '_endingTimestamp',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
     stateMutability: 'nonpayable',
   },
@@ -318,6 +328,19 @@ export const WORMcontractABI = [
   },
   {
     type: 'function',
+    name: 'cachedRewardsAccumulatedSum',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'calculateMintAmount',
     inputs: [
       {
@@ -447,14 +470,8 @@ export const WORMcontractABI = [
   },
   {
     type: 'function',
-    name: 'epochCount',
-    inputs: [
-      {
-        name: '',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
+    name: 'endingTimestamp',
+    inputs: [],
     outputs: [
       {
         name: '',
@@ -609,11 +626,6 @@ export const WORMcontractABI = [
           },
           {
             name: 'totalContribs',
-            type: 'uint256[]',
-            internalType: 'uint256[]',
-          },
-          {
-            name: 'countContribs',
             type: 'uint256[]',
             internalType: 'uint256[]',
           },
@@ -942,31 +954,6 @@ export const WORMcontractABI = [
     type: 'event',
     name: 'EIP712DomainChanged',
     inputs: [],
-    anonymous: false,
-  },
-  {
-    type: 'event',
-    name: 'EpochContribution',
-    inputs: [
-      {
-        name: 'epoch',
-        type: 'uint256',
-        indexed: true,
-        internalType: 'uint256',
-      },
-      {
-        name: 'participant',
-        type: 'address',
-        indexed: false,
-        internalType: 'address',
-      },
-      {
-        name: 'amount',
-        type: 'uint256',
-        indexed: false,
-        internalType: 'uint256',
-      },
-    ],
     anonymous: false,
   },
   {

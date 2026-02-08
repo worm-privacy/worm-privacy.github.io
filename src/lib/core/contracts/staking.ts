@@ -148,6 +148,11 @@ export const StakingContractABI = [
         type: 'uint256',
         internalType: 'uint256',
       },
+      {
+        name: '_startingTimestamp',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
     stateMutability: 'nonpayable',
   },
