@@ -1,5 +1,6 @@
 import { UserInputState } from '@/hooks/use-input';
 import { Icons } from '../ui/icons';
+import InfoIconTooltip from './info-icon-tooltip';
 
 const InputComponent = (props: InputComponentProps) => {
   let inputType = props.inputType ?? 'text';
@@ -7,11 +8,12 @@ const InputComponent = (props: InputComponentProps) => {
   const disabled = props.disabled ?? false;
   return (
     <div className={disabled ? 'opacity-60' : ''}>
-      <div className="flex flex-row items-end">
-        <label className="mb-2 block text-[14px] font-medium text-white">{props.label}</label>
-        {props.optional && <label className="mb-2 ml-1 block text-[12px] text-[#94A3B8]">Optional</label>}
+      <div className="mb-2 flex flex-row items-center">
+        <label className="block text-[14px] font-medium text-white">{props.label}</label>
+        {props.optional && <label className="ml-1 block text-[12px] text-[#94A3B8]">Optional</label>}
+        {props.info && <InfoIconTooltip content={props.info} />}
       </div>
-      <div className="flex items-center rounded-lg bg-[rgba(var(--neutral-low-rgb),0.24)] px-3 py-2.5">
+      <div className="flex h-10 items-center rounded-lg bg-[rgba(var(--neutral-low-rgb),0.24)] px-3">
         <input
           type={inputType}
           disabled={disabled}
@@ -44,6 +46,7 @@ export type InputComponentProps = {
   optional?: boolean;
   disabled?: boolean;
   children?: React.ReactNode;
+  info?: string;
 };
 type InputKind = 'ETH' | 'BETH' | 'Epoch' | 'Weeks' | 'WORM' | 'Days';
 

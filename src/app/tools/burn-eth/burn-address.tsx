@@ -62,6 +62,11 @@ export const BurnAddressGeneratorLayout = (props: {
       return;
     }
 
+    if (parseEther(burnAmount.value) > BigInt('10000000000000000000')) {
+      burnAmount.setError('You can not burn more then 10 ETH');
+      return;
+    }
+
     if (props.isLoading) return;
     props.setIsLoading(true);
     try {
@@ -129,80 +134,86 @@ const MainLayout = (props: {
   const protocolFee = calculateProtocolFee(props.burnAmount.value);
 
   return (
-    <div className="rounded-lg">
-      <div className="flex flex-col space-y-4">
+    <div className="flex h-full flex-col">
+      <div className="mb-4">
         <InputComponent label="Burn amount" hint="0.0" state={props.burnAmount} inputType="number" inputKind="ETH" />
-        <InputComponent label="Receiver address" hint="0xf3...fd23" state={props.receiverAddress} />
+      </div>
+      <div className="mb-4">
+        <InputComponent
+          label="Receiver address"
+          hint="0xf3...fd23"
+          state={props.receiverAddress}
+          info="This address will get BETH (make sure you have private key of this address)"
+        />
+      </div>
 
-        {/* Fees Section */}
-        <div className="space-y-1">
-          <div className="flex justify-between text-[16px]">
-            <span className="text-[#94A3B8]">Prover fee</span>
-            <span className="text-[#94A3B8]">{props.proverFee} BETH</span>
-          </div>
-          <div className="flex justify-between text-[16px]">
-            <span className="text-[#94A3B8]">Broadcaster fee</span>
-            <span className="text-[#94A3B8]">{props.broadcasterFee} BETH</span>
-          </div>
-          <div className="flex justify-between text-[16px]">
-            <span className="text-[#94A3B8]">Protocol fee</span>
-            <span className="text-[#94A3B8]">{protocolFee} BETH</span>
-          </div>
+      {/* Fees Section */}
+      <div className="mb-4 space-y-1">
+        <div className="flex justify-between text-[16px]">
+          <span className="text-[#94A3B8]">Prover fee</span>
+          <span className="text-[#94A3B8]">{props.proverFee} BETH</span>
         </div>
+        <div className="flex justify-between text-[16px]">
+          <span className="text-[#94A3B8]">Broadcaster fee</span>
+          <span className="text-[#94A3B8]">{props.broadcasterFee} BETH</span>
+        </div>
+        <div className="flex justify-between text-[16px]">
+          <span className="text-[#94A3B8]">Protocol fee</span>
+          <span className="text-[#94A3B8]">{protocolFee} BETH</span>
+        </div>
+      </div>
 
-        {/* You Get Section */}
-        <div className="text-[16px]">
-          {props.calculatedBeth !== 'N/A' ? (
-            <>
-              <div className="mb-1 text-white">You get</div>
-              <div>
-                <span className="text-white">{props.calculatedBeth} </span>
-                <span className="text-pink-400">BETH</span>
-                {/* TODO we don't have swap hook feature yet */}
-                {/* <span className="text-white"> + </span>
+      {/* You Get Section */}
+      <div className="text-[16px]">
+        {props.calculatedBeth !== 'N/A' ? (
+          <>
+            <div className="mb-1 text-white">You get</div>
+            <div>
+              <span className="text-white">{props.calculatedBeth} </span>
+              <span className="text-pink-400">BETH</span>
+              {/* TODO we don't have swap hook feature yet */}
+              {/* <span className="text-white"> + </span>
                     <span className="text-white">~{props.estimatedETH}</span>
                     <span className="text-blue-400"> ETH</span> */}
-              </div>
-            </>
-          ) : undefined}
-        </div>
+            </div>
+          </>
+        ) : undefined}
+      </div>
 
-        {/* Advanced Options */}
-        <div className="flex justify-center pt-2">
-          <button
-            onClick={() => props.setIsAdvancedOpen(true)}
-            className="mb-4 flex items-center text-sm font-medium text-white"
-          >
-            <span>Advanced</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className={'ml-1 h-4 w-4 transition-transform'}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-        </div>
+      {/* Advanced Options */}
+      <button
+        onClick={() => props.setIsAdvancedOpen(true)}
+        className="my-2 flex items-center justify-center py-2 text-sm font-medium text-white"
+      >
+        <span>Advanced</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className={'ml-1 h-4 w-4 transition-transform'}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
 
-        <div className="grow" />
-        {/* Action Buttons */}
-        <div className="space-y-4">
-          <button
-            onClick={props.onGenerateBurnAddressClicked}
-            className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black"
-          >
-            Generate burn address
-          </button>
+      <div className="grow" />
+      {/* Action Buttons */}
+      <div>
+        <button
+          onClick={props.onGenerateBurnAddressClicked}
+          className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black"
+        >
+          Generate burn address
+        </button>
 
-          <div className="flex justify-center">
-            <button onClick={props.onRecoverClicked} className="flex items-center text-sm font-medium text-brand">
-              <Icons.recover className="mr-2" />
-              Recover
-            </button>
-          </div>
-        </div>
+        <button
+          onClick={props.onRecoverClicked}
+          className="mt-2 flex w-full flex-row items-center justify-center py-3 text-sm font-medium text-brand"
+        >
+          <Icons.recover className="mr-2" />
+          Recover
+        </button>
       </div>
     </div>
   );
@@ -216,38 +227,38 @@ const AdvancedLayout = (props: {
   onApplyClicked: () => void;
 }) => {
   return (
-    <div className="rounded-lg p-6">
-      <div className="space-y-4">
-        <div className="text-[18px] text-white">Advanced</div>
-        <InputComponent label="Prover fee" hint="0.2" state={props.proverFee} inputKind="BETH" inputType="number" />
-        <InputComponent
-          label="Broadcaster fee"
-          hint="0.2"
-          state={props.broadcasterFee}
-          inputKind="BETH"
-          inputType="number"
-          disabled={true} // TODO user broadest it so it's 0 for now
-        />
-        <InputComponent
-          label="Sell BETH for ETH "
-          hint="0.2"
-          state={props.swapAmount}
-          inputKind="BETH"
-          inputType="number"
-          disabled={true} // TODO we do not have swap feature yet
-        />
-        {/* TODO we do not have swap hook feature yet */}
-        {/* <div className="flex flex-row">
+    <div className="flex h-full flex-col gap-4">
+      <div className="text-[18px] text-white">Advanced</div>
+      <InputComponent label="Prover fee" hint="0.2" state={props.proverFee} inputKind="BETH" inputType="number" />
+      <InputComponent
+        label="Broadcaster fee"
+        hint="0.2"
+        state={props.broadcasterFee}
+        inputKind="BETH"
+        inputType="number"
+        disabled={true} // TODO user broadest it so it's 0 for now
+      />
+      <InputComponent
+        label="Sell BETH for ETH "
+        hint="0.2"
+        state={props.swapAmount}
+        inputKind="BETH"
+        inputType="number"
+        disabled={true} // TODO we do not have swap feature yet
+      />
+      {/* TODO we do not have swap hook feature yet */}
+      {/* <div className="flex flex-row">
           <div className="mr-1 text-[#94A3B8]">You Will get: {props.estimatedETH} </div>
           <div className="text-[#6E7AF0]"> ETH </div>
         </div> */}
-        <button
-          onClick={() => props.onApplyClicked()}
-          className="mt-10 w-full rounded-lg bg-[rgba(var(--neutral-low-rgb),0.24)] px-4 py-3 font-semibold text-white"
-        >
-          Apply
-        </button>
-      </div>
+
+      <div className="grow" />
+      <button
+        onClick={() => props.onApplyClicked()}
+        className="mt-10 w-full rounded-lg bg-[rgba(var(--neutral-low-rgb),0.24)] px-4 py-3 font-semibold text-white"
+      >
+        Apply
+      </button>
     </div>
   );
 };

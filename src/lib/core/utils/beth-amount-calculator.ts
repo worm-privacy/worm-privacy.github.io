@@ -36,6 +36,7 @@ export const calculateMintAmount = (
 };
 
 export const calculateProtocolFee = (burnAmount: string): string => {
+  if (burnAmount.trim() == '') return '0';
   try {
     return formatEther(parseEther(burnAmount) / POOL_SHARE_INV);
   } catch {
