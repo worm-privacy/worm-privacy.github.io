@@ -47,8 +47,7 @@ export function NetworkStats() {
 
         const wormPrice = epochBeth > 0n ? (epochBeth * BigInt(1e18)) / currentRewardResult : 0n;
 
-        // result.epochRemainingTime is actually passedTime, wrong naming in contract
-        const epochPassedTimeInSeconds = Number(result.epochRemainingTime);
+        const epochRemainingTimeInSeconds = Number(result.epochRemainingTime);
         setStats({
           totalWorm: result.totalWorm.toString(),
           totalBeth: result.totalBeth.toString(),
@@ -58,7 +57,7 @@ export function NetworkStats() {
           epochBeth: epochBeth.toString(),
           wormPrice: wormPrice.toString(),
         });
-        setRemainingTime(600 - epochPassedTimeInSeconds);
+        setRemainingTime(epochRemainingTimeInSeconds);
         setInitialEpochTime(600);
       } catch (error) {
         console.error('Error fetching network stats:', error);

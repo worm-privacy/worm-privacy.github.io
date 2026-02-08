@@ -38,7 +38,7 @@ export function useEpochList(): [UseEpochListResult, () => Promise<void>] {
         status: 'loaded',
         currentEpoch: currentEpoch,
         epochs: epochs,
-        epochPassedTime: info.epochRemainingTime,
+        epochPassedTime: 600n - info.epochRemainingTime,
       });
     } catch (e) {
       console.error(e);
