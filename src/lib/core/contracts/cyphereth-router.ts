@@ -4,7 +4,9 @@ import { BETHContractAddress } from './beth';
 import { DEPLOYER } from './cyphereth-quoter';
 import { WETHContract, WETHContractAddress } from './weth';
 
-export const CypherETHRouterContractAddress = '0x20C5893f69F635f55b0367C519F3f95e59c0b0Ab';
+// mainnet address 0x20C5893f69F635f55b0367C519F3f95e59c0b0Ab
+// sepolia address 0x3Ec0a18671878080D8Fa798c491005Ad038DbC08
+export const CypherETHRouterContractAddress = '0x3Ec0a18671878080D8Fa798c491005Ad038DbC08';
 
 export namespace CypherETHRouterContract {
   export const createBethEtherSwapCalldata = (amountIn: bigint, recipient: `0x${string}`) => {

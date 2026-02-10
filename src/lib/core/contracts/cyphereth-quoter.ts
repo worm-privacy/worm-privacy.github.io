@@ -4,16 +4,18 @@ import { BETHContractAddress } from './beth';
 import { WETHContractAddress } from './weth';
 
 //TODO change this address
-export const CypherETHQuoterContractAddress = '0x02f22D58d161d1C291ABfe88764d84120f20F723'; // mainnet address
+// mainnet address 0xeae871C4a8dD267146558C362c86805FB7e3Fd2F
+// testnet address 0xadD719B41f49E59C9af69021a4F74C4ff1f7B3b0
+export const CypherETHQuoterContractAddress = '0xadD719B41f49E59C9af69021a4F74C4ff1f7B3b0';
 
-export const DEPLOYER = '0x1234'; // TODO
+export const DEPLOYER = '0x0000000000000000000000000000000000000000';
 
 export namespace CypherETHQuoterContract {
   /// returns (uint256 amountOut, uint16 fee)
   export const quoteExactInputSingle = async (
     client: Client,
-    tokenA: `0x${string}`,
-    tokenB: `0x${string}`,
+    tokenIn: `0x${string}`,
+    tokenOut: `0x${string}`,
     deployer: `0x${string}`,
     amountIn: bigint,
     limitSqrtPrice: bigint
@@ -22,7 +24,7 @@ export namespace CypherETHQuoterContract {
       address: CypherETHQuoterContractAddress,
       abi: CypherETHQuoterContractABI,
       functionName: 'quoteExactInputSingle',
-      args: [tokenA, tokenB, deployer, amountIn, limitSqrtPrice],
+      args: [{ tokenIn, tokenOut, deployer, amountIn, limitSqrtPrice }],
     });
   };
 
@@ -86,27 +88,42 @@ export const CypherETHQuoterContractABI = [
   {
     inputs: [
       { internalType: 'bytes', name: 'path', type: 'bytes' },
-      { internalType: 'uint256', name: 'amountIn', type: 'uint256' },
+      { internalType: 'uint256', name: 'amountInRequired', type: 'uint256' },
     ],
     name: 'quoteExactInput',
     outputs: [
-      { internalType: 'uint256', name: 'amountOut', type: 'uint256' },
-      { internalType: 'uint16[]', name: 'fees', type: 'uint16[]' },
+      { internalType: 'uint256[]', name: 'amountOutList', type: 'uint256[]' },
+      { internalType: 'uint256[]', name: 'amountInList', type: 'uint256[]' },
+      { internalType: 'uint160[]', name: 'sqrtPriceX96AfterList', type: 'uint160[]' },
+      { internalType: 'uint32[]', name: 'initializedTicksCrossedList', type: 'uint32[]' },
+      { internalType: 'uint256', name: 'gasEstimate', type: 'uint256' },
+      { internalType: 'uint16[]', name: 'feeList', type: 'uint16[]' },
     ],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
     inputs: [
-      { internalType: 'address', name: 'tokenIn', type: 'address' },
-      { internalType: 'address', name: 'tokenOut', type: 'address' },
-      { internalType: 'address', name: 'deployer', type: 'address' },
-      { internalType: 'uint256', name: 'amountIn', type: 'uint256' },
-      { internalType: 'uint160', name: 'limitSqrtPrice', type: 'uint160' },
+      {
+        components: [
+          { internalType: 'address', name: 'tokenIn', type: 'address' },
+          { internalType: 'address', name: 'tokenOut', type: 'address' },
+          { internalType: 'address', name: 'deployer', type: 'address' },
+          { internalType: 'uint256', name: 'amountIn', type: 'uint256' },
+          { internalType: 'uint160', name: 'limitSqrtPrice', type: 'uint160' },
+        ],
+        internalType: 'struct IQuoterV2.QuoteExactInputSingleParams',
+        name: 'params',
+        type: 'tuple',
+      },
     ],
     name: 'quoteExactInputSingle',
     outputs: [
       { internalType: 'uint256', name: 'amountOut', type: 'uint256' },
+      { internalType: 'uint256', name: 'amountIn', type: 'uint256' },
+      { internalType: 'uint160', name: 'sqrtPriceX96After', type: 'uint160' },
+      { internalType: 'uint32', name: 'initializedTicksCrossed', type: 'uint32' },
+      { internalType: 'uint256', name: 'gasEstimate', type: 'uint256' },
       { internalType: 'uint16', name: 'fee', type: 'uint16' },
     ],
     stateMutability: 'nonpayable',
@@ -115,27 +132,42 @@ export const CypherETHQuoterContractABI = [
   {
     inputs: [
       { internalType: 'bytes', name: 'path', type: 'bytes' },
-      { internalType: 'uint256', name: 'amountOut', type: 'uint256' },
+      { internalType: 'uint256', name: 'amountOutRequired', type: 'uint256' },
     ],
     name: 'quoteExactOutput',
     outputs: [
-      { internalType: 'uint256', name: 'amountIn', type: 'uint256' },
-      { internalType: 'uint16[]', name: 'fees', type: 'uint16[]' },
+      { internalType: 'uint256[]', name: 'amountOutList', type: 'uint256[]' },
+      { internalType: 'uint256[]', name: 'amountInList', type: 'uint256[]' },
+      { internalType: 'uint160[]', name: 'sqrtPriceX96AfterList', type: 'uint160[]' },
+      { internalType: 'uint32[]', name: 'initializedTicksCrossedList', type: 'uint32[]' },
+      { internalType: 'uint256', name: 'gasEstimate', type: 'uint256' },
+      { internalType: 'uint16[]', name: 'feeList', type: 'uint16[]' },
     ],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
     inputs: [
-      { internalType: 'address', name: 'tokenIn', type: 'address' },
-      { internalType: 'address', name: 'tokenOut', type: 'address' },
-      { internalType: 'address', name: 'deployer', type: 'address' },
-      { internalType: 'uint256', name: 'amountOut', type: 'uint256' },
-      { internalType: 'uint160', name: 'limitSqrtPrice', type: 'uint160' },
+      {
+        components: [
+          { internalType: 'address', name: 'tokenIn', type: 'address' },
+          { internalType: 'address', name: 'tokenOut', type: 'address' },
+          { internalType: 'address', name: 'deployer', type: 'address' },
+          { internalType: 'uint256', name: 'amount', type: 'uint256' },
+          { internalType: 'uint160', name: 'limitSqrtPrice', type: 'uint160' },
+        ],
+        internalType: 'struct IQuoterV2.QuoteExactOutputSingleParams',
+        name: 'params',
+        type: 'tuple',
+      },
     ],
     name: 'quoteExactOutputSingle',
     outputs: [
+      { internalType: 'uint256', name: 'amountOut', type: 'uint256' },
       { internalType: 'uint256', name: 'amountIn', type: 'uint256' },
+      { internalType: 'uint160', name: 'sqrtPriceX96After', type: 'uint160' },
+      { internalType: 'uint32', name: 'initializedTicksCrossed', type: 'uint32' },
+      { internalType: 'uint256', name: 'gasEstimate', type: 'uint256' },
       { internalType: 'uint16', name: 'fee', type: 'uint16' },
     ],
     stateMutability: 'nonpayable',
