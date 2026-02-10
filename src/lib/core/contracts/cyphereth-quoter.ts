@@ -1,11 +1,11 @@
 import { Client } from 'viem';
 import { simulateContract } from 'viem/actions';
 import { BETHContractAddress } from './beth';
+import { WETHContractAddress } from './weth';
 
 //TODO change this address
 export const CypherETHQuoterContractAddress = '0x02f22D58d161d1C291ABfe88764d84120f20F723'; // mainnet address
 
-export const ETHContractAddress = '0x1234'; // TODO
 export const DEPLOYER = '0x1234'; // TODO
 
 export namespace CypherETHQuoterContract {
@@ -31,7 +31,7 @@ export namespace CypherETHQuoterContract {
       await CypherETHQuoterContract.quoteExactInputSingle(
         client,
         BETHContractAddress,
-        ETHContractAddress,
+        WETHContractAddress,
         DEPLOYER,
         amountIn,
         0n
