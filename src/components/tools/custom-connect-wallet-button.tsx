@@ -33,8 +33,11 @@ export const CustomConnectWalletButton = () => {
 
               if (chain.unsupported) {
                 return (
-                  <button className="text-red" onClick={openChainModal} type="button">
-                    Wrong network
+                  <button
+                    onClick={openChainModal}
+                    className="flex h-10 items-center rounded-lg bg-brand px-4 py-3 font-satoshi text-[14px] font-medium text-black transition-colors duration-200"
+                  >
+                    Switch Network
                   </button>
                 );
               }
