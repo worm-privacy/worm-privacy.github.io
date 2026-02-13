@@ -196,7 +196,7 @@ const MainLayout = (props: {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-
+        
       <div className="grow" />
       {/* Action Buttons */}
       <div>
@@ -214,6 +214,12 @@ const MainLayout = (props: {
           <Icons.recover className="mr-2" />
           Recover
         </button>
+
+        <div className="text-[14px] mt-3">
+        <div className='text-white italic'>
+          <span className='text-yellow-300 font-bold'>Disclaimer:</span> The WORM project’s mainnet is expected to roll out in phases. The ETH/BETH market pair may be extremely volatile during this period, so please use it at your own risk.
+        </div>
+      </div>
       </div>
     </div>
   );
