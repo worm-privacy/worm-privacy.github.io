@@ -26,7 +26,8 @@ export default function TabBar() {
                   path === tab.path
                     ? 'border-b-2 border-[rgba(var(--brand-rgb),0.24)] text-brand'
                     : 'text-gray-300 hover:text-white'
-                }`}
+                } ${tab.disabled ? '!cursor-not-allowed opacity-50' : ''}`}
+                disabled={tab.disabled}
               >
                 {tab.label}
               </button>
@@ -39,10 +40,10 @@ export default function TabBar() {
 }
 
 const TABS = [
-  { path: '/tools/burn-eth', label: 'Burn ETH' },
-  { path: '/tools/mine-worm', label: 'Mine WORM' },
-  { path: '/tools/claim-worm', label: 'Claim WORM' },
-  { path: '/tools/buy-sell-worm', label: 'Buy/Sell WORM' },
-  { path: '/tools/stake-worm', label: 'Stake WORM' },
-  { path: '/tools/airdrop', label: 'TGE' },
+  { path: '/tools/burn-eth', label: 'Burn ETH', disabled: false },
+  { path: 'https://app.cyphereth.com/', label: 'Trade BETH', disabled: false },
+  { path: '/tools/mine-worm', label: 'Mine WORM', disabled: true },
+  { path: '/tools/claim-worm', label: 'Claim WORM', disabled: true },
+  { path: '/tools/stake-worm', label: 'Stake WORM', disabled: true },
+  { path: '/tools/airdrop', label: 'TGE', disabled: true },
 ];

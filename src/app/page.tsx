@@ -4,7 +4,6 @@ import {
   Footer,
   HeroSection,
   HowItWorks,
-  NetworkStats,
   RoadmapSection,
   SloganSection,
   TeamSection,
@@ -39,7 +38,7 @@ export default function Home() {
         <SloganSection />
         <HowItWorks />
         <WormVSBethSection />
-        <NetworkStats />
+        {/* <NetworkStats /> */}
         <TokenomicsSection />
         <RoadmapSection />
         <TeamSection />
