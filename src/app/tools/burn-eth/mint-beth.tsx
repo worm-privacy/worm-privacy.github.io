@@ -41,6 +41,7 @@ export const MintBETHLayout = (props: {
     props.setProof(proof);
     setFlowState(FlowState.Generated);
     setIsLoading(null);
+    saveJson(newSavableRecoverData(props.burnAddress, proof), `proof_${props.burnAddress.burnAddress}_backup.json`);
   };
 
   const onError = (msg: string) => {
