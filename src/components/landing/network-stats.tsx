@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { Contract, JsonRpcProvider } from 'ethers';
 import { useEffect, useState } from 'react';
 
-const RPC_URL = 'https://sepolia.drpc.org';
+const RPC_URL = 'https://eth.meowrpc.com';
 
 export function NetworkStats() {
   const isMobile = useIsMobile();
@@ -101,7 +101,7 @@ export function NetworkStats() {
 
   const formatNumber = (num: string) => {
     const value = parseFloat(num) / 1e18;
-    return value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return value.toFixed(6);
   };
 
   return (
@@ -119,7 +119,7 @@ export function NetworkStats() {
             'orbitron-body2': isMobile,
           })}
         >
-          WORM is live on Sepolia testnet!
+          TWORM (Testnet token) is live on Ethereum mainnet!
         </h3>
       </span>
       <div
@@ -140,14 +140,14 @@ export function NetworkStats() {
             <p className="satoshi-body2 flex items-center gap-1">
               <span className="text-gray-400">Current epoch reward:</span>
               <span className="orbitron-h4 text-green-400">
-                {loading ? '...' : formatNumber(stats.currentReward)} WORM
+                {loading ? '...' : formatNumber(stats.currentReward)} TWORM
               </span>
             </p>
           </div>
 
           <p className="satoshi-h4 flex items-center gap-1 text-white">
             {loading ? '...' : formatNumber(stats.wormPrice)} <span className="text-blue-400">ETH</span> ~ 1{' '}
-            <span className="text-green-400">WORM</span>
+            <span className="text-green-400">TWORM</span>
           </p>
         </div>
       </div>
@@ -158,7 +158,7 @@ export function NetworkStats() {
               'satoshi-h4': isMobile,
             })}
           >
-            Total WORM minted
+            Total TWORM minted
           </p>
           <p
             className={cn('orbitron-h4 text-white', {
@@ -171,7 +171,7 @@ export function NetworkStats() {
                 'satoshi-body2': isMobile,
               })}
             >
-              WORM
+              TWORM
             </span>
           </p>
         </div>
@@ -204,7 +204,7 @@ export function NetworkStats() {
               'satoshi-h4': isMobile,
             })}
           >
-            Total WORM supply
+            Total TWORM supply
           </p>
           <p
             className={cn('orbitron-h4 text-white', {
