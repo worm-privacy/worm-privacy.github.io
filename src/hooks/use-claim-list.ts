@@ -22,7 +22,7 @@ export function useClaimList(): [UseClaimListResult, () => Promise<void>] {
       let from = 0n;
       const max = currentEpoch + 100n;
       while (from < max && nonZeros.length === 0) {
-        [from, nonZeros] = await WORMContract.epochsWithNonZeroRewards(client, from, 5000n, address, 50n);
+        [from, nonZeros] = await WORMContract.discoverRewards(client, from, 100n, address, 10n);
       }
 
       let ranges = findRanges(nonZeros);
