@@ -79,7 +79,7 @@ const ReadyToClaimItem = (props: { epochNumber: bigint; share: bigint; refresh: 
           <div className="grow" />
           <div className="text-[14px]">Your share:</div>
           <div className="font-orbitron">{roundEther(props.share, 4)}</div>
-          <div className="text-[14px] text-brand">WORM</div>
+          <div className="text-[14px] text-brand">TWORM</div>
         </div>
       </DialogTrigger>
 
@@ -90,7 +90,7 @@ const ReadyToClaimItem = (props: { epochNumber: bigint; share: bigint; refresh: 
           </Button>
         </DialogClose>
         <DialogHeader>
-          <DialogTitle>Claim WORM</DialogTitle>
+          <DialogTitle>Claim TWORM</DialogTitle>
         </DialogHeader>
         <div className="satoshi-body2 max-h-61.5 px-8 pt-2 pb-6 text-white">
           {claimState == 'idle' && (
@@ -99,7 +99,7 @@ const ReadyToClaimItem = (props: { epochNumber: bigint; share: bigint; refresh: 
               <div className="mb-1">Your reward share: </div>
               <div className="flex flex-row">
                 <div className="mr-2 font-bold text-white">{roundEther(props.share, 4)}</div>
-                <div className="font-bold text-brand">WORM</div>
+                <div className="font-bold text-brand">TWORM</div>
               </div>
               <button
                 onClick={onClaimClicked}
@@ -131,7 +131,7 @@ const UpComingEpochItem = (props: { epochNumber: bigint; share: bigint }) => {
         <>
           <div className="text-[14px]">Your share: ~</div>
           <div className="font-orbitron">{roundEther(props.share, 4)}</div>
-          <div className=" text-[14px] text-brand">WORM</div>
+          <div className=" text-[14px] text-brand">TWORM</div>
         </>
       )}
     </div>

@@ -42,8 +42,8 @@ export default function TabBar() {
 const TABS = [
   { path: '/tools/burn-eth', label: 'Burn ETH', disabled: false },
   { path: 'https://app.cyphereth.com/?token2=0x5624344235607940d4d4ee76bf8817d403eb9cf8', label: 'Trade BETH', disabled: false },
-  { path: '/tools/mine-worm', label: 'Mine WORM', disabled: true },
-  { path: '/tools/claim-worm', label: 'Claim WORM', disabled: true },
+  { path: '/tools/mine-worm', label: 'Mine TWORM', disabled: false },
+  { path: '/tools/claim-worm', label: 'Claim TWORM', disabled: false },
   { path: '/tools/stake-worm', label: 'Stake WORM', disabled: true },
   { path: '/tools/airdrop', label: 'TGE', disabled: true },
 ];
