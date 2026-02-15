@@ -25,7 +25,7 @@ export const BurnAddressGeneratorLayout = (props: {
   const receiverAddress = useInput('', validateAddress);
 
   // Advanced inputs
-  const proverFee = useInput('0.001', validateETHAmount);
+  const proverFee = useInput('0.0001', validateETHAmount);
   const broadcasterFee = useInput('0', validateETHAmount);
   const swapAmount = useInput('0', validateETHAmount);
 
@@ -196,7 +196,7 @@ const MainLayout = (props: {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-        
+
       <div className="grow" />
       {/* Action Buttons */}
       <div>
@@ -215,11 +215,13 @@ const MainLayout = (props: {
           Recover
         </button>
 
-        <div className="text-[14px] mt-3">
-        <div className='text-white italic'>
-          <span className='text-yellow-300 font-bold'>Disclaimer:</span> The WORM project’s mainnet is expected to roll out in phases. The ETH/BETH market pair may be extremely volatile during this period, so please use it at your own risk.
+        <div className="mt-3 text-[14px]">
+          <div className="text-white italic">
+            <span className="font-bold text-yellow-300">Disclaimer:</span> The WORM project’s mainnet is expected to
+            roll out in phases. The ETH/BETH market pair may be extremely volatile during this period, so please use it
+            at your own risk.
+          </div>
         </div>
-      </div>
       </div>
     </div>
   );

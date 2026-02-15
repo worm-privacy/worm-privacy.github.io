@@ -6,7 +6,9 @@ import { WriteContractMutateAsync } from 'wagmi/query';
 import { StakingContractAddress } from './staking';
 
 //TODO change this address
-export const WORMcontractAddress = '0x0eD61b3696F0dafFaE01E7EEA22711E7860b1118';
+// sepolia 0x0d2e09d2abf22ed938fadaa306ccd48329e09774
+// mainnet TWORM 0x0d2e09d2abf22ed938fadaa306ccd48329e09774
+export const WORMcontractAddress = '0x0d2e09d2abf22ed938fadaa306ccd48329e09774';
 
 export namespace WORMContract {
   export const currentEpoch = async (client: Client): Promise<bigint> => {
@@ -27,7 +29,7 @@ export namespace WORMContract {
     });
   };
 
-  export const epochsWithNonZeroRewards = async (
+  export const discoverRewards = async (
     client: Client,
     fromEpoch: bigint,
     numEpochs: bigint,
@@ -37,7 +39,7 @@ export namespace WORMContract {
     return await readContract(client, {
       address: WORMcontractAddress,
       abi: WORMcontractABI,
-      functionName: 'epochsWithNonZeroRewards',
+      functionName: 'discoverRewards',
       args: [fromEpoch, numEpochs, user, maxFound],
     });
   };
@@ -427,6 +429,45 @@ export const WORMcontractABI = [
   },
   {
     type: 'function',
+    name: 'discoverRewards',
+    inputs: [
+      {
+        name: '_fromEpoch',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '_numEpochs',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: '_user',
+        type: 'address',
+        internalType: 'address',
+      },
+      {
+        name: '_maxFound',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    outputs: [
+      {
+        name: 'nextEpochToSearch',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+      {
+        name: 'epochs',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'eip712Domain',
     inputs: [],
     outputs: [
@@ -520,45 +561,6 @@ export const WORMcontractABI = [
         name: '',
         type: 'uint256',
         internalType: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    name: 'epochsWithNonZeroRewards',
-    inputs: [
-      {
-        name: '_fromEpoch',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_numEpochs',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: '_user',
-        type: 'address',
-        internalType: 'address',
-      },
-      {
-        name: '_maxFound',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [
-      {
-        name: 'nextEpochToSearch',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'epochs',
-        type: 'uint256[]',
-        internalType: 'uint256[]',
       },
     ],
     stateMutability: 'view',

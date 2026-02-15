@@ -41,6 +41,7 @@ export const MintBETHLayout = (props: {
     props.setProof(proof);
     setFlowState(FlowState.Generated);
     setIsLoading(null);
+    saveJson(newSavableRecoverData(props.burnAddress, proof), `proof_${props.burnAddress.burnAddress}_backup.json`);
   };
 
   const onError = (msg: string) => {
@@ -306,13 +307,13 @@ const Submitted = () => {
   return (
     <div className="flex w-full flex-col gap-6 text-white">
       <div className="text[24px] font-bold">Proof submitted successfully</div>
-      <div className="text[18px] font-normal">Now you can Mine WORM.</div>
+      <div className="text[18px] font-normal">Now you can Mine TWORM.</div>
       <div className="grow" />
 
       <Link href="/tools/mine-worm">
         <button className="flex w-full items-center justify-center rounded-lg bg-brand px-4 py-3 font-semibold text-black">
           <Icons.target className="mr-2" />
-          Mine Worm
+          Mine TWORM
         </button>
       </Link>
     </div>

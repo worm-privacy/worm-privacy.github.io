@@ -10,7 +10,8 @@ import { SmoothScroll } from '@/components/ui/smoth-scroll';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
 import { RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
 import { calculateMintAmount } from '@/lib/core/utils/beth-amount-calculator';
-import { RecoverData } from '@/lib/utils/recover-data';
+import { newSavableRecoverData, RecoverData } from '@/lib/utils/recover-data';
+import { saveJson } from '@/lib/utils/save-json';
 import { useState } from 'react';
 import { formatEther } from 'viem';
 import { BurnAddressGeneratorLayout } from './burn-address';
@@ -30,6 +31,7 @@ export default function BurnETHRoot() {
     setBurnAddress(address);
     setCurrentStep(1); // move to next step
     setMintAmount(mintAmount);
+    saveJson(newSavableRecoverData(address), `burn_${address.burnAddress}_backup.json`);
   };
 
   const onBurnComplete = () => {
@@ -114,11 +116,11 @@ const BURN_ETH_STEPS: StepItem[] = [
     description: 'Prove burn of ETH and get BETH',
   },
   {
-    title: 'Mine WORM',
-    description: 'Participate in WORM epochs',
+    title: 'Mine TWORM',
+    description: 'Participate in TWORM epochs',
   },
   {
-    title: 'Claim WORM',
-    description: 'Get WORM rewards',
+    title: 'Claim TWORM',
+    description: 'Get TWORM rewards',
   },
 ];

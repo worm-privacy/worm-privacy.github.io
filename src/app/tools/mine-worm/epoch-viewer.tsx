@@ -96,7 +96,7 @@ const EpochItem = (props: { epoch: Epoch; current: bigint; progress: number; ref
         <div className="flex flex-col items-start gap-4 md:flex-row md:items-center">
           <div className="flex items-center space-x-2">
             <span className="font-orbitron text-[16px] text-white">{roundEther(epoch.wormAmount)}</span>
-            <span className="text-brand">WORM</span>
+            <span className="text-brand">TWORM</span>
           </div>
         </div>
       </div>
