@@ -9,9 +9,9 @@ import { calculateMintAmountStr, calculateProtocolFee } from '@/lib/core/utils/b
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
 import { loadJson } from '@/lib/utils/load-json';
 import { RecoverData, recoverDataFromJson } from '@/lib/utils/recover-data';
-import { formatEther, parseEther } from 'ethers';
+import { parseEther } from 'ethers';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { hexToBytes } from 'viem';
+import { formatUnits, hexToBytes } from 'viem';
 import { useClient } from 'wagmi';
 
 export const BurnAddressGeneratorLayout = (props: {
@@ -31,7 +31,7 @@ export const BurnAddressGeneratorLayout = (props: {
   // Advanced inputs
   const proverFee = useInput('0.0001', validateETHAmount);
   const broadcasterFee = useInput('0', validateETHAmount);
-  const swapAmount = useInput('0', validateETHAmount);
+  const swapAmount = useInput('0.0005', validateETHAmount);
 
   const [estimatedETH, setEstimatedETH] = useState('N/A');
   useDebounceEffect(
@@ -39,7 +39,7 @@ export const BurnAddressGeneratorLayout = (props: {
       CypherETHQuoterContract.estimateBethEtherSwap(client!, parseEther(swapAmount.value))
         .then((estimatedAmount) => {
           console.log('estimatedAmount:', estimatedAmount);
-          setEstimatedETH(formatEther(estimatedAmount));
+          setEstimatedETH(parseFloat(formatUnits(estimatedAmount, 18)).toPrecision(3));
         })
         .catch((e) => {
           console.error(e);
@@ -118,6 +118,7 @@ export const BurnAddressGeneratorLayout = (props: {
           receiverAddress={receiverAddress}
           proverFee={proverFee.value}
           broadcasterFee={broadcasterFee.value}
+          swapAmount={swapAmount.value}
           onGenerateBurnAddressClicked={onGenerateAddressClicked}
           onRecoverClicked={onRecoverClicked}
           setIsAdvancedOpen={setIsAdvancedOpen}
@@ -134,6 +135,7 @@ const MainLayout = (props: {
   calculatedBeth: string;
   proverFee: string;
   broadcasterFee: string;
+  swapAmount: string;
   estimatedETH: string;
   setIsAdvancedOpen: Dispatch<SetStateAction<boolean>>;
   onGenerateBurnAddressClicked: () => void;
@@ -168,6 +170,10 @@ const MainLayout = (props: {
         <div className="flex justify-between text-[16px]">
           <span className="text-[#94A3B8]">Protocol fee</span>
           <span className="text-[#94A3B8]">{protocolFee} BETH</span>
+        </div>
+        <div className="flex justify-between text-[16px]">
+          <span className="text-[#94A3B8]">Swap to ETH</span>
+          <span className="text-[#94A3B8]">{props.swapAmount} BETH</span>
         </div>
       </div>
 
