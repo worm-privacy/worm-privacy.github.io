@@ -2,7 +2,7 @@ import { encodeFunctionData } from 'viem';
 
 // sepolia address 0xfff9976782d46cc05630d1f6ebab18b2324d6b14
 // mainnet address 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2
-export const WETHContractAddress = '0xfff9976782d46cc05630d1f6ebab18b2324d6b14';
+export const WETHContractAddress = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
 
 export namespace WETHContract {
   export const createWithdrawCalldata = (amount: bigint): `0x${string}` => {

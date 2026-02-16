@@ -6,7 +6,7 @@ import { WETHContractAddress } from './weth';
 //TODO change this address
 // mainnet address 0xeae871C4a8dD267146558C362c86805FB7e3Fd2F
 // testnet address 0xadD719B41f49E59C9af69021a4F74C4ff1f7B3b0
-export const CypherETHQuoterContractAddress = '0xadD719B41f49E59C9af69021a4F74C4ff1f7B3b0';
+export const CypherETHQuoterContractAddress = '0xeae871C4a8dD267146558C362c86805FB7e3Fd2F';
 
 export const DEPLOYER = '0x0000000000000000000000000000000000000000';
 
@@ -29,6 +29,8 @@ export namespace CypherETHQuoterContract {
   };
 
   export const estimateBethEtherSwap = async (client: Client, amountIn: bigint) => {
+    if (amountIn === 0n) return 0n;
+
     return (
       await CypherETHQuoterContract.quoteExactInputSingle(
         client,
