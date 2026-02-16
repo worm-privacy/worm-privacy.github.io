@@ -30,6 +30,7 @@ export namespace CypherETHQuoterContract {
 
   export const estimateBethEtherSwap = async (client: Client, amountIn: bigint) => {
     if (amountIn === 0n) return 0n;
+
     return (
       await CypherETHQuoterContract.quoteExactInputSingle(
         client,
