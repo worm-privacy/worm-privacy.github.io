@@ -1,13 +1,17 @@
 import InputComponent from '@/components/tools/input-text';
 import { Icons } from '@/components/ui/icons';
+import { useDebounceEffect } from '@/hooks/use-debounce-effect';
 import { useInput, UserInputState } from '@/hooks/use-input';
 import { BurnAddressContent, generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
+import { BETHToETHContract } from '@/lib/core/contracts/beth-to-eth';
+import { CypherETHQuoterContract } from '@/lib/core/contracts/cyphereth-quoter';
 import { calculateMintAmountStr, calculateProtocolFee } from '@/lib/core/utils/beth-amount-calculator';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
 import { loadJson } from '@/lib/utils/load-json';
 import { RecoverData, recoverDataFromJson } from '@/lib/utils/recover-data';
 import { parseEther } from 'ethers';
 import { Dispatch, SetStateAction, useState } from 'react';
+import { formatUnits, hexToBytes } from 'viem';
 import { useClient } from 'wagmi';
 
 export const BurnAddressGeneratorLayout = (props: {
@@ -27,24 +31,24 @@ export const BurnAddressGeneratorLayout = (props: {
   // Advanced inputs
   const proverFee = useInput('0.0001', validateETHAmount);
   const broadcasterFee = useInput('0', validateETHAmount);
-  const swapAmount = useInput('0', validateETHAmount);
+  const swapAmount = useInput('0.0005', validateETHAmount);
 
-  //TODO
-  // const [estimatedETH, setEstimatedETH] = useState('N/A');
-  // useDebounceEffect(
-  //   () => {
-  //     try {
-  //       const bethAmount = parseEther(swapAmount.value);
-  //       UniSwapContract.estimateETH(client!, bethAmount).then((estimatedAmount) => {
-  //         setEstimatedETH(roundEther(estimatedAmount, 2));
-  //       });
-  //     } catch {
-  //       setEstimatedETH('N/A');
-  //     }
-  //   },
-  //   1000,
-  //   [swapAmount]
-  // );
+  const [estimatedETH, setEstimatedETH] = useState('N/A');
+  useDebounceEffect(
+    () => {
+      CypherETHQuoterContract.estimateBethEtherSwap(client!, parseEther(swapAmount.value))
+        .then((estimatedAmount) => {
+          console.log('estimatedAmount:', estimatedAmount);
+          setEstimatedETH(parseFloat(formatUnits(estimatedAmount, 18)).toPrecision(3));
+        })
+        .catch((e) => {
+          console.error(e);
+          setEstimatedETH('N/A');
+        });
+    },
+    1000,
+    [swapAmount]
+  );
 
   const calculatedMintAmount = calculateMintAmountStr(
     burnAmount.value,
@@ -70,12 +74,16 @@ export const BurnAddressGeneratorLayout = (props: {
     if (props.isLoading) return;
     props.setIsLoading(true);
     try {
+      let swapCalldata = BETHToETHContract.createSwapHook(
+        parseEther(swapAmount.value),
+        receiverAddress.value as `0x${string}`
+      );
       let burnAddress = await generateBurnAddress(
         receiverAddress.value,
         parseEther(proverFee.value),
         parseEther(broadcasterFee.value),
         parseEther(burnAmount.value),
-        new Uint8Array() // TODO
+        hexToBytes(swapCalldata)
       );
       props.onBurnAddressGenerated(burnAddress, calculatedMintAmount);
     } catch (e) {
@@ -97,7 +105,7 @@ export const BurnAddressGeneratorLayout = (props: {
     <div className="w-full">
       {isAdvancedOpen ? (
         <AdvancedLayout
-          // estimatedETH={estimatedETH}
+          estimatedETH={estimatedETH}
           broadcasterFee={broadcasterFee}
           proverFee={proverFee}
           swapAmount={swapAmount}
@@ -105,11 +113,12 @@ export const BurnAddressGeneratorLayout = (props: {
         />
       ) : (
         <MainLayout
-          // estimatedETH={estimatedETH}
+          estimatedETH={estimatedETH}
           burnAmount={burnAmount}
           receiverAddress={receiverAddress}
           proverFee={proverFee.value}
           broadcasterFee={broadcasterFee.value}
+          swapAmount={swapAmount.value}
           onGenerateBurnAddressClicked={onGenerateAddressClicked}
           onRecoverClicked={onRecoverClicked}
           setIsAdvancedOpen={setIsAdvancedOpen}
@@ -126,7 +135,8 @@ const MainLayout = (props: {
   calculatedBeth: string;
   proverFee: string;
   broadcasterFee: string;
-  // estimatedETH: string;
+  swapAmount: string;
+  estimatedETH: string;
   setIsAdvancedOpen: Dispatch<SetStateAction<boolean>>;
   onGenerateBurnAddressClicked: () => void;
   onRecoverClicked: () => void;
@@ -161,6 +171,10 @@ const MainLayout = (props: {
           <span className="text-[#94A3B8]">Protocol fee</span>
           <span className="text-[#94A3B8]">{protocolFee} BETH</span>
         </div>
+        <div className="flex justify-between text-[16px]">
+          <span className="text-[#94A3B8]">Swap to ETH</span>
+          <span className="text-[#94A3B8]">{props.swapAmount} BETH</span>
+        </div>
       </div>
 
       {/* You Get Section */}
@@ -171,10 +185,9 @@ const MainLayout = (props: {
             <div>
               <span className="text-white">{props.calculatedBeth} </span>
               <span className="text-pink-400">BETH</span>
-              {/* TODO we don't have swap hook feature yet */}
-              {/* <span className="text-white"> + </span>
-                    <span className="text-white">~{props.estimatedETH}</span>
-                    <span className="text-blue-400"> ETH</span> */}
+              <span className="text-white"> + </span>
+              <span className="text-white">~{props.estimatedETH}</span>
+              <span className="text-blue-400"> ETH</span>
             </div>
           </>
         ) : undefined}
@@ -231,7 +244,7 @@ const AdvancedLayout = (props: {
   broadcasterFee: UserInputState;
   proverFee: UserInputState;
   swapAmount: UserInputState;
-  // estimatedETH: string;
+  estimatedETH: string;
   onApplyClicked: () => void;
 }) => {
   return (
@@ -252,13 +265,12 @@ const AdvancedLayout = (props: {
         state={props.swapAmount}
         inputKind="BETH"
         inputType="number"
-        disabled={true} // TODO we do not have swap feature yet
+        disabled={false}
       />
-      {/* TODO we do not have swap hook feature yet */}
-      {/* <div className="flex flex-row">
-          <div className="mr-1 text-[#94A3B8]">You Will get: {props.estimatedETH} </div>
-          <div className="text-[#6E7AF0]"> ETH </div>
-        </div> */}
+      <div className="flex flex-row">
+        <div className="mr-1 text-[#94A3B8]">You will get: ~{props.estimatedETH} </div>
+        <div className="text-[#6E7AF0]"> ETH </div>
+      </div>
 
       <div className="grow" />
       <button

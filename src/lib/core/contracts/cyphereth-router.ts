@@ -1,61 +1,8 @@
-import { solidityPacked } from 'ethers';
-import { encodeFunctionData } from 'viem';
-import { BETHContractAddress } from './beth';
-import { DEPLOYER } from './cyphereth-quoter';
-import { WETHContract, WETHContractAddress } from './weth';
-
 // mainnet address 0x20C5893f69F635f55b0367C519F3f95e59c0b0Ab
 // sepolia address 0x3Ec0a18671878080D8Fa798c491005Ad038DbC08
-export const CypherETHRouterContractAddress = '0x3Ec0a18671878080D8Fa798c491005Ad038DbC08';
+export const CypherETHRouterContractAddress = '0x20C5893f69F635f55b0367C519F3f95e59c0b0Ab';
 
-export namespace CypherETHRouterContract {
-  export const createBethEtherSwapCalldata = (amountIn: bigint, recipient: `0x${string}`) => {
-    let swap = CypherETHRouterContract.createExactInputSingleCalldata(
-      BETHContractAddress,
-      WETHContractAddress,
-      DEPLOYER,
-      recipient,
-      BigInt(Math.floor(Date.now() / 1000)) * 2n, // twice as pass time!
-      amountIn,
-      0n,
-      0n
-    );
-
-    let withdraw = WETHContract.createWithdrawCalldata(amountIn);
-
-    let multiCall = CypherETHRouterContract.createMultiCallCalldata(swap, withdraw);
-
-    return solidityPacked(
-      ['address', 'uint256', 'bytes'],
-      [CypherETHRouterContractAddress, amountIn, multiCall]
-    ) as `0x${string}`;
-  };
-
-  export const createExactInputSingleCalldata = (
-    tokenIn: `0x${string}`,
-    tokenOut: `0x${string}`,
-    deployer: `0x${string}`,
-    recipient: `0x${string}`,
-    deadline: bigint,
-    amountIn: bigint,
-    amountOutMinimum: bigint,
-    limitSqrtPrice: bigint
-  ): `0x${string}` => {
-    return encodeFunctionData({
-      abi: CypherETHRouterContractABI,
-      functionName: 'exactInputSingle',
-      args: [{ tokenIn, tokenOut, deployer, recipient, deadline, amountIn, amountOutMinimum, limitSqrtPrice }],
-    });
-  };
-
-  export const createMultiCallCalldata = (calldata1: `0x${string}`, calldata2: `0x${string}`): `0x${string}` => {
-    return encodeFunctionData({
-      abi: CypherETHRouterContractABI,
-      functionName: 'multicall',
-      args: [[calldata1, calldata2]],
-    });
-  };
-}
+export namespace CypherETHRouterContract {}
 
 // copied from https://etherscan.io/address/0x20C5893f69F635f55b0367C519F3f95e59c0b0Ab#code
 export const CypherETHRouterContractABI = [
