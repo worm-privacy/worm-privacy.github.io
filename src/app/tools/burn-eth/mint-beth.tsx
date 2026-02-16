@@ -15,6 +15,7 @@ import { saveJson } from '@/lib/utils/save-json';
 import Link from 'next/link';
 
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
+import { toHex } from 'viem';
 import { useClient, usePublicClient, useWriteContract } from 'wagmi';
 
 export const MintBETHLayout = (props: {
@@ -78,7 +79,8 @@ export const MintBETHLayout = (props: {
         props.burnAddress.revealAmount,
         props.burnAddress.receiverAddr as `0x${string}`,
         props.burnAddress.proverFee,
-        response.prover_address
+        response.prover_address,
+        toHex(props.burnAddress.receiverHook)
       );
 
       // this uses relay for broadcasting
@@ -235,7 +237,7 @@ const EndPointSelection = (props: {
           burnAddress.broadcasterFee,
           burnAddress.proverFee,
           burnAddress.revealAmount,
-          '0x', // TODO
+          toHex(burnAddress.receiverHook),
           proof!
         )
       );

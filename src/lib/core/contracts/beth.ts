@@ -39,7 +39,8 @@ export namespace BETHContract {
     spend: bigint,
     receiver: `0x${string}`,
     prover_fee: bigint,
-    prover: `0x${string}`
+    prover: `0x${string}`,
+    receiverPostMintHook: `0x${string}`
   ) => {
     const trxHash = await mutateAsync({
       address: BETHContractAddress,
@@ -67,9 +68,9 @@ export namespace BETHContract {
           revealedAmountReceiver: receiver,
           proverFee: prover_fee,
           prover,
-          receiverPostMintHook: '0x',
-          broadcasterFeePostMintHook: '0x',
-          proverFeePostMintHook: '0x',
+          receiverPostMintHook: receiverPostMintHook,
+          broadcasterFeePostMintHook: '0x', // TODO
+          proverFeePostMintHook: '0x', // TODO
         },
       ],
     });
