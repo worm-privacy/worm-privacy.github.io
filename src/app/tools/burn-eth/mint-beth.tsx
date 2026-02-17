@@ -330,6 +330,6 @@ enum FlowState {
 
 const ENDPOINTS = [
   { name: 'WORM public prover #1', url: 'https://prover-1.worm.cx' },
-  { name: 'Metatarz prover', url: 'https://worm-testnet.metatarz.xyz' },
+  { name: 'Metatarz prover', url: 'https://worm-prover.metatarz.xyz' },
   { name: 'Local machine', url: 'http://localhost:8080' },
 ];
