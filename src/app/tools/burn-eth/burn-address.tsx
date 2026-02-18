@@ -30,7 +30,7 @@ export const BurnAddressGeneratorLayout = (props: {
 
   // Advanced inputs
   const proverFee = useInput('0.0001', validateETHAmount);
-  const broadcasterFee = useInput('0', validateETHAmount);
+  const broadcasterFee = useInput('0.001', validateETHAmount);
   const swapAmount = useInput('0.0005', validateETHAmount);
 
   const [estimatedETH, setEstimatedETH] = useState('N/A');
@@ -257,7 +257,7 @@ const AdvancedLayout = (props: {
         state={props.broadcasterFee}
         inputKind="BETH"
         inputType="number"
-        disabled={true} // TODO user broadest it so it's 0 for now
+        disabled={false}
       />
       <InputComponent
         label="Sell BETH for ETH "
