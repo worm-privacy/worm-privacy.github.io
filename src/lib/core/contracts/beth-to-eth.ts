@@ -1,10 +1,14 @@
 import { encodeAbiParameters, encodeFunctionData, parseAbiParameters } from 'viem';
 
 // mainnet address: 0xbA5A285806c343AaD955a40FE4b6e5e607B752b6
+// sepolia address: 0xB41bD692C004672aCaDbD7162c84b4381A58cFeC
 export const BETHToETHContractAddress = '0xbA5A285806c343AaD955a40FE4b6e5e607B752b6';
 
 export namespace BETHToETHContract {
   export const createSwapHook = (swapAmount: bigint, recipient: `0x${string}`) => {
+    // Prevent error "Amount must be greater than 0" on running hook
+    if (swapAmount === 0n) return '0x';
+
     const calldata = BETHToETHContract.createSwapBethWithEthCalldata(swapAmount, recipient);
 
     return encodeAbiParameters(parseAbiParameters('address, uint256, bytes'), [

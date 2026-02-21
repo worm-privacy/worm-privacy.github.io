@@ -10,6 +10,7 @@ import { proof_get } from '@/lib/core/miner-api/proof-get';
 
 import { proof_get_by_nullifier, RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
 import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-post';
+import { relay_post } from '@/lib/core/miner-api/relay_post';
 import { newSavableRecoverData } from '@/lib/utils/recover-data';
 import { saveJson } from '@/lib/utils/save-json';
 import Link from 'next/link';
@@ -56,7 +57,7 @@ export const MintBETHLayout = (props: {
       `proof_${props.burnAddress.burnAddress}_backup.json`
     );
 
-  const onSubmitClick = async () => {
+  const onSubmitClick = async (kind: 'relay' | 'wallet') => {
     const remaining_coin = calculateRemainingCoinHash(
       props.burnAddress.burnKey,
       props.burnAddress.revealAmount,
@@ -66,35 +67,33 @@ export const MintBETHLayout = (props: {
     try {
       setIsLoading('submit');
       setError(null);
-
-      const response = await proof_get(endPoint);
-
-      await BETHContract.mintCoin(
-        mutateAsync,
-        client!,
-        props.proof!,
-        nullifier,
-        remaining_coin,
-        props.burnAddress.broadcasterFee,
-        props.burnAddress.revealAmount,
-        props.burnAddress.receiverAddr as `0x${string}`,
-        props.burnAddress.proverFee,
-        response.prover_address,
-        toHex(props.burnAddress.receiverHook)
-      );
-
-      // this uses relay for broadcasting
-      // await relay_post(endPoint, {
-      //   network: network,
-      //   proof: props.proof!,
-      //   nullifier: nullifier,
-      //   remaining_coin: remaining_coin,
-      //   broadcaster_fee: props.burnAddress.broadcasterFee,
-      //   reveal_amount: props.burnAddress.revealAmount,
-      //   receiver: props.burnAddress.receiverAddr,
-      //   prover_fee: props.burnAddress.proverFee,
-      //   swap_calldata: props.burnAddress.receiverHook,
-      // });
+      if (kind == 'wallet') {
+        await BETHContract.mintCoin(
+          mutateAsync,
+          client!,
+          props.proof!,
+          nullifier,
+          remaining_coin,
+          props.burnAddress.broadcasterFee,
+          props.burnAddress.revealAmount,
+          props.burnAddress.receiverAddr as `0x${string}`,
+          props.burnAddress.proverFee,
+          (await proof_get(endPoint)).prover_address,
+          toHex(props.burnAddress.receiverHook)
+        );
+      } else if (kind == 'relay') {
+        await relay_post(endPoint, {
+          network: network,
+          proof: props.proof!,
+          nullifier: nullifier,
+          remaining_coin: remaining_coin,
+          broadcaster_fee: props.burnAddress.broadcasterFee,
+          reveal_amount: props.burnAddress.revealAmount,
+          receiver: props.burnAddress.receiverAddr,
+          prover_fee: props.burnAddress.proverFee,
+          swap_calldata: props.burnAddress.receiverHook,
+        });
+      }
       setIsLoading(null);
       setFlowState(FlowState.Submitted);
     } catch (e) {
@@ -281,7 +280,7 @@ const EndPointSelection = (props: {
 
 const Generated = (props: {
   burnAddress: BurnAddressContent;
-  onSubmitClick: () => void;
+  onSubmitClick: (kind: 'relay' | 'wallet') => void;
   onBackupProofDataClick: () => void;
 }) => {
   return (
@@ -298,8 +297,17 @@ const Generated = (props: {
           Backup proof data
         </button>
       </div>
-      <button onClick={props.onSubmitClick} className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black">
-        Submit proof
+      <button
+        onClick={() => props.onSubmitClick('wallet')}
+        className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black"
+      >
+        Submit proof yourself
+      </button>
+      <button
+        onClick={() => props.onSubmitClick('relay')}
+        className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black"
+      >
+        Submit proof through relayer
       </button>
     </div>
   );
