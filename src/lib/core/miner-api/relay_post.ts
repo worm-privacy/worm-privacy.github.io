@@ -15,6 +15,7 @@ export const relay_post = async (serverURL: string, payload: RelayPostRequest): 
     reveal_amount: formatEther(payload.reveal_amount),
     receiver: payload.receiver,
     prover_fee: formatEther(payload.prover_fee),
+    prover_address: payload.prover_address,
     swap_calldata: toHex(payload.swap_calldata),
   };
 
@@ -46,6 +47,7 @@ export type RelayPostRequest = {
   reveal_amount: bigint;
   receiver: string;
   prover_fee: bigint;
+  prover_address: string;
 
   swap_calldata: Uint8Array;
 };
@@ -62,6 +64,7 @@ type RelayPostRequestAPI = {
   reveal_amount: string;
   receiver: string;
   prover_fee: string;
+  prover_address: string;
 
   swap_calldata: string;
 };
