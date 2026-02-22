@@ -25,6 +25,8 @@ export const MintBETHLayout = (props: {
   burnAddress: BurnAddressContent;
   proof: RapidsnarkOutput | null;
   setProof: Dispatch<SetStateAction<RapidsnarkOutput | null>>;
+  proverAddress: `0x${string}` | null;
+  setProverAddress: Dispatch<SetStateAction<`0x${string}` | null>>;
 }) => {
   const [isLoading, setIsLoading] = useState<'submit' | 'proof' | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -40,11 +42,16 @@ export const MintBETHLayout = (props: {
 
   let nullifier = useMemo(() => calculateNullifier(props.burnAddress.burnKey), []);
 
-  const onProofGenerated = (proof: RapidsnarkOutput) => {
+  const onProofGenerated = async (proof: RapidsnarkOutput) => {
     props.setProof(proof);
+    const _proverAddress = (await proof_get(endPoint)).prover_address;
+    props.setProverAddress(_proverAddress);
     setFlowState(FlowState.Generated);
     setIsLoading(null);
-    saveJson(newSavableRecoverData(props.burnAddress, proof), `proof_${props.burnAddress.burnAddress}_backup.json`);
+    saveJson(
+      newSavableRecoverData(props.burnAddress, proof, _proverAddress),
+      `proof_${props.burnAddress.burnAddress}_backup.json`
+    );
   };
 
   const onError = (msg: string) => {
@@ -54,7 +61,7 @@ export const MintBETHLayout = (props: {
 
   const onBackupProofDataClick = async () =>
     saveJson(
-      newSavableRecoverData(props.burnAddress, props.proof!),
+      newSavableRecoverData(props.burnAddress, props.proof!, props.proverAddress!),
       `proof_${props.burnAddress.burnAddress}_backup.json`
     );
 
@@ -79,7 +86,7 @@ export const MintBETHLayout = (props: {
           props.burnAddress.revealAmount,
           props.burnAddress.receiverAddr as `0x${string}`,
           props.burnAddress.proverFee,
-          (await proof_get(endPoint)).prover_address,
+          props.proverAddress!,
           toHex(props.burnAddress.receiverHook)
         );
       } else if (kind == 'relay') {
@@ -92,6 +99,7 @@ export const MintBETHLayout = (props: {
           reveal_amount: props.burnAddress.revealAmount,
           receiver: props.burnAddress.receiverAddr,
           prover_fee: props.burnAddress.proverFee,
+          prover_address: props.proverAddress!,
           swap_calldata: props.burnAddress.receiverHook,
         });
         console.log('waiting fot receipt trx_hash:', trxHash);

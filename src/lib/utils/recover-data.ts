@@ -4,10 +4,20 @@ import { RapidsnarkOutput } from '../core/miner-api/proof-get-by-nullifier';
 
 export type RecoverData =
   | { type: 'burn'; burn: BurnAddressContent }
-  | { type: 'proof'; burn: BurnAddressContent; proof: RapidsnarkOutput };
+  | { type: 'proof'; burn: BurnAddressContent; proof: RapidsnarkOutput; proverAddress: `0x${string}` };
 
-export const newSavableRecoverData = (burnAddress: BurnAddressContent, proof?: RapidsnarkOutput): any => {
-  if (proof) return { recoverType: 'proof', burn: fromBurnAddress(burnAddress), proof: proof };
+export const newSavableRecoverData = (
+  burnAddress: BurnAddressContent,
+  proof?: RapidsnarkOutput,
+  proverAddress?: `0x${string}`
+): any => {
+  if (proof)
+    return {
+      recoverType: 'proof',
+      burn: fromBurnAddress(burnAddress),
+      proof: proof,
+      proverAddress: proverAddress,
+    };
   else return { recoverType: 'burn', burn: fromBurnAddress(burnAddress) };
 };
 
@@ -19,7 +29,12 @@ export const recoverDataFromJson = (json: any): RecoverData => {
       return { type: 'burn', burn: burnAddress };
 
     case 'proof':
-      return { type: 'proof', burn: burnAddress, proof: json.proof as RapidsnarkOutput };
+      return {
+        type: 'proof',
+        burn: burnAddress,
+        proof: json.proof as RapidsnarkOutput,
+        proverAddress: json.proverAddress,
+      };
 
     default:
       throw 'invalid recover file';
