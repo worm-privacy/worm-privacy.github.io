@@ -7,7 +7,7 @@ import { useClient, useWriteContract } from 'wagmi';
 import { TgeSelection } from './page';
 
 // TODO: Replace with the actual exit contract address
-const EXIT_CONTRACT_ADDRESS = '0x0000000000000000000000000000000000000000' as const;
+const EXIT_CONTRACT_ADDRESS = '0x88a11fc875e7502959d643ef8bde6d05747a77d4' as const;
 
 const EXIT_CONTRACT_ABI = [
   {
@@ -86,7 +86,7 @@ function IcowormClaimInfo(props: { balance: bigint; refresh: () => Promise<void>
       )}
       {claimState === 'loading' && <LoadingComponent />}
       {claimState === 'error' && <ErrorComponent title="Error while claiming WORM" hFull={false} />}
-      {claimState === 'done' && <div className="w-full px-4 py-3 text-white">Claimed Successfully</div>}
+      {claimState === 'done' && <div className="w-full px-4 py-3 text-white">Claimed successfully!</div>}
       <div className="grow" />
     </div>
   );
