@@ -3,8 +3,9 @@ import { formatEther } from 'ethers';
 import { toHex } from 'viem';
 import { RapidsnarkOutput } from './proof-get-by-nullifier';
 
-// POST /relay
-export const relay_post = async (serverURL: string, payload: RelayPostRequest): Promise<void> => {
+/// POST /relay
+/// returns transaction hash
+export const relay_post = async (serverURL: string, payload: RelayPostRequest): Promise<`0x${string}`> => {
   let body: RelayPostRequestAPI = {
     network: payload.network,
     proof: payload.proof,
@@ -29,6 +30,8 @@ export const relay_post = async (serverURL: string, payload: RelayPostRequest): 
     const error = await response.json().catch(() => ({}));
     throw new Error(error.error);
   }
+
+  return (await response.json()).trx_hash;
 };
 
 export type RelayPostRequest = {
