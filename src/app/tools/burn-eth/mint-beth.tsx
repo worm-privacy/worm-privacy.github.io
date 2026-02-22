@@ -17,6 +17,7 @@ import Link from 'next/link';
 
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { toHex } from 'viem';
+import { waitForTransactionReceipt } from 'viem/actions';
 import { useClient, usePublicClient, useWriteContract } from 'wagmi';
 
 export const MintBETHLayout = (props: {
@@ -82,7 +83,7 @@ export const MintBETHLayout = (props: {
           toHex(props.burnAddress.receiverHook)
         );
       } else if (kind == 'relay') {
-        await relay_post(endPoint, {
+        let trxHash = await relay_post(endPoint, {
           network: network,
           proof: props.proof!,
           nullifier: nullifier,
@@ -93,6 +94,10 @@ export const MintBETHLayout = (props: {
           prover_fee: props.burnAddress.proverFee,
           swap_calldata: props.burnAddress.receiverHook,
         });
+        console.log('waiting fot receipt trx_hash:', trxHash);
+        let receipt = await waitForTransactionReceipt(client!, { hash: trxHash });
+        if (receipt.status == 'reverted') throw 'mintCoin reverted';
+        console.log('got receipt');
       }
       setIsLoading(null);
       setFlowState(FlowState.Submitted);
