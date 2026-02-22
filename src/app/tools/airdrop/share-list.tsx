@@ -33,7 +33,7 @@ export default function ShareList(props: {
     );
   }
 
-  const hasIcoworm = result.icowormBalance > 0n;
+  const hasIcoworm = result.icowormBalance > 0n || result.icowormNullified;
 
   if (!hasIcoworm && result.shares.length === 0) {
     return (
@@ -56,9 +56,15 @@ export default function ShareList(props: {
           }`}
         >
           <div className="font-bold">ICO tokens</div>
-          <div className="rounded-4xl bg-[rgba(var(--brand-rgb),0.12)] px-3 py-1 text-[12px] text-[#96FAD1]">
-            Claimable
-          </div>
+          {result.icowormNullified ? (
+            <div className="rounded-4xl bg-white/10 px-3 py-1 text-[12px] text-white/50">
+              Claimed
+            </div>
+          ) : (
+            <div className="rounded-4xl bg-[rgba(var(--brand-rgb),0.12)] px-3 py-1 text-[12px] text-[#96FAD1]">
+              Claimable
+            </div>
+          )}
           <div className="grow" />
           <div className="text-[14px]">Amount:</div>
           <div className="font-orbitron">{roundEther(result.icowormBalance, 4)}</div>

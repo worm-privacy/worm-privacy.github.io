@@ -6,6 +6,7 @@ import { readContract } from 'viem/actions';
 import { useClient, useConnection } from 'wagmi';
 
 const ICOWORM_ADDRESS = '0xf81e34cc12fcc8c56681777881ee7e37698856ff' as const;
+const EXIT_CONTRACT_ADDRESS = '0x88a11fc875e7502959d643ef8bde6d05747a77d4' as const;
 
 const ICOWORM_ABI = [
   {
@@ -13,6 +14,13 @@ const ICOWORM_ABI = [
     name: 'balanceOf',
     inputs: [{ name: 'account', type: 'address' }],
     outputs: [{ name: '', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'nullified',
+    inputs: [{ name: '', type: 'address' }],
+    outputs: [{ name: '', type: 'bool' }],
     stateMutability: 'view',
   },
 ] as const;
@@ -34,23 +42,33 @@ export function useTgeShareList(): [UseShareListResult, () => Promise<void>] {
 
       let shares: ShareModel[] = [];
 
-      // Query ICOWORM balance
+      // Query ICOWORM balance and nullified status
       let icowormBalance = 0n;
+      let icowormNullified = false;
       try {
-        icowormBalance = await readContract(client, {
-          address: ICOWORM_ADDRESS,
-          abi: ICOWORM_ABI,
-          functionName: 'balanceOf',
-          args: [address],
-        });
+        [icowormBalance, icowormNullified] = await Promise.all([
+          readContract(client, {
+            address: ICOWORM_ADDRESS,
+            abi: ICOWORM_ABI,
+            functionName: 'balanceOf',
+            args: [address],
+          }),
+          readContract(client, {
+            address: EXIT_CONTRACT_ADDRESS,
+            abi: ICOWORM_ABI,
+            functionName: 'nullified',
+            args: [address],
+          }),
+        ]);
       } catch (e) {
-        console.error('Error fetching ICOWORM balance:', e);
+        console.error('Error fetching ICOWORM data:', e);
       }
 
       setResult({
         status: 'loaded',
         shares,
         icowormBalance,
+        icowormNullified,
       });
     } catch (e) {
       console.error(e);
@@ -73,6 +91,7 @@ export type UseShareListResult =
       status: 'loaded';
       shares: ShareModel[];
       icowormBalance: bigint;
+      icowormNullified: boolean;
     };
 
 export type ShareModel = {
