@@ -9,7 +9,7 @@ export default function Participated(props: { amount: string; numberOfEpochs: st
         Congratulation! <br /> <br />
         You successfully participate total <b>{props.amount} </b> <span className="text-[#FF47C0]">BETH </span>in next{' '}
         <b>{props.numberOfEpochs} </b>epochs. <br /> <br />
-        Ready to claim your <span className="text-brand">TWORM</span>s.
+        Ready to claim your <span className="text-brand">WORM</span>s.
       </div>
 
       <div className="grow" />
@@ -17,7 +17,7 @@ export default function Participated(props: { amount: string; numberOfEpochs: st
       <Link href="/tools/claim-worm">
         <button className="flex w-full items-center justify-center rounded-lg bg-brand px-4 py-3 font-semibold text-black">
           <Icons.target className="mr-2" />
-          Claim TWORM
+          Claim WORM
         </button>
       </Link>
     </div>

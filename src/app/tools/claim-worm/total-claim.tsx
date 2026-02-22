@@ -24,7 +24,7 @@ export default function TotalClaim(props: { result: UseClaimListResult; refresh:
     return (
       <div className="flex h-full grow flex-col text-white">
         <div className="mb-3 text-[24px] font-bold">gWorm!</div>
-        <div className="text-[16px] opacity-70">No TWORM reward available</div>
+        <div className="text-[16px] opacity-70">No WORM reward available</div>
       </div>
     );
   const totalClaimAmount = result.readyToClaim.map((e) => e.amount).reduce((a, c) => a + c);
@@ -54,7 +54,7 @@ export default function TotalClaim(props: { result: UseClaimListResult; refresh:
           <div className="mt-5 text-white opacity-80">Total Claimable reward: </div>
           <div className="flex flex-row items-center gap-2">
             <div className="text-[24px] font-bold text-white">{roundEther(totalClaimAmount, 4)} </div>
-            <div className="text-[24px] text-brand">TWORM </div>
+            <div className="text-[24px] text-brand">WORM </div>
           </div>
           <div className="grow" />
           <button onClick={onClaimClick} className="w-full rounded-lg bg-brand px-4 py-3 text-black">

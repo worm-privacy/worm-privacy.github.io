@@ -127,11 +127,11 @@ const BURN_ETH_STEPS: StepItem[] = [
     description: 'Prove burn of ETH and get BETH',
   },
   {
-    title: 'Mine TWORM',
-    description: 'Participate in TWORM epochs',
+    title: 'Mine WORM',
+    description: 'Participate in WORM epochs',
   },
   {
-    title: 'Claim TWORM',
-    description: 'Get TWORM rewards',
+    title: 'Claim WORM',
+    description: 'Get WORM rewards',
   },
 ];

@@ -174,7 +174,7 @@ const UpComingEpochItem = (props: { staking: StakingItem }) => {
 const Divider = () => {
   return (
     <div className="m-1 flex flex-row">
-      <div className="text-[#94A3B8]">Upcoming days</div>
+      <div className="text-[#94A3B8]">Upcoming weeks</div>
       <div className="mx-2 my-auto  h-px grow bg-[#94A3B830]" />
     </div>
   );
