@@ -316,12 +316,12 @@ const Generated = (props: {
       >
         Submit proof yourself
       </button>
-      <button
+      {/* <button
         onClick={() => props.onSubmitClick('relay')}
         className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black"
       >
         Submit proof through relayer
-      </button>
+      </button> */}
     </div>
   );
 };
