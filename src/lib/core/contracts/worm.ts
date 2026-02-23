@@ -7,8 +7,7 @@ import { StakingContractAddress } from './staking';
 
 //TODO change this address
 // sepolia 0x0d2e09d2abf22ed938fadaa306ccd48329e09774
-// mainnet TWORM 0x0d2e09d2abf22ed938fadaa306ccd48329e09774
-export const WORMcontractAddress = '0x0d2e09d2abf22ed938fadaa306ccd48329e09774';
+export const WORMcontractAddress = '0xfC9d98CdB3529F32cD7fb02d175547641e145B29';
 
 export namespace WORMContract {
   export const currentEpoch = async (client: Client): Promise<bigint> => {
