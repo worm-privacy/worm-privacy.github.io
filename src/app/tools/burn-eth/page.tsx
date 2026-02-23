@@ -1,8 +1,7 @@
 'use client';
 
 import { Footer } from '@/components/landing';
-import LoadingComponent from '@/components/tools/loading';
-import StepsComponent, { StepItem } from '@/components/tools/steps';
+import { StepItem } from '@/components/tools/steps';
 import TabBar from '@/components/tools/tabbar';
 import TopBar from '@/components/tools/topbar';
 import { WalletNotConnectedContainer } from '@/components/tools/wallet-not-connected';
@@ -94,7 +93,7 @@ export default function BurnETHRoot() {
         <TopBar />
         <TabBar />
         <WalletNotConnectedContainer>
-          <div>
+          {/* <div>
             <div className="m-auto max-w-310">
               <div className="mt-6 mb-3 text-[24px] font-bold text-white">Burn ETH and get BETH</div>
               <div className="rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
@@ -104,6 +103,11 @@ export default function BurnETHRoot() {
                 </div>
               </div>
             </div>
+          </div> */}
+          <div className="my-60 flex grow flex-col items-center text-white">
+            <div className="grow" />
+            <div className="text-3xl">Burn ETH is disabled for now</div>
+            <div className="grow" />
           </div>
         </WalletNotConnectedContainer>
         <div className="min-h-12 grow" />
