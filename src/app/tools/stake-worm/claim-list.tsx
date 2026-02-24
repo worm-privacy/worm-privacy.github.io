@@ -99,7 +99,7 @@ const StakingItemComponent = (props: { staking: StakingItem; currentWeek: bigint
   return (
     <Dialog>
       <DialogTrigger>
-        <div className="m-1 flex w-full flex-col items-center gap-2 rounded-[12px] bg-[#64748B1F] p-4 font-satoshi text-[16px] text-white">
+        <div className="m-1 flex flex-col items-center gap-2 rounded-[12px] bg-[#64748B1F] p-4 font-satoshi text-[16px] text-white">
           {/* week and arrow */}
           <div className="flex w-full flex-row items-start">
             <span className="text-white">
@@ -194,7 +194,7 @@ const StakingWeekItemComponent = (props: {
   return (
     <Dialog>
       <DialogTrigger>
-        <div className="m-1 flex w-full flex-col items-center gap-2 rounded-[12px] bg-[#64748B1F] p-4 font-satoshi text-[16px] text-white">
+        <div className="m-1 flex flex-col items-center gap-2 rounded-[12px] bg-[#64748B1F] p-4 font-satoshi text-[16px] text-white">
           {/* week and arrow */}
           <div className="flex w-full flex-row items-start">
             <span className="text-white">
