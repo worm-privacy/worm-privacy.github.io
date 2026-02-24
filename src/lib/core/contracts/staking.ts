@@ -1,13 +1,29 @@
 import { stakingLogsRepo } from '@/lib/data/staking-logs-repo';
-import { Client, parseEventLogs } from 'viem';
+import { Address, Client, parseEventLogs } from 'viem';
 import { getContractEvents, readContract, waitForTransactionReceipt } from 'viem/actions';
 import { Config } from 'wagmi';
 import { WriteContractMutateAsync } from 'wagmi/query';
+import type { SendCallsSyncParameters, SendCallsSyncReturnType as ViemAction } from 'viem/actions';
 
 //TODO change this address
 export const StakingContractAddress = '0x03d4702b51a98661B89dF5fcBe8C4baeF84C60B7';
 
 export namespace StakingContract {
+
+  export type Action = {
+    to: Address;
+    abi: typeof StakingContractABI;
+    functionName: 'lock' | 'release' | 'claimReward';
+    args: readonly [bigint, bigint];
+  };
+
+  export const buildLockAction = (amount: bigint, numberOfEpochs: bigint): Action => ({
+    to: StakingContractAddress,
+    abi: StakingContractABI,
+    functionName: 'lock',
+    args: [amount, numberOfEpochs],
+  } as const);
+
   export const currentEpoch = async (client: Client): Promise<bigint> => {
     return await readContract(client, {
       address: StakingContractAddress,

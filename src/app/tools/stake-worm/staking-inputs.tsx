@@ -8,7 +8,7 @@ import { WORMContract, WORMcontractABI, WORMcontractAddress } from '@/lib/core/c
 import { validateAll, validateETHAmount, validatePositiveInteger } from '@/lib/core/utils/validator';
 import { useState } from 'react';
 import { formatEther, parseEther } from 'viem';
-import { useClient, useConnection, useReadContract, useWriteContract } from 'wagmi';
+import { useClient, useConnection, useReadContract, useWalletClient, useWriteContract } from 'wagmi';
 
 export default function StakingInputs(props: { result: UseStakingListResult; refresh: () => Promise<void> }) {
   const [isStakeError, setIsStakeError] = useState(false);
@@ -17,6 +17,7 @@ export default function StakingInputs(props: { result: UseStakingListResult; ref
   const [stakeLoading, setStakeLoading] = useState(false);
   const client = useClient();
   const { mutateAsync } = useWriteContract();
+  const { data: walletClient } = useWalletClient();
   const { address, isConnected } = useConnection();
 
   const {
@@ -78,14 +79,33 @@ export default function StakingInputs(props: { result: UseStakingListResult; ref
 
     setStakeLoading(true);
     setIsStakeError(false);
+
+    const runExec = async () => {
+        await WORMContract.approve(mutateAsync, client!, worm);
+        await StakingContract.lock(mutateAsync, client!, worm, weeks);
+    }
+
     try {
-      await WORMContract.approve(mutateAsync, client!, worm);
-      await StakingContract.lock(mutateAsync, client!, worm, weeks);
+      if (walletClient) {
+        try {
+          const result = await walletClient.sendCallsSync({
+            calls: [
+              WORMContract.buildApproveAction(worm),
+              StakingContract.buildLockAction(worm, weeks),
+            ],
+          })
+        } catch (e) {
+          await runExec();
+        }
+      } else {
+        await runExec();
+      }
       props.refresh();
       refetchBalance();
       wormAmount.update('');
       numberOfWeeks.update('');
     } catch (e) {
+      debugger;
       console.error(e);
       setIsStakeError(true);
     } finally {
