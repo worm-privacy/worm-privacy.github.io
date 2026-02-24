@@ -105,7 +105,6 @@ export default function StakingInputs(props: { result: UseStakingListResult; ref
       wormAmount.update('');
       numberOfWeeks.update('');
     } catch (e) {
-      debugger;
       console.error(e);
       setIsStakeError(true);
     } finally {
