@@ -9,7 +9,7 @@ import { useClient, useWriteContract } from 'wagmi';
 
 export default function StakingClaimList(props: { result: UseStakingListResult; refresh: () => Promise<void> }) {
   return (
-    <div className="mx-auto flex min-h-[580px] w-[600px] flex-col gap-1 rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#010204] p-4 shadow-lg">
+    <div className="flex h-[580px] w-[600px] flex-col gap-1 rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#010204] px-4 pt-2 shadow-lg">
       {props.result.status === 'loading' && <div className="text-white">Loading...</div>}
       {props.result.status === 'error' && <div className="text-red-500">Error loading data</div>}
       {props.result.status === 'loaded' && (
@@ -33,9 +33,9 @@ const Main = (props: {
   const [tab, setTab] = useState<'Staking' | 'Weeks'>('Staking');
 
   return (
-    <div className="flex flex-col">
+    <div className="flex h-full w-full flex-col">
       {/* tabs */}
-      <div className="flex flex-row">
+      <div className="mb-1 flex flex-row">
         <button
           onClick={() => setTab('Staking')}
           className={`relative px-6 py-2 text-[14px] font-medium ${
@@ -59,14 +59,20 @@ const Main = (props: {
       </div>
 
       {/* lists */}
-      {tab === 'Staking' &&
-        props.stakes.map((e) => (
-          <StakingItemComponent staking={e} currentWeek={props.currentWeek} refresh={props.refresh} />
-        ))}
-      {tab === 'Weeks' &&
-        props.weeks.map((e) => (
-          <StakingWeekItemComponent week={e} currentWeek={props.currentWeek} refresh={props.refresh} />
-        ))}
+      {tab === 'Staking' && (
+        <div className="scrollbar-hide flex flex-col overflow-y-scroll">
+          {props.stakes.map((e) => (
+            <StakingItemComponent staking={e} currentWeek={props.currentWeek} refresh={props.refresh} />
+          ))}
+        </div>
+      )}
+      {tab === 'Weeks' && (
+        <div className="scrollbar-hide flex flex-col overflow-y-scroll">
+          {props.weeks.map((e) => (
+            <StakingWeekItemComponent week={e} currentWeek={props.currentWeek} refresh={props.refresh} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
@@ -93,7 +99,7 @@ const StakingItemComponent = (props: { staking: StakingItem; currentWeek: bigint
   return (
     <Dialog>
       <DialogTrigger>
-        <div className="m-1 flex flex-col items-center gap-2 rounded-[12px] bg-[#64748B1F] p-4 font-satoshi text-[16px] text-white">
+        <div className="m-1 flex w-full flex-col items-center gap-2 rounded-[12px] bg-[#64748B1F] p-4 font-satoshi text-[16px] text-white">
           {/* week and arrow */}
           <div className="flex w-full flex-row items-start">
             <span className="text-white">
@@ -188,7 +194,7 @@ const StakingWeekItemComponent = (props: {
   return (
     <Dialog>
       <DialogTrigger>
-        <div className="m-1 flex flex-col items-center gap-2 rounded-[12px] bg-[#64748B1F] p-4 font-satoshi text-[16px] text-white">
+        <div className="m-1 flex w-full flex-col items-center gap-2 rounded-[12px] bg-[#64748B1F] p-4 font-satoshi text-[16px] text-white">
           {/* week and arrow */}
           <div className="flex w-full flex-row items-start">
             <span className="text-white">

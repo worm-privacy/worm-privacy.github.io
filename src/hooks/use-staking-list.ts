@@ -20,6 +20,9 @@ export function useStakingList(): [UseStakingListResult, () => Promise<void>] {
         { stakeNumber: 2n, startWeek: 100n, endWeek: 110n, stakeAmount: parseEther('200.12342345'), state: 'Active' },
         { stakeNumber: 3n, startWeek: 105n, endWeek: 106n, stakeAmount: parseEther('2.12342345'), state: 'Queued' },
         { stakeNumber: 3n, startWeek: 105n, endWeek: 106n, stakeAmount: parseEther('2.12342345'), state: 'Released' },
+        { stakeNumber: 3n, startWeek: 105n, endWeek: 106n, stakeAmount: parseEther('2.12342345'), state: 'Released' },
+        { stakeNumber: 3n, startWeek: 105n, endWeek: 106n, stakeAmount: parseEther('2.12342345'), state: 'Released' },
+        { stakeNumber: 3n, startWeek: 105n, endWeek: 106n, stakeAmount: parseEther('2.12342345'), state: 'Released' },
       ];
       const claimable: StakingWeekItem[] = [
         {
@@ -30,6 +33,30 @@ export function useStakingList(): [UseStakingListResult, () => Promise<void>] {
         },
         {
           weekNumber: 82n,
+          totalReward: parseEther('101.123443'),
+          yourReward: parseEther('33.988731'),
+          yourShare: 33.22345,
+        },
+        {
+          weekNumber: 83n,
+          totalReward: parseEther('101.123443'),
+          yourReward: parseEther('33.988731'),
+          yourShare: 33.22345,
+        },
+        {
+          weekNumber: 84n,
+          totalReward: parseEther('101.123443'),
+          yourReward: parseEther('33.988731'),
+          yourShare: 33.22345,
+        },
+        {
+          weekNumber: 85n,
+          totalReward: parseEther('101.123443'),
+          yourReward: parseEther('33.988731'),
+          yourShare: 33.22345,
+        },
+        {
+          weekNumber: 86n,
           totalReward: parseEther('101.123443'),
           yourReward: parseEther('33.988731'),
           yourShare: 33.22345,
