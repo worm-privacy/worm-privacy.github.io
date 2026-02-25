@@ -5,6 +5,7 @@ import { StakingItem, StakingWeekItem, UseStakingListResult } from '@/hooks/use-
 import { StakingContract } from '@/lib/core/contracts/staking';
 import { roundEther, roundEtherF } from '@/lib/core/utils/round-ether';
 import { useState } from 'react';
+import { formatEther } from 'viem';
 import { useClient, useWriteContract } from 'wagmi';
 
 export default function StakingClaimList(props: { result: UseStakingListResult; refresh: () => Promise<void> }) {
@@ -158,12 +159,22 @@ const StakingItemComponent = (props: { staking: StakingItem; currentWeek: bigint
                 <div className="mr-2 text-[24px] font-bold text-white">{roundEther(staking.stakeAmount, 4)}</div>
                 <div className="text-brand">WORM</div>
               </div>
-              <button
-                onClick={onReleaseClicked}
-                className="mt-5 w-full rounded-lg bg-brand px-4 py-3 font-bold text-black"
-              >
-                Release
-              </button>
+              {props.staking.state === 'Ended' && (
+                <button
+                  onClick={onReleaseClicked}
+                  className="mt-5 w-full rounded-lg bg-brand px-4 py-3 font-bold text-black"
+                >
+                  Release
+                </button>
+              )}
+              {props.staking.state !== 'Ended' && (
+                <button
+                  disabled={true}
+                  className="mt-5 w-full rounded-lg bg-[#64748B1F] px-4 py-3 font-bold text-[#64748B]"
+                >
+                  {props.staking.state === 'Released' ? 'Already released' : "Can't release yet"}
+                </button>
+              )}
             </div>
           )}
           {releaseState == 'loading' && <div className="w-full px-4 py-3 text-white">Hold on a sec...</div>}
@@ -207,7 +218,7 @@ const StakingWeekItemComponent = (props: {
               Week <span className="ml-1 font-orbitron text-[16px] text-[#727E8F]"> #{week.weekNumber}</span>
             </span>
             {props.currentWeek == week.weekNumber && (
-              <div className="ml-2 rounded-4xl bg-[#64748B1F] px-3 py-1 text-[12px] text-white ">current week</div>
+              <div className="ml-2 rounded-4xl bg-[#64748B1F] px-3 py-1 text-[12px] text-white ">Current week</div>
             )}
             <div className="grow" />
             <Icons.halfArrow />
@@ -226,7 +237,7 @@ const StakingWeekItemComponent = (props: {
               <div className="text-[12px]">
                 <span className="font-orbitron">{roundEtherF(week.yourShare)}</span>
                 <span className="text-[#727E8F]">% </span>
-                <span className="ml-1 font-orbitron">{roundEther(week.yourReward)}</span>
+                <span className="ml-1 font-orbitron">{formatEther(week.yourReward)}</span>
                 <span className="ml-1 text-[#FF47C0]">BETH</span>
               </div>
             </div>
@@ -249,7 +260,7 @@ const StakingWeekItemComponent = (props: {
               <div className="mb-5 opacity-70">Week number {week.weekNumber}</div>
               <div className="mb-1">Your reward share: </div>
               <div className="flex flex-row">
-                <div className="mr-2 text-[24px] font-bold text-white">{roundEther(week.yourReward, 4)}</div>
+                <div className="mr-2 text-[24px] font-bold text-white">{formatEther(week.yourReward)}</div>
                 <div className="text-[#FF47C0]">BETH</div>
               </div>
               <div className="mt-5 mb-1">Total reward share: </div>
@@ -257,12 +268,18 @@ const StakingWeekItemComponent = (props: {
                 <div className="mr-2 text-[24px] font-bold text-white">{roundEther(week.totalReward, 4)}</div>
                 <div className="text-[#FF47C0]">BETH</div>
               </div>
-              <button
-                onClick={onClaimClicked}
-                className="mt-5 w-full rounded-lg bg-brand px-4 py-3 font-bold text-black"
-              >
-                Claim reward
-              </button>
+              {props.week.weekNumber > props.currentWeek ? (
+                <button
+                  onClick={onClaimClicked}
+                  className="mt-5 w-full rounded-lg bg-brand px-4 py-3 font-bold text-black"
+                >
+                  Claim reward
+                </button>
+              ) : (
+                <button className="mt-5 w-full rounded-lg bg-[#64748B1F] px-4 py-3 font-bold text-[#64748B]">
+                  Can't claim reward yet
+                </button>
+              )}
             </div>
           )}
           {claimState == 'loading' && <div className="w-full px-4 py-3 text-white">Hold on a sec...</div>}
