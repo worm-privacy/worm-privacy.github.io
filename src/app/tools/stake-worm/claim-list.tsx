@@ -1,7 +1,7 @@
 import { Button, DialogTrigger } from '@/components/ui';
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog/dialog';
 import { Icons } from '@/components/ui/icons';
-import { StakingItem, StakingWeekItem, UseStakingListResult } from '@/hooks/use-staking-list';
+import { StakingItem, StakingState, StakingWeekItem, UseStakingListResult } from '@/hooks/use-staking-list';
 import { StakingContract } from '@/lib/core/contracts/staking';
 import { roundEther, roundEtherF } from '@/lib/core/utils/round-ether';
 import { useState } from 'react';
@@ -268,7 +268,7 @@ const StakingWeekItemComponent = (props: {
                 <div className="mr-2 text-[24px] font-bold text-white">{roundEther(week.totalReward, 4)}</div>
                 <div className="text-[#FF47C0]">BETH</div>
               </div>
-              {props.week.weekNumber > props.currentWeek ? (
+              {props.week.weekNumber < props.currentWeek ? (
                 <button
                   onClick={onClaimClicked}
                   className="mt-5 w-full rounded-lg bg-brand px-4 py-3 font-bold text-black"
@@ -291,7 +291,7 @@ const StakingWeekItemComponent = (props: {
   );
 };
 
-const stakingStateStyleDiff = (state: 'Active' | 'Ended' | 'Queued' | 'Released') => {
+const stakingStateStyleDiff = (state: StakingState) => {
   switch (state) {
     case 'Active':
       return 'bg-[#00C8711F] text-[#96FAD1]';
