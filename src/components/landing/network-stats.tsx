@@ -119,7 +119,7 @@ export function NetworkStats() {
             'orbitron-body2': isMobile,
           })}
         >
-          WORM (Testnet token) is live on Ethereum mainnet!
+          WORM is live on Ethereum mainnet!
         </h3>
       </span>
       <div
