@@ -60,18 +60,24 @@ const Main = (props: {
 
       {/* lists */}
       {tab === 'Staking' && (
-        <div className="scrollbar-hide flex flex-col overflow-y-scroll">
-          {props.stakes.map((e) => (
-            <StakingItemComponent staking={e} currentWeek={props.currentWeek} refresh={props.refresh} />
-          ))}
-        </div>
+        <>
+          {props.stakes.length === 0 && <div className="text-white">Nothing to show</div>}
+          <div className="scrollbar-hide flex flex-col overflow-y-scroll">
+            {props.stakes.map((e) => (
+              <StakingItemComponent staking={e} currentWeek={props.currentWeek} refresh={props.refresh} />
+            ))}
+          </div>
+        </>
       )}
       {tab === 'Weeks' && (
-        <div className="scrollbar-hide flex flex-col overflow-y-scroll">
-          {props.weeks.map((e) => (
-            <StakingWeekItemComponent week={e} currentWeek={props.currentWeek} refresh={props.refresh} />
-          ))}
-        </div>
+        <>
+          {props.weeks.length === 0 && <div className="text-white">Nothing to show</div>}
+          <div className="scrollbar-hide flex flex-col overflow-y-scroll">
+            {props.weeks.map((e) => (
+              <StakingWeekItemComponent week={e} currentWeek={props.currentWeek} refresh={props.refresh} />
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
