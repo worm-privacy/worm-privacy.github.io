@@ -14,43 +14,58 @@ export function useStakingList(): [UseStakingListResult, () => Promise<void>] {
     setResult({ status: 'loading' });
 
     try {
-      let currentWeek = 0n;
-      let notClaimed: StakingItem[] = [];
+      let currentWeek = await StakingContract.currentEpoch(client);
 
-      let stakes = await StakingContract.getAllStakes(client, address);
+      let stakes: StakingItem[] = (await StakingContract.getAllStakes(client, address)).map((e) => {
+        let state: StakingState;
+        if (e.released) {
+          state = 'Released';
+        } else {
+          if (currentWeek >= e.releaseEpoch) state = 'Ended';
+          else if (currentWeek < e.startingEpoch) state = 'Queued';
+          else state = 'Active';
+        }
+        return {
+          stakeNumber: e.index,
+          startWeek: e.startingEpoch,
+          endWeek: e.releaseEpoch,
+          state,
+          stakeAmount: e.amount,
+        };
+      });
+
+      let weeks: StakingWeekItem[] = [];
       for (let stakingLog of stakes) {
         let info = await StakingContract.info(
           client!,
           address,
-          BigInt(stakingLog.startingEpoch),
-          BigInt(stakingLog.releaseEpoch - stakingLog.startingEpoch)
+          BigInt(stakingLog.startWeek),
+          BigInt(stakingLog.endWeek - stakingLog.startWeek)
         );
-        currentWeek = info.currentEpoch;
         for (let i = 0; i < info.userLocks.length; i++) {
-          const weekNumber = BigInt(i) + stakingLog.startingEpoch;
-          if (info.userLocks[i] !== 0n) {
-            if (notClaimed.findIndex((e) => e.weekNumber === weekNumber) === -1) {
-              // 1 > share > 0
-              const share = info.totalLocks[i] === 0n ? 0 : Number(info.userLocks[i]) / Number(info.totalLocks[i]);
-              const shareAmount = BigInt(Math.round(Number(info.rewards[i]) * share));
-              notClaimed.push({
-                weekNumber,
-                totalReward: info.rewards[i],
-                shareAmount: shareAmount,
-                sharePercentage: share * 100,
-              });
-            }
+          const weekNumber = BigInt(i) + stakingLog.startWeek;
+          if (info.userLocks[i] === 0n) continue; // this prevents showing weeks with zero rewards to user (already claimed)
+
+          if (weeks.findIndex((e) => e.weekNumber === weekNumber) === -1) {
+            // 1 > share > 0
+            const share = info.totalLocks[i] === 0n ? 0 : Number(info.userLocks[i]) / Number(info.totalLocks[i]);
+            const shareAmount = BigInt(Math.round(Number(info.rewards[i]) * share));
+            weeks.push({
+              weekNumber,
+              totalReward: info.rewards[i],
+              yourShare: share * 100,
+              yourReward: shareAmount,
+            });
           }
         }
       }
 
-      let readyToClaim: StakingItem[] = [];
-      let upcoming: StakingItem[] = [];
-      for (let claim of notClaimed) {
-        if (claim.weekNumber < currentWeek) readyToClaim.push(claim);
-        else upcoming.push(claim);
-      }
-      setResult({ status: 'loaded', readyToClaim, upcoming });
+      setResult({
+        status: 'loaded',
+        stakes,
+        weeks,
+        currentWeek,
+      });
     } catch (e) {
       console.error(e);
       setResult({ status: 'error', error: 'Error reading chain data' });
@@ -70,13 +85,24 @@ export type UseStakingListResult =
     }
   | {
       status: 'loaded';
-      readyToClaim: StakingItem[];
-      upcoming: StakingItem[];
+      weeks: StakingWeekItem[];
+      stakes: StakingItem[];
+      currentWeek: bigint;
     };
 
 export type StakingItem = {
+  stakeNumber: bigint;
+  startWeek: bigint;
+  endWeek: bigint;
+  state: StakingState;
+  stakeAmount: bigint; // in WORM
+};
+
+export type StakingState = 'Active' | 'Ended' | 'Queued' | 'Released';
+
+export type StakingWeekItem = {
   weekNumber: bigint;
-  totalReward: bigint;
-  shareAmount: bigint;
-  sharePercentage: number;
+  totalReward: bigint; // in BETH
+  yourReward: bigint; // in BETH
+  yourShare: number; // 0 - 100
 };
