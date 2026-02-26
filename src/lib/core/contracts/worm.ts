@@ -1,7 +1,7 @@
 import { participationLogsRepo } from '@/lib/data/participation-logs-repo';
-import { Address, Client, parseEventLogs } from 'viem';
+import { type Account, type Chain, type WalletClient, Address, Client, parseEventLogs } from 'viem';
 import { getContractEvents, readContract, waitForTransactionReceipt } from 'viem/actions';
-import { Config } from 'wagmi';
+import { Config, Transport } from 'wagmi';
 import { WriteContractMutateAsync } from 'wagmi/query';
 import { StakingContractAddress } from './staking';
 
@@ -10,6 +10,76 @@ import { StakingContractAddress } from './staking';
 export const WORMcontractAddress = '0xfC9d98CdB3529F32cD7fb02d175547641e145B29';
 
 export namespace WORMContract {
+
+  type args = {
+    approve: [Address, bigint];
+    participate: [bigint, bigint];
+    claim: [bigint, bigint];
+    multiClaim: [{ startingEpoch: bigint; numEpochs: bigint }[]];
+  }
+
+  export type Action = {
+    to: Address;
+    abi: typeof WORMcontractABI;
+    functionName: 'approve' | 'participate' | 'claim' | 'multiClaim';
+    args: args[keyof args];
+  };
+
+  export const buildApproveAction = (amount: bigint): Action => ({
+    to: WORMcontractAddress,
+    abi: WORMcontractABI,
+    functionName: 'approve',
+    args: [StakingContractAddress, amount],
+  } as const);
+
+  export const buildParticipateAction = (amountPerEpoch: bigint, numberOfEpochs: bigint): Action => ({
+    to: WORMcontractAddress,
+    abi: WORMcontractABI,
+    functionName: 'participate',
+    args: [amountPerEpoch, numberOfEpochs],
+  } as const);
+
+  export const buildClaimAction = (start: bigint, numberOfEpochs: bigint): Action => ({
+    to: WORMcontractAddress,
+    abi: WORMcontractABI,
+    functionName: 'claim',
+    args: [start, numberOfEpochs],
+  } as const);
+
+  export const buildMultiClaimAction = (
+    epochRanges: { startingEpoch: bigint; numEpochs: bigint }[]
+  ): Action => ({
+    to: WORMcontractAddress,
+    abi: WORMcontractABI,
+    functionName: 'multiClaim',
+    args: [epochRanges],
+  });
+
+  export const executeActionsWithSendCalls = async<
+    transport extends Transport = Transport,
+    chain extends Chain | undefined = Chain | undefined,
+    account extends Account | undefined = Account | undefined
+  >(
+    walletClient: WalletClient<transport, chain, account>,
+    actions: Action[],
+    options?: {
+      account?: Account | Address | null;
+      chain?: Chain;
+      id?: string;
+      forceAtomic?: boolean;
+      experimentalFallback?: boolean;
+    }
+  ) => {
+    return walletClient.sendCallsSync({
+      account: options?.account ?? null,
+      chain: options?.chain,
+      id: options?.id,
+      forceAtomic: options?.forceAtomic,
+      experimental_fallback: options?.experimentalFallback ?? true,
+      calls: actions,
+    });
+  };
+
   export const currentEpoch = async (client: Client): Promise<bigint> => {
     return await readContract(client, {
       address: WORMcontractAddress,
