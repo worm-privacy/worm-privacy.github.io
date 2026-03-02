@@ -215,7 +215,7 @@ function ShareDetails(props: { share: AirdropShareModel; onRevealClick: () => vo
           Reveal Share
         </button>
       ) : (
-        <button onClick={onClaimClick} className="w-full rounded-lg bg-brand px-4 py-3 text-black">
+        <button  disabled={true} onClick={onClaimClick} className="w-full rounded-lg bg-brand px-4 py-3 text-black">
           Claim WORM
         </button>
       )}
