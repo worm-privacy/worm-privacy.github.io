@@ -4,11 +4,12 @@ import { Config } from 'wagmi';
 import { WriteContractMutateAsync } from 'wagmi/query';
 
 // TODO: Update this address when deployed
-export const DistributionContractAddress = '0xc98331493088676B4644fA43500d2C22CEf9202b';
+export const DistributionContractAddress = '0x9E59bCbEB00e3e6089a167a970377Fb0204cEe96';
 
 export type ShareData = {
   id: string;
   owner: string;
+  tgeStartTime: string;
   tge: string;
   startTime: string;
   initialAmount: string;
@@ -21,6 +22,7 @@ export type ShareData = {
 export type OnChainShare = {
   id: bigint;
   owner: `0x${string}`;
+  tgeStartTime: bigint,
   tge: bigint;
   startTime: bigint;
   initialAmount: bigint;
@@ -40,11 +42,12 @@ export namespace DistributionContract {
     return {
       id: tuple[0],
       owner: tuple[1],
-      tge: tuple[2],
-      startTime: tuple[3],
-      initialAmount: tuple[4],
-      amountPerSecond: tuple[5],
-      totalCap: tuple[6],
+      tgeStartTime: tuple[2],
+      tge: tuple[3],
+      startTime: tuple[4],
+      initialAmount: tuple[5],
+      amountPerSecond: tuple[6],
+      totalCap: tuple[7]
     };
   };
 
@@ -77,6 +80,7 @@ export namespace DistributionContract {
     const shareStruct = {
       id: BigInt(share.id),
       owner: share.owner as `0x${string}`,
+      tgeStartTime: BigInt(share.tgeStartTime),
       tge: BigInt(share.tge),
       startTime: BigInt(share.startTime),
       initialAmount: BigInt(share.initialAmount),
@@ -219,6 +223,11 @@ export const DistributionContractABI = [
             internalType: 'address',
           },
           {
+            name: 'tgeStartTime',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
             name: 'tge',
             type: 'uint256',
             internalType: 'uint256',
@@ -293,6 +302,11 @@ export const DistributionContractABI = [
         name: 'owner',
         type: 'address',
         internalType: 'address',
+      },
+      {
+        name: 'tgeStartTime',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
         name: 'tge',
@@ -392,6 +406,11 @@ export const DistributionContractABI = [
             name: 'owner',
             type: 'address',
             internalType: 'address',
+          },
+          {
+            name: 'tgeStartTime',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
             name: 'tge',
