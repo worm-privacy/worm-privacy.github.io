@@ -46,4 +46,5 @@ const TABS = [
   { path: '/tools/claim-worm', label: 'Claim WORM', disabled: false },
   { path: '/tools/stake-worm', label: 'Stake WORM', disabled: false },
   { path: '/tools/airdrop', label: 'TGE', disabled: false },
+  { path: '/tools/ico', label: 'ICO', disabled: false },
 ];
