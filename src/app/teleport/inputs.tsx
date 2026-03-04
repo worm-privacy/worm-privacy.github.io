@@ -1,22 +1,77 @@
 import InputComponent from '@/components/tools/input-text';
 import { Icons } from '@/components/ui/icons';
+import { useDebounceEffect } from '@/hooks/use-debounce-effect';
 import { useInput } from '@/hooks/use-input';
+import { CypherETHQuoterContract } from '@/lib/core/contracts/cyphereth-quoter';
+import { proof_get } from '@/lib/core/miner-api/proof-get';
+import { relay_get } from '@/lib/core/miner-api/relay-get';
+import { calculateMintAmount } from '@/lib/core/utils/beth-amount-calculator';
+import { roundEther } from '@/lib/core/utils/round-ether';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
 import { loadJson } from '@/lib/utils/load-json';
 import { RecoverData, recoverDataFromJson } from '@/lib/utils/recover-data';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { parseEther } from 'viem';
+import { useClient } from 'wagmi';
+import { DEFAULT_ENDPOINT } from '../tools/burn-eth/mint-beth';
 
 export const Inputs = (props: {
   onStart: (burnAmount: bigint, receiverAddress: `0x${string}`) => void;
   onRecover: (backup: RecoverData) => void;
 }) => {
+  const client = useClient();
+
+  // inputs
   const burnAmount = useInput('', validateETHAmount);
   const receiverAddress = useInput('', validateAddress);
 
-  const [receiveAmount, setReceiveAmount] = useState(0n);
+  // fees
+  const [proverFee, setProverFee] = useState<bigint | null>(null); // null means not loaded yet
+  const [broadcasterFee, setBroadcasterFee] = useState<bigint | null>(null); // null means not loaded yet
 
-  const estimatedETH: string = '0.1234';
+  // calculate/estimate
+  const [mintAmount, setMintAmount] = useState(0n); // this is BETH
+  const [receiveAmount, setReceiveAmount] = useState(0n); // this is ETH
+
+  useEffect(() => {
+    // TODO call these two in parallel
+    relay_get(DEFAULT_ENDPOINT.url)
+      .then((response) => {
+        setBroadcasterFee(response.min_broadcaster_fee);
+      })
+      .catch((e) => {
+        // TODO handle error
+      });
+    proof_get(DEFAULT_ENDPOINT.url)
+      .then((response) => {
+        setProverFee(response.min_prover_fee);
+      })
+      .catch((e) => {
+        // TODO handle error
+      });
+  }, []);
+
+  useEffect(() => {
+    if (proverFee == null || broadcasterFee == null) return;
+    // Swap amount sets 0 because we want to swap all of it anyway
+    setMintAmount(calculateMintAmount(parseEther(burnAmount.value), 0n, proverFee, broadcasterFee));
+  }, [burnAmount, proverFee, broadcasterFee]);
+
+  useDebounceEffect(
+    () => {
+      CypherETHQuoterContract.estimateBethEtherSwap(client!, mintAmount)
+        .then((estimatedAmount) => {
+          console.log('estimatedAmount:', estimatedAmount);
+          setReceiveAmount(estimatedAmount);
+        })
+        .catch((e) => {
+          console.error(e);
+          //TODO handle error
+        });
+    },
+    1000,
+    [mintAmount]
+  );
 
   const onStartClick = () => {
     if (!validateAll(burnAmount, receiverAddress)) return;
@@ -61,10 +116,10 @@ export const Inputs = (props: {
         </div>
 
         <div className="text-[16px]">
-          {estimatedETH !== '' ? (
+          {roundEther(receiveAmount) !== '' ? (
             <>
               <span className="mb-1 text-white">You will get</span>
-              <span className="text-white"> ~{estimatedETH}</span>
+              <span className="text-white"> ~{receiveAmount}</span>
               <span className="text-blue-400"> ETH</span>
             </>
           ) : undefined}

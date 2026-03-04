@@ -349,8 +349,9 @@ enum FlowState {
   Submitted,
 }
 
-const ENDPOINTS = [
+export const ENDPOINTS = [
   { name: 'WORM public prover #1', url: 'https://prover-1.worm.cx' },
   { name: 'Metatarz prover', url: 'https://worm-prover.metatarz.xyz' },
   { name: 'Local machine', url: 'http://localhost:8080' },
 ];
+export const DEFAULT_ENDPOINT = ENDPOINTS[0];
