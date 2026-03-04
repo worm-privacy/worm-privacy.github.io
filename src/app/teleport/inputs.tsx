@@ -16,7 +16,7 @@ import { useClient } from 'wagmi';
 import { DEFAULT_ENDPOINT } from '../tools/burn-eth/mint-beth';
 
 export const Inputs = (props: {
-  onStart: (burnAmount: bigint, receiverAddress: `0x${string}`) => void;
+  onStart: (burnAmount: bigint, receiverAddress: `0x${string}`, proverFee: bigint, broadcasterFee: bigint) => void;
   onRecover: (backup: RecoverData) => void;
 }) => {
   const client = useClient();
@@ -75,6 +75,7 @@ export const Inputs = (props: {
 
   const onStartClick = () => {
     if (!validateAll(burnAmount, receiverAddress)) return;
+    if (proverFee == null || broadcasterFee == null) return;
 
     if (receiveAmount < 0n) {
       burnAmount.setError('Burn amount is too low');
@@ -85,7 +86,7 @@ export const Inputs = (props: {
       burnAmount.setError('You can not burn more then 10 ETH');
       return;
     }
-    props.onStart(burnAmountN, receiverAddress.value as `0x${string}`);
+    props.onStart(burnAmountN, receiverAddress.value as `0x${string}`, proverFee, broadcasterFee);
   };
   const onRecoverClick = async () => props.onRecover(recoverDataFromJson(await loadJson()));
 

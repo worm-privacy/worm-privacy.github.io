@@ -5,14 +5,38 @@ import StepsComponent, { StepItem } from '@/components/tools/steps';
 import TopBar from '@/components/tools/topbar';
 import { WalletNotConnectedContainer } from '@/components/tools/wallet-not-connected';
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
-import { RecoverData } from '@/lib/utils/recover-data';
+import { generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
+import { BETHToETHContract } from '@/lib/core/contracts/beth-to-eth';
+import { newSavableRecoverData, RecoverData } from '@/lib/utils/recover-data';
+import { saveJson } from '@/lib/utils/save-json';
 import { useState } from 'react';
+import { hexToBytes } from 'viem';
 import { Inputs } from './inputs';
 
 export default function Teleport() {
   const [currentStep, setCurrentStep] = useState(-1); // -1 means user input state
 
-  const onStart = (burnAmount: bigint, receiverAddress: `0x${string}`) => {
+  const onStart = async (
+    burnAmount: bigint,
+    receiverAddress: `0x${string}`,
+    proverFee: bigint,
+    broadcasterFee: bigint
+  ) => {
+    setCurrentStep(0);
+
+    const swapCalldata = BETHToETHContract.createSwapHook(burnAmount, receiverAddress as `0x${string}`);
+    const burnAddress = await generateBurnAddress(
+      receiverAddress,
+      proverFee,
+      broadcasterFee,
+      burnAmount,
+      hexToBytes(swapCalldata)
+    );
+
+    saveJson(newSavableRecoverData(burnAddress), `burn_${burnAddress.burnAddress}_backup.json`);
+
+    setCurrentStep(1);
+
     console.log('onStart', burnAmount, receiverAddress);
   };
 
