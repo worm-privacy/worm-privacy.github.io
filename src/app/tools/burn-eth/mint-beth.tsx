@@ -189,7 +189,7 @@ export const MintBETHLayout = (props: {
   }
 };
 
-const GET_PROOF_RESULT_POLLING_INTERVAL = 5000;
+export const GET_PROOF_RESULT_POLLING_INTERVAL = 5000;
 const EndPointSelection = (props: {
   mintAmount: string;
   burnAddress: BurnAddressContent;

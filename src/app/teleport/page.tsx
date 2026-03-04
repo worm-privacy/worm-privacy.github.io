@@ -6,22 +6,34 @@ import TopBar from '@/components/tools/topbar';
 import { WalletNotConnectedContainer } from '@/components/tools/wallet-not-connected';
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
 import { generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
+import { calculateNullifier } from '@/lib/core/burn-address/nullifier';
 import { BETHToETHContract } from '@/lib/core/contracts/beth-to-eth';
+import { proof_get_by_nullifier, RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
+import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-post';
+import { transferETH } from '@/lib/core/utils/transfer-eth';
 import { newSavableRecoverData, RecoverData } from '@/lib/utils/recover-data';
 import { saveJson } from '@/lib/utils/save-json';
 import { useState } from 'react';
-import { hexToBytes } from 'viem';
+import { hexToBytes, toHex } from 'viem';
+import { useClient, usePublicClient, useSendTransaction } from 'wagmi';
+import { DEFAULT_ENDPOINT, GET_PROOF_RESULT_POLLING_INTERVAL } from '../tools/burn-eth/mint-beth';
 import { Inputs } from './inputs';
 
 export default function Teleport() {
   const [currentStep, setCurrentStep] = useState(-1); // -1 means user input state
 
+  const { mutateAsync } = useSendTransaction();
+  const client = useClient();
+  const publicClient = usePublicClient();
+
+  // TODO error handling
   const onStart = async (
     burnAmount: bigint,
     receiverAddress: `0x${string}`,
     proverFee: bigint,
     broadcasterFee: bigint
   ) => {
+    console.log('onStart', burnAmount, receiverAddress);
     setCurrentStep(0);
 
     const swapCalldata = BETHToETHContract.createSwapHook(burnAmount, receiverAddress as `0x${string}`);
@@ -37,7 +49,40 @@ export default function Teleport() {
 
     setCurrentStep(1);
 
-    console.log('onStart', burnAmount, receiverAddress);
+    await transferETH(mutateAsync, client!, burnAddress.revealAmount, burnAddress.burnAddress);
+
+    setCurrentStep(2);
+
+    let blockNumber = (await publicClient!.getBlock()).number;
+    let accountProof = await publicClient?.getProof({
+      address: burnAddress.burnAddress as `0x${string}`,
+      storageKeys: [],
+      blockNumber: blockNumber,
+    });
+
+    await proof_post(
+      DEFAULT_ENDPOINT.url,
+      createProofPostRequest(
+        blockNumber,
+        'mainnet',
+        burnAddress.burnKey,
+        burnAddress.receiverAddr,
+        burnAddress.broadcasterFee,
+        burnAddress.proverFee,
+        burnAddress.revealAmount,
+        toHex(burnAddress.receiverHook),
+        accountProof!
+      )
+    );
+
+    const nullifier = calculateNullifier(burnAddress.burnKey);
+    let rapidsnarkProof: RapidsnarkOutput | null = null;
+    while (accountProof === null) {
+      const result = await proof_get_by_nullifier(DEFAULT_ENDPOINT.url, toHex(nullifier));
+      if (result.status == 'done') rapidsnarkProof = result.proof;
+      await new Promise((resolve) => setTimeout(resolve, GET_PROOF_RESULT_POLLING_INTERVAL));
+    }
+    console.log('rapidsnarkProof:', rapidsnarkProof);
   };
 
   const onRecover = (recoverData: RecoverData) => {
