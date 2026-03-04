@@ -1,16 +1,38 @@
 import InputComponent from '@/components/tools/input-text';
 import { Icons } from '@/components/ui/icons';
 import { useInput } from '@/hooks/use-input';
-import { validateAddress, validateETHAmount } from '@/lib/core/utils/validator';
+import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
+import { loadJson } from '@/lib/utils/load-json';
+import { RecoverData, recoverDataFromJson } from '@/lib/utils/recover-data';
 import { useState } from 'react';
+import { parseEther } from 'viem';
 
-export const Inputs = () => {
+export const Inputs = (props: {
+  onStart: (burnAmount: bigint, receiverAddress: `0x${string}`) => void;
+  onRecover: (backup: RecoverData) => void;
+}) => {
   const burnAmount = useInput('', validateETHAmount);
   const receiverAddress = useInput('', validateAddress);
 
-  const receiveAmount = useState(0n);
+  const [receiveAmount, setReceiveAmount] = useState(0n);
 
   const estimatedETH: string = '0.1234';
+
+  const onStartClick = () => {
+    if (!validateAll(burnAmount, receiverAddress)) return;
+
+    if (receiveAmount < 0n) {
+      burnAmount.setError('Burn amount is too low');
+      return;
+    }
+    const burnAmountN = parseEther(burnAmount.value);
+    if (burnAmountN > parseEther('10')) {
+      burnAmount.setError('You can not burn more then 10 ETH');
+      return;
+    }
+    props.onStart(burnAmountN, receiverAddress.value as `0x${string}`);
+  };
+  const onRecoverClick = async () => props.onRecover(recoverDataFromJson(await loadJson()));
 
   return (
     <div className="mx-auto w-[580px] rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#010204] p-4 shadow-lg">
@@ -48,9 +70,14 @@ export const Inputs = () => {
           ) : undefined}
         </div>
 
-        <button className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black">Teleport!</button>
+        <button onClick={onStartClick} className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black">
+          Teleport!
+        </button>
 
-        <button className="flex w-full flex-row items-center justify-center py-3 text-sm font-medium text-brand">
+        <button
+          onClick={onRecoverClick}
+          className="flex w-full flex-row items-center justify-center py-3 text-sm font-medium text-brand"
+        >
           <Icons.recover className="mr-2" />
           Recover
         </button>

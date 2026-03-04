@@ -5,14 +5,20 @@ import StepsComponent, { StepItem } from '@/components/tools/steps';
 import TopBar from '@/components/tools/topbar';
 import { WalletNotConnectedContainer } from '@/components/tools/wallet-not-connected';
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
+import { RecoverData } from '@/lib/utils/recover-data';
 import { useState } from 'react';
 import { Inputs } from './inputs';
 
 export default function Teleport() {
   const [currentStep, setCurrentStep] = useState(-1); // -1 means user input state
 
-  const onStart = () => {};
-  const onRecover = () => {};
+  const onStart = (burnAmount: bigint, receiverAddress: `0x${string}`) => {
+    console.log('onStart', burnAmount, receiverAddress);
+  };
+
+  const onRecover = (recoverData: RecoverData) => {
+    console.log('onRecover', recoverData);
+  };
 
   return (
     <SmoothScroll>
@@ -22,7 +28,11 @@ export default function Teleport() {
           <div>
             <div className="m-auto max-w-310">
               <div className="mt-6 mb-3 text-[24px] font-bold text-white">Teleport</div>
-              {currentStep == -1 ? <Inputs /> : <StepsComponent steps={TELEPORT_STEPS} selected={currentStep} />}
+              {currentStep == -1 ? (
+                <Inputs onStart={onStart} onRecover={onRecover} />
+              ) : (
+                <StepsComponent steps={TELEPORT_STEPS} selected={currentStep} />
+              )}
             </div>
           </div>
         </WalletNotConnectedContainer>
