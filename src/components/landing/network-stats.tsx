@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { Contract, JsonRpcProvider } from 'ethers';
 import { useEffect, useState } from 'react';
 
-const RPC_URL = 'https://eth.meowrpc.com';
+const RPC_URL = 'https://eth.drpc.org';
 
 export function NetworkStats() {
   const isMobile = useIsMobile();

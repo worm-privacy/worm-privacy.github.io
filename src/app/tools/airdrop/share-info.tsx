@@ -57,7 +57,7 @@ export default function AirdropShareInfo(props: { result: UseAirdropSharesResult
     if (!client) return;
     try {
       setActionState('loading');
-      await DistributionContract.reveal(mutateAsync, client, selectedShare.shareData);
+      await DistributionContract.reveal(mutateAsync, client, selectedShare.shareData, selectedShare.shareData.contract);
       setActionState('done');
       await props.refresh();
     } catch (e) {
@@ -70,7 +70,7 @@ export default function AirdropShareInfo(props: { result: UseAirdropSharesResult
     if (!client) return;
     try {
       setActionState('loading');
-      await DistributionContract.trigger(mutateAsync, client, BigInt(selectedShare.shareData.id));
+      await DistributionContract.trigger(mutateAsync, client, BigInt(selectedShare.shareData.id), selectedShare.shareData.contract);
       setActionState('done');
       await props.refresh();
     } catch (e) {
