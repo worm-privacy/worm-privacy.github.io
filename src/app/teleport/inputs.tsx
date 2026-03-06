@@ -16,7 +16,13 @@ import { useClient } from 'wagmi';
 import { DEFAULT_ENDPOINT } from '../tools/burn-eth/mint-beth';
 
 export const Inputs = (props: {
-  onStart: (burnAmount: bigint, receiverAddress: `0x${string}`, proverFee: bigint, broadcasterFee: bigint) => void;
+  onStart: (
+    burnAmount: bigint,
+    receiverAddress: `0x${string}`,
+    proverAddress: `0x${string}`,
+    proverFee: bigint,
+    broadcasterFee: bigint
+  ) => void;
   onRecover: (backup: RecoverData) => void;
 }) => {
   const client = useClient();
@@ -28,6 +34,7 @@ export const Inputs = (props: {
   // fees
   const [proverFee, setProverFee] = useState<bigint | null>(null); // null means not loaded yet
   const [broadcasterFee, setBroadcasterFee] = useState<bigint | null>(null); // null means not loaded yet
+  const [proverAddress, setProverAddress] = useState<`0x${string}` | null>(null); // null means not loaded yet
 
   // calculate/estimate
   const [mintAmount, setMintAmount] = useState(0n); // this is BETH
@@ -45,6 +52,7 @@ export const Inputs = (props: {
     proof_get(DEFAULT_ENDPOINT.url)
       .then((response) => {
         setProverFee(response.min_prover_fee);
+        setProverAddress(response.prover_address);
       })
       .catch((e) => {
         // TODO handle error
@@ -86,7 +94,7 @@ export const Inputs = (props: {
       burnAmount.setError('You can not burn more then 10 ETH');
       return;
     }
-    props.onStart(burnAmountN, receiverAddress.value as `0x${string}`, proverFee, broadcasterFee);
+    props.onStart(burnAmountN, receiverAddress.value as `0x${string}`, proverAddress!, proverFee, broadcasterFee);
   };
   const onRecoverClick = async () => props.onRecover(recoverDataFromJson(await loadJson()));
 
