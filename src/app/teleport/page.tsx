@@ -8,6 +8,7 @@ import { SmoothScroll } from '@/components/ui/smoth-scroll';
 import { generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
 import { calculateNullifier } from '@/lib/core/burn-address/nullifier';
 import { calculateRemainingCoinHash } from '@/lib/core/burn-address/remaining_coin';
+import { BETHContract } from '@/lib/core/contracts/beth';
 import { BETHToETHContract } from '@/lib/core/contracts/beth-to-eth';
 import { proof_get_by_nullifier, RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
 import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-post';
@@ -104,9 +105,18 @@ export default function Teleport() {
     });
 
     console.log('waiting fot receipt trx_hash:', trxHash);
-    let receipt = await waitForTransactionReceipt(client!, { hash: trxHash });
-    if (receipt.status === 'reverted') throw 'mintCoin reverted';
-    console.log('got receipt:', trxHash);
+    try {
+      let receipt = await waitForTransactionReceipt(client!, { hash: trxHash });
+      if (receipt.status === 'reverted') throw 'mintCoin reverted';
+      console.log('got receipt:', trxHash);
+    } catch (e) {
+      console.error(e);
+      console.log('Plan B: checking for nullifier on contract');
+      // plan B: check if nullifier exists on contract
+      await new Promise((resolve) => setTimeout(resolve, 15000)); // wait for one block time
+      const exists = await BETHContract.checkNullifier(client!, nullifier);
+      if (!exists) throw 'nullifier is not on contract';
+    }
   };
 
   const onRecover = (recoverData: RecoverData) => {

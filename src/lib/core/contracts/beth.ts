@@ -1,5 +1,5 @@
 import { Client, hexToBigInt } from 'viem';
-import { waitForTransactionReceipt } from 'viem/actions';
+import { readContract, waitForTransactionReceipt } from 'viem/actions';
 import { Config } from 'wagmi';
 import { WriteContractMutateAsync } from 'wagmi/query';
 import { RapidsnarkOutput } from '../miner-api/proof-get-by-nullifier';
@@ -78,6 +78,16 @@ export namespace BETHContract {
     let r = await waitForTransactionReceipt(client!, { hash: trxHash });
     if (r.status == 'reverted') throw 'mintCoin reverted';
     console.log('got receipt');
+  };
+
+  // returns true if nullifier exist in contract
+  export const checkNullifier = async (client: Client, nullifier: bigint) => {
+    return await readContract(client, {
+      address: BETHContractAddress,
+      abi: BETHContractABI,
+      functionName: 'nullifiers',
+      args: [nullifier],
+    });
   };
 }
 
