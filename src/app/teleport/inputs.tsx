@@ -10,7 +10,7 @@ import { roundEther } from '@/lib/core/utils/round-ether';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
 import { loadJson } from '@/lib/utils/load-json';
 import { RecoverData, recoverDataFromJson } from '@/lib/utils/recover-data';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { parseEther } from 'viem';
 import { useClient } from 'wagmi';
 import { DEFAULT_ENDPOINT } from '../tools/burn-eth/mint-beth';
@@ -24,6 +24,7 @@ export const Inputs = (props: {
     broadcasterFee: bigint
   ) => void;
   onRecover: (backup: RecoverData) => void;
+  setError: Dispatch<SetStateAction<string | null>>;
 }) => {
   const client = useClient();
 
@@ -47,7 +48,8 @@ export const Inputs = (props: {
         setBroadcasterFee(response.min_broadcaster_fee);
       })
       .catch((e) => {
-        // TODO handle error
+        console.error('relay_get:', e);
+        props.setError('Error while getting info from server');
       });
     proof_get(DEFAULT_ENDPOINT.url)
       .then((response) => {
@@ -55,7 +57,8 @@ export const Inputs = (props: {
         setProverAddress(response.prover_address);
       })
       .catch((e) => {
-        // TODO handle error
+        console.error('proof_get', e);
+        props.setError('Error while getting info from server');
       });
   }, []);
 
@@ -74,7 +77,7 @@ export const Inputs = (props: {
         })
         .catch((e) => {
           console.error(e);
-          //TODO handle error
+          props.setError('Error while Estimating receive amount');
         });
     },
     1000,

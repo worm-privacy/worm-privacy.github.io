@@ -1,6 +1,7 @@
 'use client';
 
 import { Footer } from '@/components/landing';
+import ErrorComponent from '@/components/tools/error-component';
 import StepsComponent, { StepItem } from '@/components/tools/steps';
 import TopBar from '@/components/tools/topbar';
 import { WalletNotConnectedContainer } from '@/components/tools/wallet-not-connected';
@@ -26,6 +27,7 @@ import { Inputs } from './inputs';
 
 export default function Teleport() {
   const [currentStep, setCurrentStep] = useState(-1); // -1 means user input state
+  const [error, setError] = useState<string | null>('Error happened'); // null means no error state
 
   const { mutateAsync } = useSendTransaction();
   const client = useClient();
@@ -39,32 +41,47 @@ export default function Teleport() {
     proverFee: bigint,
     broadcasterFee: bigint
   ) => {
-    console.log('onStart', burnAmount, receiverAddress);
-    setCurrentStep(0);
+    try {
+      console.log('onStart', burnAmount, receiverAddress);
+      setCurrentStep(0);
 
-    const swapCalldata = hexToBytes(BETHToETHContract.createSwapHook(burnAmount, receiverAddress as `0x${string}`));
-    const burnAddress = await generateBurnAddress(receiverAddress, proverFee, broadcasterFee, burnAmount, swapCalldata);
+      const swapCalldata = hexToBytes(BETHToETHContract.createSwapHook(burnAmount, receiverAddress as `0x${string}`));
+      const burnAddress = await generateBurnAddress(
+        receiverAddress,
+        proverFee,
+        broadcasterFee,
+        burnAmount,
+        swapCalldata
+      );
 
-    saveJson(newSavableRecoverData(burnAddress), `burn_${burnAddress.burnAddress}_backup.json`);
+      saveJson(newSavableRecoverData(burnAddress), `burn_${burnAddress.burnAddress}_backup.json`);
 
-    setCurrentStep(1);
+      setCurrentStep(1);
 
-    await transferETH(mutateAsync, client!, burnAddress.revealAmount, burnAddress.burnAddress);
+      await transferETH(mutateAsync, client!, burnAddress.revealAmount, burnAddress.burnAddress);
 
-    generateAndSubmit(client!, burnAddress, setCurrentStep, publicClient, burnAmount, proverAddress);
+      generateAndSubmit(client!, burnAddress, setCurrentStep, publicClient, burnAmount, proverAddress);
+    } catch (e) {
+      console.error('onStart', e);
+      setError('Error happened');
+    }
   };
 
   const onRecover = (recoverData: RecoverData) => {
     console.log('onRecover', recoverData);
-
-    generateAndSubmit(
-      client!,
-      recoverData.burn,
-      setCurrentStep,
-      publicClient,
-      recoverData.burn.revealAmount,
-      undefined
-    );
+    try {
+      generateAndSubmit(
+        client!,
+        recoverData.burn,
+        setCurrentStep,
+        publicClient,
+        recoverData.burn.revealAmount,
+        undefined
+      );
+    } catch (e) {
+      console.error('onRecover', e);
+      setError('Error happened');
+    }
   };
 
   return (
@@ -75,8 +92,10 @@ export default function Teleport() {
           <div>
             <div className="m-auto max-w-310">
               <div className="mt-6 mb-3 text-[24px] font-bold text-white">Teleport</div>
-              {currentStep == -1 ? (
-                <Inputs onStart={onStart} onRecover={onRecover} />
+              {error ? (
+                <ErrorComponent title={error} />
+              ) : currentStep == -1 ? (
+                <Inputs onStart={onStart} onRecover={onRecover} setError={setError} />
               ) : (
                 <StepsComponent steps={TELEPORT_STEPS} selected={currentStep} />
               )}
