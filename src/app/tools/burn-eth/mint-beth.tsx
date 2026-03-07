@@ -103,9 +103,18 @@ export const MintBETHLayout = (props: {
           swap_calldata: props.burnAddress.receiverHook,
         });
         console.log('waiting fot receipt trx_hash:', trxHash);
-        let receipt = await waitForTransactionReceipt(client!, { hash: trxHash });
-        if (receipt.status == 'reverted') throw 'mintCoin reverted';
-        console.log('got receipt');
+        try {
+          let receipt = await waitForTransactionReceipt(client!, { hash: trxHash });
+          if (receipt.status == 'reverted') throw 'mintCoin reverted';
+          console.log('got receipt');
+        } catch (e) {
+          console.error(e);
+          console.log('Plan B: checking for nullifier on contract');
+          // plan B: check if nullifier exists on contract
+          await new Promise((resolve) => setTimeout(resolve, 15000)); // wait for one block time
+          const exists = await BETHContract.checkNullifier(client!, nullifier);
+          if (!exists) throw 'Proof Submission failed';
+        }
       }
       setIsLoading(null);
       setFlowState(FlowState.Submitted);

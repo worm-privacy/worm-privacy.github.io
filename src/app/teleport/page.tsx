@@ -33,7 +33,6 @@ export default function Teleport() {
   const client = useClient();
   const publicClient = usePublicClient();
 
-  // TODO error handling
   const onStart = async (
     burnAmount: bigint,
     receiverAddress: `0x${string}`,
