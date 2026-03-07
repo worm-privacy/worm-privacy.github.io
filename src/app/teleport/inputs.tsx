@@ -5,13 +5,13 @@ import { useInput } from '@/hooks/use-input';
 import { CypherETHQuoterContract } from '@/lib/core/contracts/cyphereth-quoter';
 import { proof_get } from '@/lib/core/miner-api/proof-get';
 import { relay_get } from '@/lib/core/miner-api/relay-get';
-import { calculateMintAmount } from '@/lib/core/utils/beth-amount-calculator';
+import { calculateMintAmount, POOL_SHARE_INV } from '@/lib/core/utils/beth-amount-calculator';
 import { roundEther } from '@/lib/core/utils/round-ether';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
 import { loadJson } from '@/lib/utils/load-json';
 import { RecoverData, recoverDataFromJson } from '@/lib/utils/recover-data';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { parseEther } from 'viem';
+import { formatEther, parseEther } from 'viem';
 import { useClient } from 'wagmi';
 import { DEFAULT_ENDPOINT } from '../tools/burn-eth/mint-beth';
 
@@ -35,6 +35,8 @@ export const Inputs = (props: {
   // fees
   const [proverFee, setProverFee] = useState<bigint | null>(null); // null means not loaded yet
   const [broadcasterFee, setBroadcasterFee] = useState<bigint | null>(null); // null means not loaded yet
+  const protocolFee = burnAmount.value === '' ? 0n : parseEther(burnAmount.value) / POOL_SHARE_INV;
+
   const [proverAddress, setProverAddress] = useState<`0x${string}` | null>(null); // null means not loaded yet
 
   // calculate/estimate
@@ -115,15 +117,15 @@ export const Inputs = (props: {
         <div className="space-y-1">
           <div className="flex justify-between text-[16px]">
             <span className="text-[#94A3B8]">Prover fee</span>
-            <span className="text-[#94A3B8]">{1} BETH</span>
+            <span className="text-[#94A3B8]">{proverFee == null ? '...' : formatEther(proverFee)} BETH</span>
           </div>
           <div className="flex justify-between text-[16px]">
             <span className="text-[#94A3B8]">Broadcaster fee</span>
-            <span className="text-[#94A3B8]">{1} BETH</span>
+            <span className="text-[#94A3B8]">{broadcasterFee == null ? '...' : formatEther(broadcasterFee)} BETH</span>
           </div>
           <div className="flex justify-between text-[16px]">
             <span className="text-[#94A3B8]">Protocol fee</span>
-            <span className="text-[#94A3B8]">{1} BETH</span>
+            <span className="text-[#94A3B8]">{formatEther(protocolFee)} BETH</span>
           </div>
         </div>
 

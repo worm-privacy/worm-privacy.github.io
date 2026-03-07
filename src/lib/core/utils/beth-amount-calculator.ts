@@ -1,7 +1,7 @@
 import { formatEther, parseEther } from 'ethers';
 
 /// this 0.5% goes to stakers
-const POOL_SHARE_INV = 200n as const; // 0.5%
+export const POOL_SHARE_INV = 200n as const; // 0.5%
 
 /// returns amount of BETH user will get
 export const calculateMintAmountStr = (
