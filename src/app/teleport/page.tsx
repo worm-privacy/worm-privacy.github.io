@@ -5,19 +5,20 @@ import StepsComponent, { StepItem } from '@/components/tools/steps';
 import TopBar from '@/components/tools/topbar';
 import { WalletNotConnectedContainer } from '@/components/tools/wallet-not-connected';
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
-import { generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
+import { BurnAddressContent, generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
 import { calculateNullifier } from '@/lib/core/burn-address/nullifier';
 import { calculateRemainingCoinHash } from '@/lib/core/burn-address/remaining_coin';
 import { BETHContract } from '@/lib/core/contracts/beth';
 import { BETHToETHContract } from '@/lib/core/contracts/beth-to-eth';
+import { proof_get } from '@/lib/core/miner-api/proof-get';
 import { proof_get_by_nullifier, RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
 import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-post';
 import { relay_post } from '@/lib/core/miner-api/relay_post';
 import { transferETH } from '@/lib/core/utils/transfer-eth';
 import { newSavableRecoverData, RecoverData } from '@/lib/utils/recover-data';
 import { saveJson } from '@/lib/utils/save-json';
-import { useState } from 'react';
-import { hexToBytes, toHex } from 'viem';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { Client, hexToBytes, toHex } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useClient, usePublicClient, useSendTransaction } from 'wagmi';
 import { DEFAULT_ENDPOINT, GET_PROOF_RESULT_POLLING_INTERVAL } from '../tools/burn-eth/mint-beth';
@@ -50,77 +51,20 @@ export default function Teleport() {
 
     await transferETH(mutateAsync, client!, burnAddress.revealAmount, burnAddress.burnAddress);
 
-    setCurrentStep(2);
-
-    let blockNumber = (await publicClient!.getBlock()).number;
-    let accountProof = await publicClient?.getProof({
-      address: burnAddress.burnAddress as `0x${string}`,
-      storageKeys: [],
-      blockNumber: blockNumber,
-    });
-
-    await proof_post(
-      DEFAULT_ENDPOINT.url,
-      createProofPostRequest(
-        blockNumber,
-        'mainnet',
-        burnAddress.burnKey,
-        burnAddress.receiverAddr,
-        burnAddress.broadcasterFee,
-        burnAddress.proverFee,
-        burnAddress.revealAmount,
-        toHex(burnAddress.receiverHook),
-        accountProof!
-      )
-    );
-
-    const nullifier = calculateNullifier(burnAddress.burnKey);
-    let rapidsnarkProof: RapidsnarkOutput | null = null;
-    while (accountProof === null) {
-      const result = await proof_get_by_nullifier(DEFAULT_ENDPOINT.url, toHex(nullifier));
-      if (result.status == 'done') rapidsnarkProof = result.proof;
-      await new Promise((resolve) => setTimeout(resolve, GET_PROOF_RESULT_POLLING_INTERVAL));
-    }
-    console.log('rapidsnarkProof:', rapidsnarkProof);
-
-    setCurrentStep(3);
-
-    const remainingCoin = calculateRemainingCoinHash(
-      burnAddress.burnKey,
-      burnAddress.revealAmount,
-      burnAddress.revealAmount
-    );
-
-    const trxHash = await relay_post(DEFAULT_ENDPOINT.url, {
-      network: 'mainnet',
-      proof: rapidsnarkProof!,
-      nullifier,
-      remaining_coin: remainingCoin,
-      broadcaster_fee: burnAddress.broadcasterFee,
-      reveal_amount: burnAmount,
-      receiver: burnAddress.receiverAddr,
-      prover_fee: burnAddress.proverFee,
-      prover_address: proverAddress,
-      swap_calldata: swapCalldata,
-    });
-
-    console.log('waiting fot receipt trx_hash:', trxHash);
-    try {
-      let receipt = await waitForTransactionReceipt(client!, { hash: trxHash });
-      if (receipt.status === 'reverted') throw 'mintCoin reverted';
-      console.log('got receipt:', trxHash);
-    } catch (e) {
-      console.error(e);
-      console.log('Plan B: checking for nullifier on contract');
-      // plan B: check if nullifier exists on contract
-      await new Promise((resolve) => setTimeout(resolve, 15000)); // wait for one block time
-      const exists = await BETHContract.checkNullifier(client!, nullifier);
-      if (!exists) throw 'nullifier is not on contract';
-    }
+    generateAndSubmit(client!, burnAddress, setCurrentStep, publicClient, burnAmount, proverAddress);
   };
 
   const onRecover = (recoverData: RecoverData) => {
     console.log('onRecover', recoverData);
+
+    generateAndSubmit(
+      client!,
+      recoverData.burn,
+      setCurrentStep,
+      publicClient,
+      recoverData.burn.revealAmount,
+      undefined
+    );
   };
 
   return (
@@ -164,3 +108,79 @@ const TELEPORT_STEPS: StepItem[] = [
     description: 'Get ETH',
   },
 ];
+
+const generateAndSubmit = async (
+  client: Client,
+  burnAddress: BurnAddressContent,
+  setCurrentStep: Dispatch<SetStateAction<number>>,
+  publicClient: any, // pass whatever usePublicClient() returns
+  burnAmount: bigint,
+  proverAddress?: `0x${string}`
+) => {
+  setCurrentStep(2);
+  let blockNumber = (await publicClient!.getBlock()).number;
+  let accountProof = await publicClient?.getProof({
+    address: burnAddress.burnAddress as `0x${string}`,
+    storageKeys: [],
+    blockNumber: blockNumber,
+  });
+
+  await proof_post(
+    DEFAULT_ENDPOINT.url,
+    createProofPostRequest(
+      blockNumber,
+      'mainnet',
+      burnAddress.burnKey,
+      burnAddress.receiverAddr,
+      burnAddress.broadcasterFee,
+      burnAddress.proverFee,
+      burnAddress.revealAmount,
+      toHex(burnAddress.receiverHook),
+      accountProof!
+    )
+  );
+
+  const nullifier = calculateNullifier(burnAddress.burnKey);
+  let rapidsnarkProof: RapidsnarkOutput | null = null;
+  while (accountProof === null) {
+    const result = await proof_get_by_nullifier(DEFAULT_ENDPOINT.url, toHex(nullifier));
+    if (result.status == 'done') rapidsnarkProof = result.proof;
+    await new Promise((resolve) => setTimeout(resolve, GET_PROOF_RESULT_POLLING_INTERVAL));
+  }
+  console.log('rapidsnarkProof:', rapidsnarkProof);
+
+  setCurrentStep(3);
+
+  const remainingCoin = calculateRemainingCoinHash(
+    burnAddress.burnKey,
+    burnAddress.revealAmount,
+    burnAddress.revealAmount
+  );
+
+  const trxHash = await relay_post(DEFAULT_ENDPOINT.url, {
+    network: 'mainnet',
+    proof: rapidsnarkProof!,
+    nullifier,
+    remaining_coin: remainingCoin,
+    broadcaster_fee: burnAddress.broadcasterFee,
+    reveal_amount: burnAmount,
+    receiver: burnAddress.receiverAddr,
+    prover_fee: burnAddress.proverFee,
+    prover_address: proverAddress ?? (await proof_get(DEFAULT_ENDPOINT.url)).prover_address,
+    swap_calldata: burnAddress.receiverHook,
+  });
+
+  console.log('waiting fot receipt trx_hash:', trxHash);
+  try {
+    let receipt = await waitForTransactionReceipt(client!, { hash: trxHash });
+    if (receipt.status === 'reverted') throw 'mintCoin reverted';
+    console.log('got receipt:', trxHash);
+  } catch (e) {
+    console.error(e);
+    console.log('Plan B: checking for nullifier on contract');
+    // plan B: check if nullifier exists on contract
+    await new Promise((resolve) => setTimeout(resolve, 15000)); // wait for one block time
+    const exists = await BETHContract.checkNullifier(client!, nullifier);
+    if (!exists) throw 'nullifier is not on contract';
+  }
+};
