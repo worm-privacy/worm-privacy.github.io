@@ -104,8 +104,8 @@ export const Inputs = (props: {
   const onRecoverClick = async () => props.onRecover(recoverDataFromJson(await loadJson()));
 
   return (
-    <div className="mx-auto w-[580px] rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#010204] p-4 shadow-lg">
-      <div className="flex flex-col gap-4">
+    <div className="mx-auto w-full">
+      <div className="flex h-full flex-col gap-4">
         <InputComponent label="Burn amount" hint="0.0" state={burnAmount} inputType="number" inputKind="ETH" />
         <InputComponent
           label="Receiver address"
@@ -139,6 +139,7 @@ export const Inputs = (props: {
           ) : undefined}
         </div>
 
+        <div className="grow" />
         <button onClick={onStartClick} className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black">
           Teleport!
         </button>

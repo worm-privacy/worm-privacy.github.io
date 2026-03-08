@@ -2,6 +2,7 @@
 
 import { Footer } from '@/components/landing';
 import ErrorComponent from '@/components/tools/error-component';
+import LoadingComponent from '@/components/tools/loading';
 import StepsComponent, { StepItem } from '@/components/tools/steps';
 import TopBar from '@/components/tools/topbar';
 import { WalletNotConnectedContainer } from '@/components/tools/wallet-not-connected';
@@ -26,7 +27,7 @@ import { DEFAULT_ENDPOINT, GET_PROOF_RESULT_POLLING_INTERVAL } from '../tools/bu
 import { Inputs } from './inputs';
 
 export default function Teleport() {
-  const [currentStep, setCurrentStep] = useState(-1); // -1 means user input state
+  const [currentStep, setCurrentStep] = useState(0);
   const [error, setError] = useState<string | null>('Error happened'); // null means no error state
 
   const { mutateAsync } = useSendTransaction();
@@ -91,13 +92,18 @@ export default function Teleport() {
           <div>
             <div className="m-auto max-w-310">
               <div className="mt-6 mb-3 text-[24px] font-bold text-white">Teleport</div>
-              {error ? (
-                <ErrorComponent title={error} />
-              ) : currentStep == -1 ? (
-                <Inputs onStart={onStart} onRecover={onRecover} setError={setError} />
-              ) : (
-                <StepsComponent steps={TELEPORT_STEPS} selected={currentStep} />
-              )}
+              <div className="rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
+                <div className="flex flex-row gap-6">
+                  <StepsComponent steps={TELEPORT_STEPS} selected={currentStep} />
+                  {error ? (
+                    <ErrorComponent title={error} />
+                  ) : currentStep == 0 ? (
+                    <Inputs onStart={onStart} onRecover={onRecover} setError={setError} />
+                  ) : (
+                    <LoadingComponent />
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </WalletNotConnectedContainer>
@@ -109,6 +115,10 @@ export default function Teleport() {
 }
 
 const TELEPORT_STEPS: StepItem[] = [
+  {
+    title: 'Inputs',
+    description: 'Waiting for user to enter inputs',
+  },
   {
     title: 'Backup burn data',
     description: 'Just in case if something goes wrong',
