@@ -141,7 +141,7 @@ export const Inputs = (props: {
 
         <div className="grow" />
         <button onClick={onStartClick} className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black">
-          Teleport!
+          Wormhole!
         </button>
 
         <button

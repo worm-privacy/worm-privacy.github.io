@@ -28,7 +28,7 @@ import { useClient, usePublicClient, useSendTransaction } from 'wagmi';
 import { DEFAULT_ENDPOINT, GET_PROOF_RESULT_POLLING_INTERVAL } from '../tools/burn-eth/mint-beth';
 import { Inputs } from './inputs';
 
-export default function Teleport() {
+export default function Wormhole() {
   const [currentStep, setCurrentStep] = useState(0);
   const [error, setError] = useState<string | null>(null); // null means no error state
 
@@ -97,10 +97,10 @@ export default function Teleport() {
         <WalletNotConnectedContainer>
           <div>
             <div className="m-auto max-w-310">
-              <div className="mt-6 mb-3 text-[24px] font-bold text-white">Teleport</div>
+              <div className="mt-6 mb-3 text-[24px] font-bold text-white">Wormhole</div>
               <div className="rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
                 <div className="flex flex-row gap-6">
-                  <StepsComponent steps={TELEPORT_STEPS} selected={currentStep} />
+                  <StepsComponent steps={WORMHOLE_STEPS} selected={currentStep} />
                   {error ? (
                     <ErrorComponent title={error} />
                   ) : currentStep == 0 ? (
@@ -120,7 +120,7 @@ export default function Teleport() {
   );
 }
 
-const TELEPORT_STEPS: StepItem[] = [
+const WORMHOLE_STEPS: StepItem[] = [
   {
     title: 'Inputs',
     description: 'Waiting for user to enter inputs',
