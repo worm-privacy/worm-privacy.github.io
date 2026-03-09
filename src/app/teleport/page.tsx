@@ -16,11 +16,12 @@ import { proof_get } from '@/lib/core/miner-api/proof-get';
 import { proof_get_by_nullifier, RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
 import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-post';
 import { relay_post } from '@/lib/core/miner-api/relay_post';
+import { calculateMintAmount } from '@/lib/core/utils/beth-amount-calculator';
 import { transferETH } from '@/lib/core/utils/transfer-eth';
 import { newSavableRecoverData, RecoverData } from '@/lib/utils/recover-data';
 import { saveJson } from '@/lib/utils/save-json';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { Client, hexToBytes, toHex } from 'viem';
+import { Client, formatEther, hexToBytes, toHex } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useClient, usePublicClient, useSendTransaction } from 'wagmi';
 import { DEFAULT_ENDPOINT, GET_PROOF_RESULT_POLLING_INTERVAL } from '../tools/burn-eth/mint-beth';
@@ -28,7 +29,7 @@ import { Inputs } from './inputs';
 
 export default function Teleport() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [error, setError] = useState<string | null>('Error happened'); // null means no error state
+  const [error, setError] = useState<string | null>(null); // null means no error state
 
   const { mutateAsync } = useSendTransaction();
   const client = useClient();
@@ -42,10 +43,12 @@ export default function Teleport() {
     broadcasterFee: bigint
   ) => {
     try {
-      console.log('onStart', burnAmount, receiverAddress);
+      // `swapAmount` sets 0n because we want to swap all of it anyway
+      const mintAmount = calculateMintAmount(burnAmount, 0n, proverFee, broadcasterFee);
+      console.log('onStart', formatEther(burnAmount), formatEther(mintAmount), receiverAddress);
       setCurrentStep(0);
 
-      const swapCalldata = hexToBytes(BETHToETHContract.createSwapHook(burnAmount, receiverAddress as `0x${string}`));
+      const swapCalldata = hexToBytes(BETHToETHContract.createSwapHook(mintAmount, receiverAddress as `0x${string}`));
       const burnAddress = await generateBurnAddress(
         receiverAddress,
         proverFee,
