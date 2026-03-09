@@ -7,6 +7,7 @@ import StepsComponent, { StepItem } from '@/components/tools/steps';
 import TopBar from '@/components/tools/topbar';
 import { WalletNotConnectedContainer } from '@/components/tools/wallet-not-connected';
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
+import { useNetwork, WormNetwork } from '@/hooks/use-network';
 import { BurnAddressContent, generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
 import { calculateNullifier } from '@/lib/core/burn-address/nullifier';
 import { calculateRemainingCoinHash } from '@/lib/core/burn-address/remaining_coin';
@@ -34,6 +35,7 @@ export default function Teleport() {
   const { mutateAsync } = useSendTransaction();
   const client = useClient();
   const publicClient = usePublicClient();
+  const network = useNetwork();
 
   const onStart = async (
     burnAmount: bigint,
@@ -63,7 +65,7 @@ export default function Teleport() {
 
       await transferETH(mutateAsync, client!, burnAddress.revealAmount, burnAddress.burnAddress);
 
-      await generateAndSubmit(client!, burnAddress, setCurrentStep, publicClient, burnAmount, proverAddress);
+      await generateAndSubmit(client!, burnAddress, setCurrentStep, publicClient, burnAmount, network, proverAddress);
     } catch (e) {
       console.error('onStart', e);
       setError('Error happened');
@@ -79,6 +81,7 @@ export default function Teleport() {
         setCurrentStep,
         publicClient,
         recoverData.burn.revealAmount,
+        network,
         undefined
       );
     } catch (e) {
@@ -146,6 +149,7 @@ const generateAndSubmit = async (
   setCurrentStep: Dispatch<SetStateAction<number>>,
   publicClient: any, // pass whatever usePublicClient() returns
   burnAmount: bigint,
+  network: WormNetwork,
   proverAddress?: `0x${string}`
 ) => {
   setCurrentStep(3);
@@ -160,7 +164,7 @@ const generateAndSubmit = async (
     DEFAULT_ENDPOINT.url,
     createProofPostRequest(
       blockNumber,
-      'mainnet',
+      network,
       burnAddress.burnKey,
       burnAddress.receiverAddr,
       burnAddress.broadcasterFee,
@@ -189,7 +193,7 @@ const generateAndSubmit = async (
   );
 
   const trxHash = await relay_post(DEFAULT_ENDPOINT.url, {
-    network: 'mainnet',
+    network: network,
     proof: rapidsnarkProof!,
     nullifier,
     remaining_coin: remainingCoin,
@@ -214,4 +218,5 @@ const generateAndSubmit = async (
     const exists = await BETHContract.checkNullifier(client!, nullifier);
     if (!exists) throw 'nullifier is not on contract';
   }
+  setCurrentStep(0);
 };
