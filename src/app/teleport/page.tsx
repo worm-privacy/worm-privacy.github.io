@@ -46,7 +46,7 @@ export default function Teleport() {
       // `swapAmount` sets 0n because we want to swap all of it anyway
       const mintAmount = calculateMintAmount(burnAmount, 0n, proverFee, broadcasterFee);
       console.log('onStart', formatEther(burnAmount), formatEther(mintAmount), receiverAddress);
-      setCurrentStep(0);
+      setCurrentStep(1);
 
       const swapCalldata = hexToBytes(BETHToETHContract.createSwapHook(mintAmount, receiverAddress as `0x${string}`));
       const burnAddress = await generateBurnAddress(
@@ -59,21 +59,21 @@ export default function Teleport() {
 
       saveJson(newSavableRecoverData(burnAddress), `burn_${burnAddress.burnAddress}_backup.json`);
 
-      setCurrentStep(1);
+      setCurrentStep(2);
 
       await transferETH(mutateAsync, client!, burnAddress.revealAmount, burnAddress.burnAddress);
 
-      generateAndSubmit(client!, burnAddress, setCurrentStep, publicClient, burnAmount, proverAddress);
+      await generateAndSubmit(client!, burnAddress, setCurrentStep, publicClient, burnAmount, proverAddress);
     } catch (e) {
       console.error('onStart', e);
       setError('Error happened');
     }
   };
 
-  const onRecover = (recoverData: RecoverData) => {
+  const onRecover = async (recoverData: RecoverData) => {
     console.log('onRecover', recoverData);
     try {
-      generateAndSubmit(
+      await generateAndSubmit(
         client!,
         recoverData.burn,
         setCurrentStep,
@@ -148,7 +148,7 @@ const generateAndSubmit = async (
   burnAmount: bigint,
   proverAddress?: `0x${string}`
 ) => {
-  setCurrentStep(2);
+  setCurrentStep(3);
   let blockNumber = (await publicClient!.getBlock()).number;
   let accountProof = await publicClient?.getProof({
     address: burnAddress.burnAddress as `0x${string}`,
@@ -173,14 +173,14 @@ const generateAndSubmit = async (
 
   const nullifier = calculateNullifier(burnAddress.burnKey);
   let rapidsnarkProof: RapidsnarkOutput | null = null;
-  while (accountProof === null) {
-    const result = await proof_get_by_nullifier(DEFAULT_ENDPOINT.url, toHex(nullifier));
+  while (rapidsnarkProof === null) {
+    const result = await proof_get_by_nullifier(DEFAULT_ENDPOINT.url, nullifier.toString());
     if (result.status == 'done') rapidsnarkProof = result.proof;
     await new Promise((resolve) => setTimeout(resolve, GET_PROOF_RESULT_POLLING_INTERVAL));
   }
   console.log('rapidsnarkProof:', rapidsnarkProof);
 
-  setCurrentStep(3);
+  setCurrentStep(4);
 
   const remainingCoin = calculateRemainingCoinHash(
     burnAddress.burnKey,
