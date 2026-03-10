@@ -50,6 +50,7 @@ export default function Wormhole() {
 
   // state
   const [wormholeState, setWormholeState] = useState<WormholeState>('Start');
+  const isLoadingState = wormholeState === 'Calculating' || wormholeState == 'Sending';
   const [error, setError] = useState<string | null>(null); // null means no error state
 
   const [burnAddress, setBurnAddress] = useState<BurnAddressContent | null>(null);
@@ -202,6 +203,7 @@ export default function Wormhole() {
               {error === null ? (
                 <div className="flex flex-col gap-3 ">
                   <InputComponent
+                    disabled={wormholeState !== 'Start'}
                     label="Send amount"
                     hint="0.0"
                     state={burnAmount}
@@ -225,6 +227,7 @@ export default function Wormhole() {
                     inputKind="ETH"
                   />
                   <InputComponent
+                    disabled={wormholeState !== 'Start'}
                     label="Receiver address"
                     hint="0xf3...fd23"
                     state={receiverAddress}
@@ -233,18 +236,24 @@ export default function Wormhole() {
 
                   <button
                     onClick={onPrimaryClick}
-                    className="mt-3 w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black"
+                    disabled={isLoadingState}
+                    className={`mt-3 w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black ${isLoadingState ? 'opacity-60' : ''}`}
                   >
                     {wormholeState}
+                    {isLoadingState ? '...' : ''}
                   </button>
 
-                  <button
-                    onClick={onRecoverClick}
-                    className="flex w-full flex-row items-center justify-center py-3 text-sm font-medium text-brand"
-                  >
-                    <Icons.recover className="mr-2" />
-                    Recover
-                  </button>
+                  {wormholeState === 'Start' ? (
+                    <button
+                      onClick={onRecoverClick}
+                      className="flex w-full flex-row items-center justify-center py-3 text-sm font-medium text-brand"
+                    >
+                      <Icons.recover className="mr-2" />
+                      Recover
+                    </button>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               ) : (
                 <div className="mt-3">
