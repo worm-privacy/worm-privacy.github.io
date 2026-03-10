@@ -37,7 +37,6 @@ export default function Wormhole() {
   // inputs
   const burnAmount = useInput('', validateETHAmount);
   const receiverAddress = useInput('', validateAddress);
-  const receiveAmount = useInput('0', validateETHAmount); // this is ETH
 
   // fees
   const [proverFee, setProverFee] = useState<bigint | null>(null); // null means not loaded yet
@@ -47,12 +46,22 @@ export default function Wormhole() {
 
   // calculate/estimate
   const [mintAmount, setMintAmount] = useState(0n); // this is BETH
+  const receiveAmount = useInput('', validateETHAmount); // this is ETH
 
   // state
   const [wormholeState, setWormholeState] = useState<WormholeState>('Start');
   const [error, setError] = useState<string | null>(null); // null means no error state
 
   const [burnAddress, setBurnAddress] = useState<BurnAddressContent | null>(null);
+
+  const resetStates = () => {
+    setWormholeState('Start');
+    burnAmount.update('');
+    receiverAddress.update('');
+    receiveAmount.update('');
+    setError(null);
+    setBurnAddress(null);
+  };
 
   const { mutateAsync } = useSendTransaction();
   const client = useClient();
@@ -118,6 +127,7 @@ export default function Wormhole() {
     try {
       await transferETH(mutateAsync, client!, burnAddress!.revealAmount, burnAddress!.burnAddress);
       await generateAndSubmit(client!, burnAddress!, publicClient, burnAddress!.revealAmount, network, proverAddress!);
+      resetStates();
     } catch (e) {
       console.error('onSend', e);
       setError('Error happened');
@@ -174,6 +184,7 @@ export default function Wormhole() {
         network,
         undefined
       );
+      resetStates();
     } catch (e) {
       console.error('onRecover', e);
       setError('Error happened');
