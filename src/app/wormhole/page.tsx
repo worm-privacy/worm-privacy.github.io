@@ -50,7 +50,7 @@ export default function Wormhole() {
 
   // state
   const [wormholeState, setWormholeState] = useState<WormholeState>('Start');
-  const isLoadingState = wormholeState === 'Calculating' || wormholeState == 'Sending';
+  const isLoadingState = wormholeState === 'Calculating' || wormholeState == 'Sending' || wormholeState == 'Minting';
   const [error, setError] = useState<string | null>(null); // null means no error state
 
   const [burnAddress, setBurnAddress] = useState<BurnAddressContent | null>(null);
