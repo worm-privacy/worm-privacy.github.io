@@ -127,6 +127,7 @@ export default function Wormhole() {
     setWormholeState('Sending');
     try {
       await transferETH(mutateAsync, client!, burnAddress!.revealAmount, burnAddress!.burnAddress);
+      setWormholeState('Minting');
       await generateAndSubmit(client!, burnAddress!, publicClient, burnAddress!.revealAmount, network, proverAddress!);
       resetStates();
     } catch (e) {
@@ -235,7 +236,7 @@ export default function Wormhole() {
                     label="Receiver address"
                     hint="0xf3...fd23"
                     state={receiverAddress}
-                    info="This address will get BETH (make sure you have private key of this address)"
+                    info="This address will get ETH with no link to the burner! The burner account will perform zero smart-contract interactions!"
                   />
 
                   <button
@@ -347,4 +348,4 @@ const generateAndSubmit = async (
   }
 };
 
-type WormholeState = 'Start' | 'Calculating' | 'Send' | 'Sending';
+type WormholeState = 'Start' | 'Calculating' | 'Send' | 'Sending' | 'Minting';
