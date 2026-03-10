@@ -175,6 +175,10 @@ export default function Wormhole() {
   const onRecoverClick = async () => {
     const recoverData = recoverDataFromJson(await loadJson());
     console.log('onRecover', recoverData);
+
+    burnAmount.update(formatEther(recoverData.burn.revealAmount));
+    receiverAddress.update(recoverData.burn.receiverAddr);
+
     setWormholeState('Sending');
     try {
       await generateAndSubmit(
