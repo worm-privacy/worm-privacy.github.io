@@ -103,9 +103,18 @@ export const MintBETHLayout = (props: {
           swap_calldata: props.burnAddress.receiverHook,
         });
         console.log('waiting fot receipt trx_hash:', trxHash);
-        let receipt = await waitForTransactionReceipt(client!, { hash: trxHash });
-        if (receipt.status == 'reverted') throw 'mintCoin reverted';
-        console.log('got receipt');
+        try {
+          let receipt = await waitForTransactionReceipt(client!, { hash: trxHash });
+          if (receipt.status == 'reverted') throw 'mintCoin reverted';
+          console.log('got receipt');
+        } catch (e) {
+          console.error(e);
+          console.log('Plan B: checking for nullifier on contract');
+          // plan B: check if nullifier exists on contract
+          await new Promise((resolve) => setTimeout(resolve, 15000)); // wait for one block time
+          const exists = await BETHContract.checkNullifier(client!, nullifier);
+          if (!exists) throw 'Proof Submission failed';
+        }
       }
       setIsLoading(null);
       setFlowState(FlowState.Submitted);
@@ -189,7 +198,7 @@ export const MintBETHLayout = (props: {
   }
 };
 
-const GET_PROOF_RESULT_POLLING_INTERVAL = 5000;
+export const GET_PROOF_RESULT_POLLING_INTERVAL = 5000;
 const EndPointSelection = (props: {
   mintAmount: string;
   burnAddress: BurnAddressContent;
@@ -349,8 +358,9 @@ enum FlowState {
   Submitted,
 }
 
-const ENDPOINTS = [
+export const ENDPOINTS = [
   { name: 'WORM public prover #1', url: 'https://prover-1.worm.cx' },
   { name: 'Metatarz prover', url: 'https://worm-prover.metatarz.xyz' },
   { name: 'Local machine', url: 'http://localhost:8080' },
 ];
+export const DEFAULT_ENDPOINT = ENDPOINTS[0];
