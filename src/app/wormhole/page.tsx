@@ -27,7 +27,7 @@ import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/util
 import { loadJson } from '@/lib/utils/load-json';
 import { newSavableRecoverData, recoverDataFromJson } from '@/lib/utils/recover-data';
 import { saveJson } from '@/lib/utils/save-json';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Client, formatEther, hexToBytes, parseEther, toHex } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useClient, usePublicClient, useSendTransaction } from 'wagmi';
@@ -50,7 +50,7 @@ export default function Wormhole() {
 
   // state
   const [wormholeState, setWormholeState] = useState<WormholeState>('Start');
-  const isLoadingState = wormholeState === 'Calculating' || wormholeState == 'Sending';
+  const isLoadingState = !(wormholeState === 'Send' || wormholeState === 'Start');
   const [error, setError] = useState<string | null>(null); // null means no error state
 
   const [burnAddress, setBurnAddress] = useState<BurnAddressContent | null>(null);
@@ -124,10 +124,18 @@ export default function Wormhole() {
   };
 
   const onSendClick = async () => {
-    setWormholeState('Sending');
     try {
+      setWormholeState('Sending to burn address');
       await transferETH(mutateAsync, client!, burnAddress!.revealAmount, burnAddress!.burnAddress);
-      await generateAndSubmit(client!, burnAddress!, publicClient, burnAddress!.revealAmount, network, proverAddress!);
+      await generateAndSubmit(
+        client!,
+        burnAddress!,
+        setWormholeState,
+        publicClient,
+        burnAddress!.revealAmount,
+        network,
+        proverAddress!
+      );
       resetStates();
     } catch (e) {
       console.error('onSend', e);
@@ -179,11 +187,11 @@ export default function Wormhole() {
     burnAmount.update(formatEther(recoverData.burn.revealAmount));
     receiverAddress.update(recoverData.burn.receiverAddr);
 
-    setWormholeState('Sending');
     try {
       await generateAndSubmit(
         client!,
         recoverData.burn,
+        setWormholeState,
         publicClient,
         recoverData.burn.revealAmount,
         network,
@@ -277,11 +285,13 @@ export default function Wormhole() {
 const generateAndSubmit = async (
   client: Client,
   burnAddress: BurnAddressContent,
+  setWormholeState: Dispatch<SetStateAction<WormholeState>>,
   publicClient: any, // pass whatever usePublicClient() returns
   burnAmount: bigint,
   network: WormNetwork,
   proverAddress?: `0x${string}`
 ) => {
+  setWormholeState('Generating proof');
   let blockNumber = (await publicClient!.getBlock()).number;
   let accountProof = await publicClient?.getProof({
     address: burnAddress.burnAddress as `0x${string}`,
@@ -313,6 +323,7 @@ const generateAndSubmit = async (
   }
   console.log('rapidsnarkProof:', rapidsnarkProof);
 
+  setWormholeState('Submitting proof');
   const remainingCoin = calculateRemainingCoinHash(
     burnAddress.burnKey,
     burnAddress.revealAmount,
@@ -347,4 +358,11 @@ const generateAndSubmit = async (
   }
 };
 
-type WormholeState = 'Start' | 'Calculating' | 'Send' | 'Sending';
+/// primary button texts
+type WormholeState =
+  | 'Start'
+  | 'Calculating'
+  | 'Send'
+  | 'Sending to burn address'
+  | 'Generating proof'
+  | 'Submitting proof';
