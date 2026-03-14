@@ -176,7 +176,7 @@ export const ROADMAP: Roadmap[] = [
     title: 'Mainnet launch',
     deadline: 'Q1 2026',
     description: 'Launching BETH/WORM tokens on mainnet.',
-    status: 'passed',
+    status: 'active',
   },
 ];
 
