@@ -57,23 +57,6 @@ export const TEAM: TeamMemberInfo[] = [
   },
   {
     id: 4,
-    fullName: 'Sage Tega',
-    positions: ['Growth Lead'],
-    avatar: {
-      src: '/assets/img/sage.png',
-      size: 28.75,
-      position: {
-        top: 58.5,
-        left: 86.25,
-      },
-    },
-    socials: [
-      { link: 'https://x.com/Sage_Tega', logo: Icons.x, label: '' },
-      { link: 'https://github.com', logo: Icons.github, label: 'GitHub' },
-    ],
-  },
-  {
-    id: 5,
     fullName: 'Ali Zeynali',
     positions: ['Product Designer'],
     avatar: {
@@ -179,21 +162,21 @@ export const ROADMAP: Roadmap[] = [
     title: 'Molt Testnet',
     deadline: 'Q1 2026',
     description: 'Forth incentivized testnet / last testnet before mainnet launch.',
-    status: 'active',
+    status: 'passed',
   },
   {
     order: 10,
     title: 'Token sale',
     deadline: 'Q1 2026',
     description: 'ICO on CypherEthereum.',
-    status: 'not-yet',
+    status: 'passed',
   },
   {
     order: 11,
     title: 'Mainnet launch',
     deadline: 'Q1 2026',
     description: 'Launching BETH/WORM tokens on mainnet.',
-    status: 'not-yet',
+    status: 'active',
   },
 ];
 

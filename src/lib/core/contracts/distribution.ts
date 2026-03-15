@@ -4,11 +4,12 @@ import { Config } from 'wagmi';
 import { WriteContractMutateAsync } from 'wagmi/query';
 
 // TODO: Update this address when deployed
-export const DistributionContractAddress = '0xc98331493088676B4644fA43500d2C22CEf9202b';
+//export const DistributionContractAddress = '0x9E59bCbEB00e3e6089a167a970377Fb0204cEe96';
 
 export type ShareData = {
   id: string;
   owner: string;
+  tgeStartTime: string;
   tge: string;
   startTime: string;
   initialAmount: string;
@@ -16,11 +17,13 @@ export type ShareData = {
   totalCap: string;
   sig: string;
   note: string;
+  contract: `0x{string}`;
 };
 
 export type OnChainShare = {
   id: bigint;
   owner: `0x${string}`;
+  tgeStartTime: bigint,
   tge: bigint;
   startTime: bigint;
   initialAmount: bigint;
@@ -29,9 +32,9 @@ export type OnChainShare = {
 };
 
 export namespace DistributionContract {
-  export const getShare = async (client: Client, shareId: bigint): Promise<OnChainShare> => {
+  export const getShare = async (client: Client, shareId: bigint, contract: `0x${string}`): Promise<OnChainShare> => {
     const tuple = await readContract(client, {
-      address: DistributionContractAddress,
+      address: contract,
       abi: DistributionContractABI,
       functionName: 'shares',
       args: [shareId],
@@ -40,17 +43,18 @@ export namespace DistributionContract {
     return {
       id: tuple[0],
       owner: tuple[1],
-      tge: tuple[2],
-      startTime: tuple[3],
-      initialAmount: tuple[4],
-      amountPerSecond: tuple[5],
-      totalCap: tuple[6],
+      tgeStartTime: tuple[2],
+      tge: tuple[3],
+      startTime: tuple[4],
+      initialAmount: tuple[5],
+      amountPerSecond: tuple[6],
+      totalCap: tuple[7]
     };
   };
 
-  export const calculateClaimable = async (client: Client, shareId: bigint): Promise<bigint> => {
+  export const calculateClaimable = async (client: Client, shareId: bigint, contract: `0x${string}`): Promise<bigint> => {
     const result = await readContract(client, {
-      address: DistributionContractAddress,
+      address: contract,
       abi: DistributionContractABI,
       functionName: 'calculateClaimable',
       args: [shareId],
@@ -58,9 +62,9 @@ export namespace DistributionContract {
     return result as bigint;
   };
 
-  export const getShareClaimed = async (client: Client, shareId: bigint): Promise<bigint> => {
+  export const getShareClaimed = async (client: Client, shareId: bigint, contract: `0x${string}`): Promise<bigint> => {
     const result = await readContract(client, {
-      address: DistributionContractAddress,
+      address: contract,
       abi: DistributionContractABI,
       functionName: 'shareClaimed',
       args: [shareId],
@@ -71,12 +75,14 @@ export namespace DistributionContract {
   export const reveal = async (
     mutateAsync: WriteContractMutateAsync<Config, unknown>,
     client: Client,
-    share: ShareData
+    share: ShareData,
+    contract: `0x${string}`
   ) => {
     console.log(`calling reveal for share ${share.id}`);
     const shareStruct = {
       id: BigInt(share.id),
       owner: share.owner as `0x${string}`,
+      tgeStartTime: BigInt(share.tgeStartTime),
       tge: BigInt(share.tge),
       startTime: BigInt(share.startTime),
       initialAmount: BigInt(share.initialAmount),
@@ -84,7 +90,7 @@ export namespace DistributionContract {
       totalCap: BigInt(share.totalCap),
     };
     const trxHash = await mutateAsync({
-      address: DistributionContractAddress,
+      address: contract,
       abi: DistributionContractABI,
       functionName: 'reveal',
       args: [shareStruct, share.sig as `0x${string}`],
@@ -98,11 +104,12 @@ export namespace DistributionContract {
   export const trigger = async (
     mutateAsync: WriteContractMutateAsync<Config, unknown>,
     client: Client,
-    shareId: bigint
+    shareId: bigint,
+    contract: `0x${string}`
   ) => {
     console.log(`calling trigger for share ${shareId}`);
     const trxHash = await mutateAsync({
-      address: DistributionContractAddress,
+      address: contract,
       abi: DistributionContractABI,
       functionName: 'trigger',
       args: [shareId],
@@ -219,6 +226,11 @@ export const DistributionContractABI = [
             internalType: 'address',
           },
           {
+            name: 'tgeStartTime',
+            type: 'uint256',
+            internalType: 'uint256',
+          },
+          {
             name: 'tge',
             type: 'uint256',
             internalType: 'uint256',
@@ -293,6 +305,11 @@ export const DistributionContractABI = [
         name: 'owner',
         type: 'address',
         internalType: 'address',
+      },
+      {
+        name: 'tgeStartTime',
+        type: 'uint256',
+        internalType: 'uint256',
       },
       {
         name: 'tge',
@@ -392,6 +409,11 @@ export const DistributionContractABI = [
             name: 'owner',
             type: 'address',
             internalType: 'address',
+          },
+          {
+            name: 'tgeStartTime',
+            type: 'uint256',
+            internalType: 'uint256',
           },
           {
             name: 'tge',

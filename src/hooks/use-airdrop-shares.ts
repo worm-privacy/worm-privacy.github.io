@@ -87,13 +87,13 @@ export function useAirdropShares(): [
       const shares: AirdropShareModel[] = await Promise.all(
         sharesData.map(async (shareData) => {
           try {
-            const onChainShare = await DistributionContract.getShare(client, BigInt(shareData.id));
+            const onChainShare = await DistributionContract.getShare(client, BigInt(shareData.id), shareData.contract);
             const isRevealed = onChainShare.owner !== '0x0000000000000000000000000000000000000000';
             
             if (isRevealed) {
               const [claimable, claimed] = await Promise.all([
-                DistributionContract.calculateClaimable(client, BigInt(shareData.id)),
-                DistributionContract.getShareClaimed(client, BigInt(shareData.id)),
+                DistributionContract.calculateClaimable(client, BigInt(shareData.id), shareData.contract),
+                DistributionContract.getShareClaimed(client, BigInt(shareData.id), shareData.contract),
               ]);
               const availableToClaim = claimable - claimed;
               return {

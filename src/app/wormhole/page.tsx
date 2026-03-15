@@ -243,7 +243,7 @@ export default function Wormhole() {
                     label="Receiver address"
                     hint="0xf3...fd23"
                     state={receiverAddress}
-                    info="This address will get BETH (make sure you have private key of this address)"
+                    info="This address will get ETH with no link to the burner! The burner account will perform zero smart-contract interactions!"
                   />
 
                   <button

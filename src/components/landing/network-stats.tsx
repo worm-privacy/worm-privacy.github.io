@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { Contract, JsonRpcProvider } from 'ethers';
 import { useEffect, useState } from 'react';
 
-const RPC_URL = 'https://eth.meowrpc.com';
+const RPC_URL = 'https://eth.drpc.org';
 
 export function NetworkStats() {
   const isMobile = useIsMobile();
@@ -38,6 +38,12 @@ export function NetworkStats() {
 
         const result = await contract.info('0x0000000000000000000000000000000000000000', 0n, 0n);
         const currentRewardResult = await contract.currentReward();
+
+        const staticsBal = await contract.balanceOf("0x169866647724f1bb3541092c09e40ece8435aaaf")
+        const donatorsBal = await contract.balanceOf("0x9E59bCbEB00e3e6089a167a970377Fb0204cEe96")
+        const testnetsBal = await contract.balanceOf("0xbdEf39046485366E709fbAF06Bc72E71c2B3927C")
+        console.log(staticsBal + donatorsBal + testnetsBal)
+        
 
         const currentEpoch = Number(result.currentEpoch);
         const since = Number(result.since);
