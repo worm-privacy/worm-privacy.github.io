@@ -53,7 +53,7 @@ export default function TotalClaim(props: { result: UseClaimListResult; refresh:
           <div className="text-[24px] font-bold">Rewards are ready</div>
           <div className="mt-5 text-white opacity-80">Total Claimable reward: </div>
           <div className="flex flex-row items-center gap-2">
-            <div className="text-[24px] font-bold text-white">{roundEther(totalClaimAmount, 4)} </div>
+            <div className="text-[24px] font-bold text-white">{roundEther(totalClaimAmount)} </div>
             <div className="text-[24px] text-brand">WORM </div>
           </div>
           <div className="grow" />
