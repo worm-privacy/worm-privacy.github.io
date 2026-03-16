@@ -1,5 +1,5 @@
 import { participationLogsRepo } from '@/lib/data/participation-logs-repo';
-import { Address, Client, parseEventLogs } from 'viem';
+import { Address, Client, parseEther, parseEventLogs } from 'viem';
 import { getContractEvents, readContract, waitForTransactionReceipt } from 'viem/actions';
 import { Config } from 'wagmi';
 import { WriteContractMutateAsync } from 'wagmi/query';
@@ -130,6 +130,25 @@ export namespace WORMContract {
     let r = await waitForTransactionReceipt(client!, { hash: trxHash });
     if (r.status == 'reverted') throw 'allowance reverted';
     console.log('got approve receipt');
+  };
+
+  export const approveInfiniteIfAllowanceNotEnough = async (
+    mutateAsync: WriteContractMutateAsync<Config, unknown>,
+    client: Client,
+    address: `0x${string}`,
+    amount: bigint
+  ) => {
+    const allowance = await WORMContract.allowance(client, address, StakingContractAddress);
+    if (amount > allowance) await approve(mutateAsync, client, parseEther('1000000'));
+  };
+
+  export const allowance = async (client: Client, account: `0x${string}`, spender: `0x${string}`) => {
+    return await readContract(client, {
+      address: WORMcontractAddress,
+      abi: WORMcontractABI,
+      functionName: 'allowance',
+      args: [account, spender],
+    });
   };
 }
 
