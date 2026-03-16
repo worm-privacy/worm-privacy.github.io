@@ -39,6 +39,13 @@ export default function ParticipateInputs(props: { result: UseEpochListResult; r
     return <ErrorComponent title="Balance Error" details="error happens while getting your balance" />;
   }
 
+  let perEpoch = 0n;
+  try {
+    const beth = parseEther(bethAmount.value);
+    const epochs = BigInt(parseInt(numberOfEpochs.value));
+    perEpoch = beth / epochs;
+  } catch (e) {}
+
   if (!isConnected) {
     return (
       <>
@@ -117,6 +124,14 @@ export default function ParticipateInputs(props: { result: UseEpochListResult; r
         inputType="number"
         optional={false}
       />
+
+      {perEpoch !== 0n ? (
+        <div className="text-white opacity-60">
+          Per epoch: <span className="font-orbitron">{formatEther(perEpoch)}</span>
+        </div>
+      ) : (
+        <></>
+      )}
 
       <div className="grow" />
 
