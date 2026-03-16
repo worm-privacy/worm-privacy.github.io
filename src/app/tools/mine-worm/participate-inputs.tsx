@@ -83,7 +83,7 @@ export default function ParticipateInputs(props: { result: UseEpochListResult; r
     setParticipateLoading(true);
     setIsParticipateError(false);
     try {
-      await BETHContract.approve(mutateAsync, client!, beth);
+      await BETHContract.approveInfiniteIfAllowanceNotEnough(mutateAsync, client!, address!, beth);
       await WORMContract.participate(mutateAsync, client!, bethPerEpoch, epochs);
       props.refresh();
       setParticipated(true);

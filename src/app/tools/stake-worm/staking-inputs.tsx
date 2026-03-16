@@ -79,7 +79,7 @@ export default function StakingInputs(props: { result: UseStakingListResult; ref
     setStakeLoading(true);
     setIsStakeError(false);
     try {
-      await WORMContract.approve(mutateAsync, client!, worm);
+      await WORMContract.approveInfiniteIfAllowanceNotEnough(mutateAsync, client!, address!, worm);
       await StakingContract.lock(mutateAsync, client!, worm, weeks);
       props.refresh();
       refetchBalance();
