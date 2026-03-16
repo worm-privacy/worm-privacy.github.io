@@ -1,10 +1,12 @@
 import ErrorComponent from '@/components/tools/error-component';
 import InputComponent from '@/components/tools/input-text';
 import LoadingComponent from '@/components/tools/loading';
+import { useDebounceEffect } from '@/hooks/use-debounce-effect';
 import { UseEpochListResult } from '@/hooks/use-epoch-list';
 import { useInput } from '@/hooks/use-input';
 import { BETHContract, BETHContractABI, BETHContractAddress } from '@/lib/core/contracts/beth';
 import { WORMContract } from '@/lib/core/contracts/worm';
+import { roundEther } from '@/lib/core/utils/round-ether';
 import { validateAll, validateETHAmount, validatePositiveInteger } from '@/lib/core/utils/validator';
 import { useState } from 'react';
 import { formatEther, parseEther } from 'viem';
@@ -18,6 +20,8 @@ export default function ParticipateInputs(props: { result: UseEpochListResult; r
   const numberOfEpochs = useInput('', validatePositiveInteger);
   const [participateLoading, setParticipateLoading] = useState(false);
   const client = useClient();
+
+  const [approximatedAmount, setApproximatedAmount] = useState(0n);
 
   const { mutateAsync } = useWriteContract();
 
@@ -41,10 +45,21 @@ export default function ParticipateInputs(props: { result: UseEpochListResult; r
 
   let perEpoch = 0n;
   try {
-    const beth = parseEther(bethAmount.value);
-    const epochs = BigInt(parseInt(numberOfEpochs.value));
-    perEpoch = beth / epochs;
+    perEpoch = parseEther(bethAmount.value) / BigInt(parseInt(numberOfEpochs.value));
   } catch (e) {}
+
+  useDebounceEffect(
+    () => {
+      WORMContract.approximate(client!, perEpoch, BigInt(parseInt(numberOfEpochs.value))).then(
+        (_approximatedAmount) => {
+          console.log('approximated value:', _approximatedAmount);
+          setApproximatedAmount(_approximatedAmount);
+        }
+      );
+    },
+    2000,
+    [bethAmount.value, numberOfEpochs.value]
+  );
 
   if (!isConnected) {
     return (
@@ -126,8 +141,21 @@ export default function ParticipateInputs(props: { result: UseEpochListResult; r
       />
 
       {perEpoch !== 0n ? (
-        <div className="text-white opacity-60">
-          Per epoch: <span className="font-orbitron">{formatEther(perEpoch)}</span>
+        <div className="text-white ">
+          <span className="opacity-70">BETH amount per epoch:</span>{' '}
+          <span className="font-orbitron">{roundEther(perEpoch)}</span> <span className="text-pink-400">BETH</span>
+        </div>
+      ) : (
+        <></>
+      )}
+
+      {approximatedAmount !== 0n ? (
+        <div className="flex flex-col rounded-lg bg-[rgba(var(--neutral-low-rgb),0.15)] p-3 text-white">
+          <div className="opacity-70">Approximated reward</div>
+          <div className="text-[20px]">
+            {roundEther(approximatedAmount)}
+            <span className="ml-2 font-bold text-brand">WORM</span>
+          </div>
         </div>
       ) : (
         <></>
