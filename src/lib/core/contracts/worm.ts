@@ -28,6 +28,16 @@ export namespace WORMContract {
     });
   };
 
+  export const approximate = async (client: Client, amountPerEpoch: bigint, numEpochs: bigint) => {
+    if (amountPerEpoch === 0n || numEpochs === 0n) return 0n;
+    return await readContract(client, {
+      address: WORMcontractAddress,
+      abi: WORMcontractABI,
+      functionName: 'approximate',
+      args: [amountPerEpoch, numEpochs],
+    });
+  };
+
   export const discoverRewards = async (
     client: Client,
     fromEpoch: bigint,
