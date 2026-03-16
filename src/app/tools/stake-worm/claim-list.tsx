@@ -156,7 +156,7 @@ const StakingItemComponent = (props: { staking: StakingItem; currentWeek: bigint
             <div className="flex flex-col">
               <div className="mb-2">Staked amount</div>
               <div className="flex flex-row">
-                <div className="mr-2 text-[24px] font-bold text-white">{roundEther(staking.stakeAmount, 4)}</div>
+                <div className="mr-2 text-[24px] font-bold text-white">{roundEther(staking.stakeAmount)}</div>
                 <div className="text-brand">WORM</div>
               </div>
               {props.staking.state === 'Ended' && (
@@ -237,7 +237,7 @@ const StakingWeekItemComponent = (props: {
               <div className="text-[12px]">
                 <span className="font-orbitron">{roundEtherF(week.yourShare)}</span>
                 <span className="text-[#727E8F]">% </span>
-                <span className="ml-1 font-orbitron">{formatEther(week.yourReward)}</span>
+                <span className="ml-1 font-orbitron">{roundEther(week.yourReward, 12)}</span>
                 <span className="ml-1 text-[#FF47C0]">BETH</span>
               </div>
             </div>
@@ -265,7 +265,7 @@ const StakingWeekItemComponent = (props: {
               </div>
               <div className="mt-5 mb-1">Total reward share: </div>
               <div className="flex flex-row">
-                <div className="mr-2 text-[24px] font-bold text-white">{roundEther(week.totalReward, 4)}</div>
+                <div className="mr-2 text-[24px] font-bold text-white">{roundEther(week.totalReward)}</div>
                 <div className="text-[#FF47C0]">BETH</div>
               </div>
               {props.week.weekNumber < props.currentWeek ? (

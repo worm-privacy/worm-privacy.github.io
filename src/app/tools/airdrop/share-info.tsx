@@ -3,7 +3,7 @@ import LoadingComponent from '@/components/tools/loading';
 import { UseShareListResult } from '@/hooks/use-tge-share-list';
 import { roundEther } from '@/lib/core/utils/round-ether';
 import { useState } from 'react';
-import { useClient, useWriteContract } from 'wagmi';
+import { useWriteContract } from 'wagmi';
 import { TgeSelection } from './page';
 
 // TODO: Replace with the actual exit contract address
@@ -74,12 +74,10 @@ function IcowormClaimInfo(props: { balance: bigint; refresh: () => Promise<void>
       {claimState === 'idle' && (
         <div className="flex h-full flex-col text-white">
           <div className="text-[24px] font-bold">ICO tokens</div>
-          <div className="mt-2 text-[16px] opacity-70">
-            Here you can claim the WORM tokens you bought on the ICO.
-          </div>
+          <div className="mt-2 text-[16px] opacity-70">Here you can claim the WORM tokens you bought on the ICO.</div>
           <div className="mt-5 text-white opacity-80">Amount claimable:</div>
           <div className="flex flex-row items-center gap-2">
-            <div className="text-[24px] font-bold text-white">{roundEther(props.balance, 4)}</div>
+            <div className="text-[24px] font-bold text-white">{roundEther(props.balance)}</div>
             <div className="text-[24px] text-brand">WORM</div>
           </div>
           <div className="grow" />
@@ -100,12 +98,10 @@ function IcowormAlreadyClaimed(props: { balance: bigint }) {
   return (
     <div className="flex h-full grow flex-col text-white">
       <div className="text-[24px] font-bold">ICO tokens</div>
-      <div className="mt-2 text-[16px] opacity-70">
-        Here you can claim the WORM tokens you bought on the ICO.
-      </div>
+      <div className="mt-2 text-[16px] opacity-70">Here you can claim the WORM tokens you bought on the ICO.</div>
       <div className="mt-5 text-white opacity-80">Amount:</div>
       <div className="flex flex-row items-center gap-2">
-        <div className="text-[24px] font-bold text-white/50">{roundEther(props.balance, 4)}</div>
+        <div className="text-[24px] font-bold text-white/50">{roundEther(props.balance)}</div>
         <div className="text-[24px] text-brand/50">WORM</div>
       </div>
       <div className="mt-4 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-[14px] text-white/60">

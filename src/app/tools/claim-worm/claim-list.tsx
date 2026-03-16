@@ -78,7 +78,7 @@ const ReadyToClaimItem = (props: { epochNumber: bigint; share: bigint; refresh: 
           </div>
           <div className="grow" />
           <div className="text-[14px]">Your share:</div>
-          <div className="font-orbitron">{roundEther(props.share, 4)}</div>
+          <div className="font-orbitron">{roundEther(props.share)}</div>
           <div className="text-[14px] text-brand">WORM</div>
         </div>
       </DialogTrigger>
@@ -98,7 +98,7 @@ const ReadyToClaimItem = (props: { epochNumber: bigint; share: bigint; refresh: 
               <div className="mb-5 opacity-70">Epoch number {props.epochNumber}</div>
               <div className="mb-1">Your reward share: </div>
               <div className="flex flex-row">
-                <div className="mr-2 font-bold text-white">{roundEther(props.share, 4)}</div>
+                <div className="mr-2 font-bold text-white">{roundEther(props.share)}</div>
                 <div className="font-bold text-brand">WORM</div>
               </div>
               <button
@@ -130,7 +130,7 @@ const UpComingEpochItem = (props: { epochNumber: bigint; share: bigint }) => {
       ) : (
         <>
           <div className="text-[14px]">Your share: ~</div>
-          <div className="font-orbitron">{roundEther(props.share, 4)}</div>
+          <div className="font-orbitron">{roundEther(props.share)}</div>
           <div className=" text-[14px] text-brand">WORM</div>
         </>
       )}

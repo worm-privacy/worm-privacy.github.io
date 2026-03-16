@@ -1,10 +1,5 @@
-import { Button, DialogTrigger } from '@/components/ui';
-import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog/dialog';
-import { Icons } from '@/components/ui/icons';
 import { UseShareListResult } from '@/hooks/use-tge-share-list';
 import { roundEther } from '@/lib/core/utils/round-ether';
-import { useState } from 'react';
-import { useClient, useWriteContract } from 'wagmi';
 import { TgeSelection } from './page';
 
 const CARD_STYLE =
@@ -51,15 +46,13 @@ export default function ShareList(props: {
           onClick={() => props.setSelection('icoworm')}
           className={`m-1 flex flex-row items-center gap-2 rounded-[12px] p-3 text-[16px] text-white transition-colors ${
             props.selection === 'icoworm'
-              ? 'bg-[rgba(var(--brand-rgb),0.15)] border border-brand/40'
-              : 'bg-[#64748B1F] border border-transparent'
+              ? 'border border-brand/40 bg-[rgba(var(--brand-rgb),0.15)]'
+              : 'border border-transparent bg-[#64748B1F]'
           }`}
         >
           <div className="font-bold">ICO tokens</div>
           {result.icowormNullified ? (
-            <div className="rounded-4xl bg-white/10 px-3 py-1 text-[12px] text-white/50">
-              Claimed
-            </div>
+            <div className="rounded-4xl bg-white/10 px-3 py-1 text-[12px] text-white/50">Claimed</div>
           ) : (
             <div className="rounded-4xl bg-[rgba(var(--brand-rgb),0.12)] px-3 py-1 text-[12px] text-[#96FAD1]">
               Claimable
@@ -67,7 +60,7 @@ export default function ShareList(props: {
           )}
           <div className="grow" />
           <div className="text-[14px]">Amount:</div>
-          <div className="font-orbitron">{roundEther(result.icowormBalance, 4)}</div>
+          <div className="font-orbitron">{roundEther(result.icowormBalance)}</div>
           <div className="text-[14px] text-brand">WORM</div>
         </button>
       )}
