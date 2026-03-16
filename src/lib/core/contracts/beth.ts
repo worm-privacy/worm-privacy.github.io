@@ -1,4 +1,4 @@
-import { Client, hexToBigInt } from 'viem';
+import { Client, hexToBigInt, parseEther } from 'viem';
 import { readContract, waitForTransactionReceipt } from 'viem/actions';
 import { Config } from 'wagmi';
 import { WriteContractMutateAsync } from 'wagmi/query';
@@ -27,6 +27,16 @@ export namespace BETHContract {
     let r = await waitForTransactionReceipt(client!, { hash: approveTXHash });
     if (r.status == 'reverted') throw 'allowance reverted';
     console.log('got approve receipt');
+  };
+
+  export const approveInfiniteIfAllowanceNotEnough = async (
+    mutateAsync: WriteContractMutateAsync<Config, unknown>,
+    client: Client,
+    address: `0x${string}`,
+    amount: bigint
+  ) => {
+    const allowance = await BETHContract.allowance(client, address, WORMcontractAddress);
+    if (amount > allowance) await approve(mutateAsync, client, parseEther('1000000'));
   };
 
   export const mintCoin = async (
@@ -87,6 +97,15 @@ export namespace BETHContract {
       abi: BETHContractABI,
       functionName: 'nullifiers',
       args: [nullifier],
+    });
+  };
+
+  export const allowance = async (client: Client, account: `0x${string}`, spender: `0x${string}`) => {
+    return await readContract(client, {
+      address: BETHContractAddress,
+      abi: BETHContractABI,
+      functionName: 'allowance',
+      args: [account, spender],
     });
   };
 }
