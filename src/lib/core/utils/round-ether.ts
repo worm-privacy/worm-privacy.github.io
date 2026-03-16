@@ -1,6 +1,7 @@
 import { formatEther, parseEther } from 'viem';
 
 export const roundEther = (amount: bigint, maxLen: number = 7): string => {
+  if (amount === 0n) return '0';
   const sn = maxLen - 4 > 0 ? '0.' + '0'.repeat(maxLen - 4) + '1' : '0';
   if (amount < parseEther(sn)) return '<' + sn;
 
@@ -21,6 +22,7 @@ export const test_roundEther = () => {
   const assert = (a: any, b: any) => (a !== b ? console.log(`assert(${a}, ${b})`) : undefined);
   console.log('----- test_roundEther -----');
 
+  assert(roundEther(0n), '0');
   assert(roundEther(parseEther('1')), '1');
   assert(roundEther(parseEther('1'), 10), '1');
 
