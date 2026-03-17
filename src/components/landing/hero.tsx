@@ -37,19 +37,19 @@ export function HeroSection() {
         <Icons.logo />
         <Icons.typedLogo />
       </span>
-      <div className="corner-only relative w-full items-center justify-center overflow-clip rounded-base border-2 border-green-500/70 bg-surface text-gray-400 md:w-160 md:justify-self-center lg:justify-self-auto">
+      <div className="corner-only relative w-full items-center justify-center overflow-clip rounded-base border-2 border-brand/70 bg-surface text-gray-400 md:w-160 md:justify-self-center lg:justify-self-auto">
         <Icons.gridPattern className="absolute -top-10 -right-10 -bottom-10 -left-10 -z-10 object-cover md:top-0 md:left-0 md:size-full" />
 
         <div className="flex size-full flex-col items-center gap-10 px-8 py-19.5 md:px-25 md:py-20">
           {isSafari ? (
             <h1
-              className="mx-auto flex w-full items-center-safe justify-center text-center font-orbitron text-[3rem] font-bold text-green-400 sm:text-[4rem] md:text-[5.625rem]"
+              className="mx-auto flex w-full items-center-safe justify-center text-center font-orbitron text-[3rem] font-bold text-brand sm:text-[4rem] md:text-[5.625rem]"
               style={{
                 textShadow:
                   '0 0 0px rgba(150,250,209,0.5), 0 0 5px rgba(150,250,209,0.5), 0 0 10px rgba(150,250,209,0.5), 0 0 20px rgba(150,250,209,0.5)',
               }}
             >
-              Privacy<sup className="fill-green-400 font-orbitron text-xl md:text-4xl">2</sup>
+              Privacy<sup className="fill-brand font-orbitron text-xl md:text-4xl">2</sup>
             </h1>
           ) : (
             <svg className="h-17 w-full md:h-30">
@@ -87,7 +87,7 @@ export function HeroSection() {
                   <tspan
                     dy={isMobile ? '-2rem' : '-3rem'}
                     textAnchor="middle"
-                    className="fill-green-500 font-orbitron text-xl md:pt-4 md:text-4xl"
+                    className="fill-brand font-orbitron text-xl md:pt-4 md:text-4xl"
                     fillOpacity={0.4}
                   >
                     2
@@ -175,6 +175,20 @@ export function HeroSection() {
             href="https://x.com/EIP7503"
           >
             Follow on <Icons.x />
+          </Link>
+        </div>
+
+        <div className="flex w-full flex-row items-center ">
+          <div className="flex flex-col text-white">
+            <div className="font-bold">New feature launched!</div>
+            <div className="text-[12px] opacity-70">Migrate your ETH to a fresh address</div>
+          </div>
+          <div className="grow" />
+          <Link
+            className="rounded-lg border border-[rgba(var(--brand-rgb),0.24)]  px-4 py-3 text-[14px] font-bold text-brand"
+            href="/wormhole"
+          >
+            Try Wormhole
           </Link>
         </div>
       </div>
