@@ -4,8 +4,13 @@ import { useIsMobile } from '@/hooks';
 import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import { PropsWithChildren, useCallback, useLayoutEffect, useRef, useState } from 'react';
 import ResizeObserver from 'resize-observer-polyfill';
+import { ClientOnlyWrapper } from '../tools/client-only';
 
-function SmoothScroll({ children, slideUpOnLoad = false }: PropsWithChildren & { slideUpOnLoad?: boolean }) {
+function SmoothScroll({
+  children,
+  slideUpOnLoad = false,
+  clientOnly = true,
+}: PropsWithChildren & { slideUpOnLoad?: boolean; clientOnly?: boolean }) {
   const scrollRef = useRef(null);
   const isMobile = useIsMobile();
 
@@ -40,7 +45,7 @@ function SmoothScroll({ children, slideUpOnLoad = false }: PropsWithChildren & {
       }}
       className="relative w-full will-change-transform"
     >
-      {children}
+      <ClientOnlyWrapper enabled={clientOnly}> {children} </ClientOnlyWrapper>
     </motion.div>
   ) : (
     <>
@@ -57,7 +62,7 @@ function SmoothScroll({ children, slideUpOnLoad = false }: PropsWithChildren & {
         style={{ y: spring }}
         className="fixed left-0 w-full overflow-hidden will-change-transform"
       >
-        {children}
+        <ClientOnlyWrapper enabled={clientOnly}> {children} </ClientOnlyWrapper>
       </motion.div>
       <div style={{ height: pageHeight }} />
     </>
