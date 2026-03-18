@@ -8,6 +8,7 @@ import { WriteContractMutateAsync } from 'wagmi/query';
 export const StakingContractAddress = '0x03d4702b51a98661B89dF5fcBe8C4baeF84C60B7';
 
 export namespace StakingContract {
+  /// returns unix timestamp in seconds
   export const startingTimestamp = async (client: Client): Promise<bigint> => {
     const key = StakingContractAddress + '_' + 'startingTimestamp';
     const cached = localStorage.getItem(key);
@@ -24,6 +25,7 @@ export namespace StakingContract {
     return value;
   };
 
+  /// returns duration seconds
   export const epochDuration = async (client: Client): Promise<bigint> => {
     const key = StakingContractAddress + '_' + 'epochDuration';
     const cached = localStorage.getItem(key);
