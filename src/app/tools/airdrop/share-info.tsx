@@ -70,7 +70,12 @@ export default function AirdropShareInfo(props: { result: UseAirdropSharesResult
     if (!client) return;
     try {
       setActionState('loading');
-      await DistributionContract.trigger(mutateAsync, client, BigInt(selectedShare.shareData.id), selectedShare.shareData.contract);
+      await DistributionContract.trigger(
+        mutateAsync,
+        client,
+        BigInt(selectedShare.shareData.id),
+        selectedShare.shareData.contract
+      );
       setActionState('done');
       await props.refresh();
     } catch (e) {
@@ -112,16 +117,16 @@ function ShareDetails(props: { share: AirdropShareModel; onRevealClick: () => vo
   const { share, onRevealClick, onClaimClick } = props;
   const shareData = share.shareData;
 
-  const tge = roundEther(BigInt(shareData.tge), 4);
-  const initialAmount = roundEther(BigInt(shareData.initialAmount), 4);
-  const totalCap = roundEther(BigInt(shareData.totalCap), 4);
+  const tge = roundEther(BigInt(shareData.tge), 10);
+  const initialAmount = roundEther(BigInt(shareData.initialAmount), 8);
+  const totalCap = roundEther(BigInt(shareData.totalCap), 10);
   // Format amount per second properly to avoid scientific notation
   const amountPerDayRaw = formatEther(BigInt(shareData.amountPerSecond) * 3600n * 24n);
   const startTime = new Date(Number(shareData.startTime) * 1000).toLocaleString();
 
   // Format claimable amounts for revealed shares
-  const claimable = share.claimable ? roundEther(share.claimable, 4) : '0';
-  const claimed = share.claimed ? roundEther(share.claimed, 4) : '0';
+  const claimable = share.claimable ? roundEther(share.claimable, 10) : '0';
+  const claimed = share.claimed ? roundEther(share.claimed, 10) : '0';
   const availableToClaim = share.availableToClaim ? formatEther(BigInt(share.availableToClaim)) : '0';
 
   return (
