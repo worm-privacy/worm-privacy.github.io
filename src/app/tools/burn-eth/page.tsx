@@ -105,11 +105,6 @@ export default function BurnETHRoot() {
               </div>
             </div>
           </div>
-          {/* <div className="my-60 flex grow flex-col items-center text-white">
-            <div className="grow" />
-            <div className="text-3xl">Burn ETH is disabled for now</div>
-            <div className="grow" />
-          </div> */}
         </WalletNotConnectedContainer>
         <div className="min-h-12 grow" />
         <Footer />

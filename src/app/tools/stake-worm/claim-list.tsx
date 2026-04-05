@@ -4,8 +4,8 @@ import { Icons } from '@/components/ui/icons';
 import { StakingItem, StakingState, StakingWeekItem, UseStakingListResult } from '@/hooks/use-staking-list';
 import { StakingContract } from '@/lib/core/contracts/staking';
 import { roundEther, roundEtherF } from '@/lib/core/utils/round-ether';
-import { useState } from 'react';
-import { formatEther } from 'viem';
+import { useEffect, useState } from 'react';
+import { Client, formatEther } from 'viem';
 import { useClient, useWriteContract } from 'wagmi';
 
 export default function StakingClaimList(props: { result: UseStakingListResult; refresh: () => Promise<void> }) {
@@ -91,6 +91,13 @@ const StakingItemComponent = (props: { staking: StakingItem; currentWeek: bigint
   const client = useClient();
   const [releaseState, setReleaseState] = useState<'idle' | 'loading' | 'error' | 'done'>('idle');
 
+  const [releaseTime, setReleaseTime] = useState(0n);
+  useEffect(() => {
+    if (client === null) return;
+    // -1 is because endWeek is release date which is last week + 1
+    calculateEpochEndTime(client!, props.staking.endWeek - 1n).then((value: bigint) => setReleaseTime(value));
+  }, [client]);
+
   const onReleaseClicked = async () => {
     try {
       setReleaseState('loading');
@@ -151,7 +158,7 @@ const StakingItemComponent = (props: { staking: StakingItem; currentWeek: bigint
         <DialogHeader>
           <DialogTitle>Participate #{staking.stakeNumber}</DialogTitle>
         </DialogHeader>
-        <div className="satoshi-body2 max-h-61.5 px-8 pb-6 text-white">
+        <div className="satoshi-body2 px-8 pb-6 text-white">
           {releaseState == 'idle' && (
             <div className="flex flex-col">
               <div className="mb-2">Staked amount</div>
@@ -159,6 +166,12 @@ const StakingItemComponent = (props: { staking: StakingItem; currentWeek: bigint
                 <div className="mr-2 text-[24px] font-bold text-white">{roundEther(staking.stakeAmount)}</div>
                 <div className="text-brand">WORM</div>
               </div>
+
+              <div className="mt-5 mb-1 text-white">
+                <span className="opacity-70">Release time: </span>
+                <span> {new Date(Number(releaseTime) * 1000).toLocaleString()} </span>
+              </div>
+
               {props.staking.state === 'Ended' && (
                 <button
                   onClick={onReleaseClicked}
@@ -195,6 +208,12 @@ const StakingWeekItemComponent = (props: {
   const { mutateAsync } = useWriteContract();
   const client = useClient();
   const [claimState, setClaimState] = useState<'idle' | 'loading' | 'error' | 'done'>('idle');
+
+  const [claimTime, setClaimTime] = useState(0n);
+  useEffect(() => {
+    if (client === null) return;
+    calculateEpochEndTime(client!, props.week.weekNumber).then((value: bigint) => setClaimTime(value));
+  }, [client]);
 
   const onClaimClicked = async () => {
     try {
@@ -254,7 +273,7 @@ const StakingWeekItemComponent = (props: {
         <DialogHeader>
           <DialogTitle>Claim staking reward</DialogTitle>
         </DialogHeader>
-        <div className="satoshi-body2 max-h-61.5 px-8 pb-6 text-white">
+        <div className="satoshi-body2 px-8 pb-6 text-white">
           {claimState == 'idle' && (
             <div className="flex flex-col">
               <div className="mb-5 opacity-70">Week number {week.weekNumber}</div>
@@ -268,6 +287,12 @@ const StakingWeekItemComponent = (props: {
                 <div className="mr-2 text-[24px] font-bold text-white">{roundEther(week.totalReward)}</div>
                 <div className="text-[#FF47C0]">BETH</div>
               </div>
+
+              <div className="mt-5 mb-1 text-white">
+                <span className="opacity-70">Claim time: </span>
+                <span> {new Date(Number(claimTime) * 1000).toLocaleString()} </span>
+              </div>
+
               {props.week.weekNumber < props.currentWeek ? (
                 <button
                   onClick={onClaimClicked}
@@ -302,4 +327,13 @@ const stakingStateStyleDiff = (state: StakingState) => {
     case 'Released':
       return 'bg-[#64748B1F] text-[#FFFFFF]';
   }
+};
+
+/// claim-time = start-time + ( (week + 1) * epoch-duration )
+/// +1 is because epochs are zero-base
+const calculateEpochEndTime = async (client: Client, weekNumber: bigint) => {
+  return (
+    (await StakingContract.startingTimestamp(client)) +
+    (weekNumber + 1n) * (await StakingContract.epochDuration(client))
+  );
 };
