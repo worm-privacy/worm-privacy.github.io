@@ -5,7 +5,6 @@ import { WriteContractMutateAsync } from 'wagmi/query';
 import { RapidsnarkOutput } from '../miner-api/proof-get-by-nullifier';
 import { WORMcontractAddress } from './worm';
 
-//TODO change this address
 // mainnet 0x5624344235607940d4d4ee76bf8817d403eb9cf8
 // sepolia 0x98B9b8879EC255dfcfA55dF19d9FFc0987d68064
 export const BETHContractAddress = '0x5624344235607940d4d4ee76bf8817d403eb9cf8';

@@ -70,7 +70,6 @@ export default function Wormhole() {
   const network = useNetwork();
 
   useEffect(() => {
-    // TODO call these two in parallel
     relay_get(DEFAULT_ENDPOINT.url)
       .then((response) => {
         setBroadcasterFee(response.min_broadcaster_fee);

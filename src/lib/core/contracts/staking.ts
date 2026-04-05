@@ -4,7 +4,6 @@ import { getContractEvents, readContract, waitForTransactionReceipt } from 'viem
 import { Config } from 'wagmi';
 import { WriteContractMutateAsync } from 'wagmi/query';
 
-//TODO change this address
 export const StakingContractAddress = '0x03d4702b51a98661B89dF5fcBe8C4baeF84C60B7';
 
 export namespace StakingContract {

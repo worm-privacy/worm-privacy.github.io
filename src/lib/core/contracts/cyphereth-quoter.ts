@@ -3,7 +3,6 @@ import { simulateContract } from 'viem/actions';
 import { BETHContractAddress } from './beth';
 import { WETHContractAddress } from './weth';
 
-//TODO change this address
 // mainnet address 0xeae871C4a8dD267146558C362c86805FB7e3Fd2F
 // testnet address 0xadD719B41f49E59C9af69021a4F74C4ff1f7B3b0
 export const CypherETHQuoterContractAddress = '0xeae871C4a8dD267146558C362c86805FB7e3Fd2F';
