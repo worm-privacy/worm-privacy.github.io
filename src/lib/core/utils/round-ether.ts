@@ -7,6 +7,8 @@ export const roundEther = (amount: bigint, maxLen: number = 7): string => {
 
   let str = formatEther(amount);
   if (str.indexOf('.') !== -1) {
+    const leftSide = str.split('.')[0];
+    if (leftSide.length >= maxLen) return leftSide;
     str = str.substring(0, maxLen);
     while (str.endsWith('0')) str = str.substring(0, str.length - 1);
     if (str.endsWith('.')) str = str.substring(0, str.length - 1);
@@ -44,4 +46,9 @@ export const test_roundEther = () => {
   assert(roundEther(1n), '<0.0001');
 
   assert(roundEther(parseEther('12345678'), 1), '12345678');
+
+  // this test case is from allocation
+  assert(roundEther(BigInt('59687106120565576576444'), 4), '59687');
+  assert(roundEther(BigInt('9947851020094262762740'), 4), '9947');
+  console.log('----- all test_roundEther tests passed -----');
 };

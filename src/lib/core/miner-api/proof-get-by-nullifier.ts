@@ -14,8 +14,11 @@ export const proof_get_by_nullifier = async (
       try {
         const inQueue = parseInt((await response.json()).error);
         return { status: 'waiting', inQueue };
-      } catch {
-        //TODO
+      } catch (e) {
+        console.error(e);
+        console.error(
+          'This error happens in case server is returning status 404 but body of response is not json or does not have valid inQueue value in it'
+        );
       }
     default:
       const error = await response.json().catch(() => ({}));

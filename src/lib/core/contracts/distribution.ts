@@ -3,9 +3,6 @@ import { readContract, waitForTransactionReceipt } from 'viem/actions';
 import { Config } from 'wagmi';
 import { WriteContractMutateAsync } from 'wagmi/query';
 
-// TODO: Update this address when deployed
-//export const DistributionContractAddress = '0x9E59bCbEB00e3e6089a167a970377Fb0204cEe96';
-
 export type ShareData = {
   id: string;
   owner: string;
@@ -23,7 +20,7 @@ export type ShareData = {
 export type OnChainShare = {
   id: bigint;
   owner: `0x${string}`;
-  tgeStartTime: bigint,
+  tgeStartTime: bigint;
   tge: bigint;
   startTime: bigint;
   initialAmount: bigint;
@@ -48,11 +45,15 @@ export namespace DistributionContract {
       startTime: tuple[4],
       initialAmount: tuple[5],
       amountPerSecond: tuple[6],
-      totalCap: tuple[7]
+      totalCap: tuple[7],
     };
   };
 
-  export const calculateClaimable = async (client: Client, shareId: bigint, contract: `0x${string}`): Promise<bigint> => {
+  export const calculateClaimable = async (
+    client: Client,
+    shareId: bigint,
+    contract: `0x${string}`
+  ): Promise<bigint> => {
     const result = await readContract(client, {
       address: contract,
       abi: DistributionContractABI,
