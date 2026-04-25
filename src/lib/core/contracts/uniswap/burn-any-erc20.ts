@@ -1,8 +1,8 @@
 import { AllowanceTransfer, PERMIT2_ADDRESS, PermitSingle } from '@uniswap/permit2-sdk';
 import { CommandType, RoutePlanner } from '@uniswap/universal-router-sdk';
-import { Address, encodeFunctionData, encodePacked, parseAbi, PublicClient, WalletClient } from 'viem';
+import { Address, encodeFunctionData, parseAbi, PublicClient, WalletClient } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
-import { WETHContractAddress } from '../weth';
+import { ListedToken } from '../../tokens-config';
 import { approveTokenForPermit2 } from './permit2';
 
 const UNIVERSAL_ROUTER = '0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD' as Address;
@@ -10,14 +10,14 @@ const UNIVERSAL_ROUTER = '0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD' as Address
 export const burnAnyERC20ExactOut = async (
   walletClient: WalletClient,
   publicClient: PublicClient,
-  tokenInAddress: `0x${string}`,
+  tokenIn: ListedToken,
   amountOut: bigint,
   amountIn: bigint, // in ERC20 input token
   burnAddress: `0x${string}`
 ) => {
   if (!walletClient.account) throw new Error('Wallet client has no account');
 
-  await approveTokenForPermit2(walletClient, publicClient, tokenInAddress);
+  await approveTokenForPermit2(walletClient, publicClient, tokenIn.address);
 
   const userAddress = (await walletClient.getAddresses())[0];
   const amountInMax = amountIn + amountIn / 20n; // 5% safety to prevent transaction failure
@@ -27,7 +27,7 @@ export const burnAnyERC20ExactOut = async (
       address: PERMIT2_ADDRESS,
       abi: PERMIT2_ABI,
       functionName: 'allowance',
-      args: [userAddress, tokenInAddress, UNIVERSAL_ROUTER],
+      args: [userAddress, tokenIn.address, UNIVERSAL_ROUTER],
     })
   )[2];
 
@@ -35,7 +35,7 @@ export const burnAnyERC20ExactOut = async (
 
   const permitSingle: PermitSingle = {
     details: {
-      token: tokenInAddress,
+      token: tokenIn.address,
       amount: amountInMax + amountInMax / 20n,
       expiration: deadline,
       nonce,
@@ -58,11 +58,15 @@ export const burnAnyERC20ExactOut = async (
     message: values as any,
   });
 
-  const path = encodePacked(['address', 'uint24', 'address'], [WETHContractAddress, 3000, tokenInAddress]);
-
   const planner = new RoutePlanner()
     .addCommand(CommandType.PERMIT2_PERMIT, [permitSingle, signature])
-    .addCommand(CommandType.V3_SWAP_EXACT_OUT, [UNIVERSAL_ROUTER, amountOut, amountInMax, path, true])
+    .addCommand(CommandType.V3_SWAP_EXACT_OUT, [
+      UNIVERSAL_ROUTER,
+      amountOut,
+      amountInMax,
+      tokenIn.v3ExactOutPathToWETH,
+      true,
+    ])
     .addCommand(CommandType.UNWRAP_WETH, [burnAddress, amountOut]);
 
   const calldata = encodeFunctionData({
