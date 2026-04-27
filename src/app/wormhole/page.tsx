@@ -226,7 +226,7 @@ export default function Wormhole() {
               {error === null ? (
                 <div className="flex flex-col gap-3 ">
                   <AmountTokenSelector
-                    label="You send"
+                    typeName="send"
                     disabled={wormholeState !== 'Start'}
                     amountState={burnAmount}
                     tokenSelectionState={burnToken}
@@ -240,7 +240,7 @@ export default function Wormhole() {
                   </div>
 
                   <AmountTokenSelector
-                    label="You Receive"
+                    typeName="receive"
                     disabled={true}
                     amountState={receiveAmount}
                     tokenSelectionState={receiveToken}
