@@ -10,6 +10,7 @@ import { SmoothScroll } from '@/components/ui/smoth-scroll';
 import { useDebounceEffect } from '@/hooks/use-debounce-effect';
 import { useInput } from '@/hooks/use-input';
 import { useNetwork, WormNetwork } from '@/hooks/use-network';
+import { useTokenSelection } from '@/hooks/use-token-selection';
 import { BurnAddressContent, generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
 import { calculateNullifier } from '@/lib/core/burn-address/nullifier';
 import { calculateRemainingCoinHash } from '@/lib/core/burn-address/remaining_coin';
@@ -21,6 +22,7 @@ import { proof_get_by_nullifier, RapidsnarkOutput } from '@/lib/core/miner-api/p
 import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-post';
 import { relay_get } from '@/lib/core/miner-api/relay-get';
 import { relay_post } from '@/lib/core/miner-api/relay_post';
+import { LISTED_TOKENS } from '@/lib/core/tokens-config';
 import { calculateMintAmount } from '@/lib/core/utils/beth-amount-calculator';
 import { transferETH } from '@/lib/core/utils/transfer-eth';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
@@ -32,11 +34,15 @@ import { Client, formatEther, hexToBytes, parseEther, toHex } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useClient, usePublicClient, useSendTransaction } from 'wagmi';
 import { DEFAULT_ENDPOINT, GET_PROOF_RESULT_POLLING_INTERVAL } from '../tools/burn-eth/mint-beth';
+import { AmountTokenSelector } from './amount-token-selector';
 
 export default function Wormhole() {
   // inputs
   const burnAmount = useInput('', validateETHAmount);
+  const burnToken = useTokenSelection(LISTED_TOKENS[0]);
+
   const receiverAddress = useInput('', validateAddress);
+  const receiveToken = useTokenSelection(null);
 
   // fees
   const [proverFee, setProverFee] = useState<bigint | null>(null); // null means not loaded yet
@@ -209,33 +215,35 @@ export default function Wormhole() {
         <TopBar />
         <WalletNotConnectedContainer>
           <div>
+            <div className="m-auto mt-10 flex max-w-[500px] flex-row items-center">
+              <Icons.back width={15} className="m-4" />
+              <div className="text-[24px] font-bold text-white">Wormhole</div>
+            </div>
+            <div className="m-auto  flex max-w-[500px] text-white">
+              Privacy-first swap, Send and receive anonymously!
+            </div>
             <div className="m-auto mt-10 flex max-w-[500px] flex-col rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
-              <div className="m-auto text-[24px] font-bold text-white">Wormhole</div>
               {error === null ? (
                 <div className="flex flex-col gap-3 ">
-                  <InputComponent
+                  <AmountTokenSelector
+                    label="You send"
                     disabled={wormholeState !== 'Start'}
-                    label="Send amount"
-                    hint="0.0"
-                    state={burnAmount}
-                    inputType="number"
-                    inputKind="ETH"
+                    amountState={burnAmount}
+                    tokenSelectionState={burnToken}
                   />
 
                   {/* arrow */}
-                  <div className="mt-2 flex flex-row">
+                  <div className="-mt-7 -mb-7 flex flex-row">
                     <div className="grow" />
-                    <Icons.back className="rotate-270" />
+                    <Icons.back className="rotate-270 rounded-lg bg-black p-2" width={35} height={35} />
                     <div className="grow" />
                   </div>
 
-                  <InputComponent
-                    disabled
-                    label="Receive amount"
-                    hint="0.0"
-                    state={receiveAmount}
-                    inputType="number"
-                    inputKind="ETH"
+                  <AmountTokenSelector
+                    label="You Receive"
+                    disabled={true}
+                    amountState={receiveAmount}
+                    tokenSelectionState={receiveToken}
                   />
                   <InputComponent
                     disabled={wormholeState !== 'Start'}
