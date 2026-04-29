@@ -13,13 +13,14 @@ export const AmountTokenSelector = (props: InputComponentProps) => {
   useDebounceEffect(
     async () => {
       try {
-        console.log(
-          `estimate type: ${props.typeName}, amount: ${props.amountState.value}, token: ${props.tokenSelectionState.value}`
-        );
         if (props.amountState.value === '') throw 'empty input';
         setDollarValue('...');
         const path = props.tokenSelectionState.value!.pathToTether;
-        if (path.length === 0) return setDollarValue(props.amountState.value); // tokens is dollar stablecoin
+        if (path.length === 0) {
+          // tokens is dollar stablecoin
+          setDollarValue(props.amountState.value);
+          return;
+        }
         const estimatedAmount = await UniswapV3Quoter.quoteExactInput(
           client!,
           path,
@@ -32,7 +33,7 @@ export const AmountTokenSelector = (props: InputComponentProps) => {
       }
     },
     1000,
-    [props.amountState, props.tokenSelectionState]
+    [props.amountState.value, props.tokenSelectionState.value]
   );
 
   return (
