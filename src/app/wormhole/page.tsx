@@ -16,7 +16,6 @@ import { calculateNullifier } from '@/lib/core/burn-address/nullifier';
 import { calculateRemainingCoinHash } from '@/lib/core/burn-address/remaining_coin';
 import { BETHContract } from '@/lib/core/contracts/beth';
 import { BETHToETHContract } from '@/lib/core/contracts/beth-to-eth';
-import { CypherETHQuoterContract } from '@/lib/core/contracts/cyphereth-quoter';
 import { proof_get } from '@/lib/core/miner-api/proof-get';
 import { proof_get_by_nullifier, RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
 import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-post';
@@ -26,11 +25,12 @@ import { LISTED_TOKENS } from '@/lib/core/tokens-config';
 import { calculateMintAmount } from '@/lib/core/utils/beth-amount-calculator';
 import { transferETH } from '@/lib/core/utils/transfer-eth';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
+import { estimatePrivateSwap, INPUT_AMOUNT_NOT_ENOUGH } from '@/lib/utils/estimate-private-swap';
 import { loadJson } from '@/lib/utils/load-json';
 import { newSavableRecoverData, recoverDataFromJson } from '@/lib/utils/recover-data';
 import { saveJson } from '@/lib/utils/save-json';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Client, formatEther, hexToBytes, parseEther, toHex } from 'viem';
+import { Client, formatEther, formatUnits, hexToBytes, parseEther, parseUnits, toHex } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useClient, usePublicClient, useSendTransaction } from 'wagmi';
 import { DEFAULT_ENDPOINT, GET_PROOF_RESULT_POLLING_INTERVAL } from '../tools/burn-eth/mint-beth';
@@ -44,15 +44,13 @@ export default function Wormhole() {
   const receiverAddress = useInput('', validateAddress);
   const receiveToken = useTokenSelection(null);
 
-  // fees
+  // off-chain server configs
   const [proverFee, setProverFee] = useState<bigint | null>(null); // null means not loaded yet
   const [broadcasterFee, setBroadcasterFee] = useState<bigint | null>(null); // null means not loaded yet
-
   const [proverAddress, setProverAddress] = useState<`0x${string}` | null>(null); // null means not loaded yet
 
   // calculate/estimate
-  const [mintAmount, setMintAmount] = useState(0n); // this is BETH
-  const receiveAmount = useInput('', validateETHAmount); // this is ETH
+  const receiveAmount = useInput('', validateETHAmount);
 
   // state
   const [wormholeState, setWormholeState] = useState<WormholeState>('Start');
@@ -95,26 +93,27 @@ export default function Wormhole() {
       });
   }, []);
 
-  useEffect(() => {
-    if (proverFee == null || broadcasterFee == null) return;
-    // Swap amount sets 0 because we want to swap all of it anyway
-    setMintAmount(calculateMintAmount(parseEther(burnAmount.value), 0n, proverFee, broadcasterFee));
-  }, [burnAmount, proverFee, broadcasterFee]);
-
   useDebounceEffect(
-    () => {
-      CypherETHQuoterContract.estimateBethEtherSwap(client!, mintAmount)
-        .then((estimatedAmount) => {
-          console.log('estimatedAmount:', estimatedAmount);
-          receiveAmount.update(formatEther(estimatedAmount));
-        })
-        .catch((e) => {
-          console.error(e);
-          setError('Error while Estimating receive amount');
-        });
+    async () => {
+      try {
+        receiveAmount.update('');
+        const estimatedAmount = await estimatePrivateSwap(
+          client!,
+          burnToken.value!,
+          receiveToken.value!,
+          parseUnits(burnAmount.value, burnToken.value!.decimals),
+          proverFee!,
+          broadcasterFee!
+        );
+        receiveAmount.update(formatUnits(estimatedAmount, receiveToken.value!.decimals));
+      } catch (e) {
+        console.error(e);
+        if (e === INPUT_AMOUNT_NOT_ENOUGH) setError(e);
+        receiveAmount.update('');
+      }
     },
-    1000,
-    [mintAmount]
+    2000,
+    [burnAmount.value, burnToken.value?.address, receiveToken.value?.address]
   );
 
   const onPrimaryClick = async () => {
@@ -235,7 +234,7 @@ export default function Wormhole() {
                   {/* arrow */}
                   <div className="-mt-7 -mb-7 flex flex-row">
                     <div className="grow" />
-                    <Icons.back className="rotate-270 rounded-lg bg-black p-2" width={35} height={35} />
+                    <Icons.back className="rotate-270 rounded-lg bg-[#090C15] p-2" width={35} height={35} />
                     <div className="grow" />
                   </div>
 

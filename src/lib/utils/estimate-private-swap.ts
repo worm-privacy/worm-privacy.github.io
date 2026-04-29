@@ -23,6 +23,7 @@ export const estimatePrivateSwap = async (
 
   const mintAmount = calculateMintAmount(burnAmount, 0n, proverFee, broadcasterFee);
   console.log('mintAmount', mintAmount);
+  if (mintAmount <= 0) throw 'INPUT_AMOUNT_NOT_ENOUGH';
 
   const ethReceiveAmount = await CypherETHQuoterContract.estimateBethEtherSwap(client, mintAmount);
   console.log('ethReceiveAmount', ethReceiveAmount);
@@ -36,3 +37,5 @@ export const estimatePrivateSwap = async (
 
   return tokenOutReceiveAmount;
 };
+
+export const INPUT_AMOUNT_NOT_ENOUGH = 'Input amount not enough';
