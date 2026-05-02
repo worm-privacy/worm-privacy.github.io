@@ -7,7 +7,7 @@ const UNISWAP_V3_QUOTER_ADDRESS = '0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6';
 
 export namespace UniswapV3Quoter {
   export const quoteExactInput = async (client: Client, path: SwapPathType, amountIn: bigint) => {
-    if (amountIn < 0n) return 0n;
+    if (amountIn <= 0n) return 0n;
     return (
       await simulateContract(client, {
         address: UNISWAP_V3_QUOTER_ADDRESS,
