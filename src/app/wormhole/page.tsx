@@ -90,7 +90,7 @@ export default function Wormhole() {
       case 'Loading':
         return <WormholeLoadingComponent />;
       case 'Error':
-        return <WormholeErrorComponent />;
+        return <WormholeErrorComponent onRecoverClick={onRecoverClick} />;
       case 'Finished':
         return <WormholeFinishedComponent />;
       default:
