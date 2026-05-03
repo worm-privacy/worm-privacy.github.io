@@ -26,9 +26,13 @@ import WormholeRestComponent, { WormholeRestComponentResult } from './rest';
 
 export default function Wormhole() {
   // state
-  const [wormholeState, setWormholeState] = useState<WormholeState>('Rest');
+  const [wormholeState, setWormholeState] = useState<WormholeState>('Finished');
 
   const [restResult, setRestResult] = useState<WormholeRestComponentResult | null>(null);
+
+  //TODO set these two hashes
+  const [burnTrx, setBurnTrx] = useState<`0x${string}` | null>(null);
+  const [mintTrx, setMintTrx] = useState<`0x${string}` | null>(null);
 
   const onStart = (result: WormholeRestComponentResult) => {
     console.log('result', result);
@@ -92,7 +96,7 @@ export default function Wormhole() {
       case 'Error':
         return <WormholeErrorComponent onRecoverClick={onRecoverClick} />;
       case 'Finished':
-        return <WormholeFinishedComponent />;
+        return <WormholeFinishedComponent senderTx={burnTrx} receiverTx={mintTrx} />;
       default:
         throw 'state not supported';
     }
