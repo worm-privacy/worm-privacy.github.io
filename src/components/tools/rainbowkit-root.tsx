@@ -68,6 +68,7 @@ export const mainnet = /*#__PURE__*/ defineChain({
   rpcUrls: {
     default: {
       http: [
+        'https://eth.drpc.org',
         'https://0xrpc.io/eth',
         'https://eth.merkle.io',
         'https://eth.llamarpc.com',
