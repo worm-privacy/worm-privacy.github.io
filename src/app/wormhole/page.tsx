@@ -5,7 +5,7 @@ import TopBar from '@/components/tools/topbar';
 import { WalletNotConnectedContainer } from '@/components/tools/wallet-not-connected';
 import { Icons } from '@/components/ui/icons';
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
-import { useNetwork, WormNetwork } from '@/hooks/use-network';
+import { WormNetwork } from '@/hooks/use-network';
 import { BurnAddressContent } from '@/lib/core/burn-address/burn-address-generator';
 import { calculateNullifier } from '@/lib/core/burn-address/nullifier';
 import { calculateRemainingCoinHash } from '@/lib/core/burn-address/remaining_coin';
@@ -17,7 +17,6 @@ import { relay_post } from '@/lib/core/miner-api/relay_post';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Client, toHex } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
-import { useClient, usePublicClient, useSendTransaction } from 'wagmi';
 import { DEFAULT_ENDPOINT, GET_PROOF_RESULT_POLLING_INTERVAL } from '../tools/burn-eth/mint-beth';
 import WormholeErrorComponent from './error';
 import WormholeFinishedComponent from './finished';
@@ -30,11 +29,6 @@ export default function Wormhole() {
   const [wormholeState, setWormholeState] = useState<WormholeState>('Rest');
 
   const [restResult, setRestResult] = useState<WormholeRestComponentResult | null>(null);
-
-  const { mutateAsync } = useSendTransaction();
-  const client = useClient();
-  const publicClient = usePublicClient();
-  const network = useNetwork();
 
   const onStart = (result: WormholeRestComponentResult) => {
     console.log('result', result);
@@ -92,7 +86,7 @@ export default function Wormhole() {
       case 'Rest':
         return <WormholeRestComponent onRecoverClick={onRecoverClick} onStart={onStart} />;
       case 'ReadyToSend':
-        return <WormholeReadyToSendComponent />;
+        return <WormholeReadyToSendComponent restResult={restResult!} />;
       case 'Loading':
         return <WormholeLoadingComponent />;
       case 'Error':
@@ -110,14 +104,14 @@ export default function Wormhole() {
         <TopBar />
         <WalletNotConnectedContainer>
           <div>
-            <div className="m-auto mt-10 flex max-w-[500px] flex-row items-center">
-              <Icons.back width={15} className="m-4" />
+            <div className="m-auto mt-5 flex max-w-[500px] flex-row items-center">
+              <Icons.back width="15" className="m-4" />
               <div className="text-[24px] font-bold text-white">Wormhole</div>
             </div>
             <div className="m-auto  flex max-w-[500px] text-white">
               Privacy-first swap, Send and receive anonymously!
             </div>
-            <div className="m-auto mt-10 flex max-w-[500px] flex-col rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
+            <div className="m-auto mt-5 flex max-w-[500px] flex-col rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
               {switchInnerComponent()}
             </div>
           </div>

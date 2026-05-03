@@ -10,7 +10,7 @@ import { BurnAddressContent, generateBurnAddress } from '@/lib/core/burn-address
 import { BETHToETHContract } from '@/lib/core/contracts/beth-to-eth';
 import { proof_get } from '@/lib/core/miner-api/proof-get';
 import { relay_get } from '@/lib/core/miner-api/relay-get';
-import { LISTED_TOKENS } from '@/lib/core/tokens-config';
+import { LISTED_TOKENS, ListedToken } from '@/lib/core/tokens-config';
 import { calculateMintAmount, POOL_SHARE_INV } from '@/lib/core/utils/beth-amount-calculator';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
 import { estimatePrivateSwap } from '@/lib/utils/estimate-private-swap';
@@ -27,7 +27,7 @@ export default function WormholeRestComponent(props: {
   onRecoverClick: () => void;
   onStart: (result: WormholeRestComponentResult) => void;
 }) {
-  const burnAmount = useInput('', validateETHAmount); // TODO handle error state
+  const burnAmountERC20 = useInput('', validateETHAmount); // TODO handle error state
   const burnToken = useTokenSelection(LISTED_TOKENS[0]);
 
   const receiverAddress = useInput('', validateAddress); // TODO handle error state
@@ -69,7 +69,7 @@ export default function WormholeRestComponent(props: {
           client!,
           burnToken.value!,
           receiveToken.value!,
-          parseUnits(burnAmount.value, burnToken.value!.decimals),
+          parseUnits(burnAmountERC20.value, burnToken.value!.decimals),
           relayConfig!.proverFee,
           relayConfig!.broadcasterFee
         );
@@ -83,19 +83,19 @@ export default function WormholeRestComponent(props: {
       }
     },
     2000,
-    [burnAmount.value, burnToken.value?.address, receiveToken.value?.address]
+    [burnAmountERC20.value, burnToken.value?.address, receiveToken.value?.address]
   );
 
   const onStartClick = async () => {
     // validation
-    if (!validateAll(burnAmount, receiverAddress)) return;
+    if (!validateAll(burnAmountERC20, receiverAddress)) return;
     if (receiveToken.value === null) {
       //TODO error "Receive token is not selected"
     }
     if (parseUnits(estimatedTokenOut.value, receiveToken.value!.decimals) < 0n)
-      return burnAmount.setError('Burn amount is too low');
+      return burnAmountERC20.setError('Burn amount is too low');
 
-    if (burnAmountETH > parseEther('10')) return burnAmount.setError('You can not burn more then 10 ETH');
+    if (burnAmountETH > parseEther('10')) return burnAmountERC20.setError('You can not burn more then 10 ETH');
 
     if (relayConfig === null) return;
 
@@ -119,7 +119,13 @@ export default function WormholeRestComponent(props: {
       );
 
       saveJson(newSavableRecoverData(_burnAddress), `burn_${_burnAddress.burnAddress}_backup.json`);
-      props.onStart({ burnAddress: _burnAddress });
+      props.onStart({
+        burnAddress: _burnAddress,
+        burnToken: burnToken.value!,
+        burnAmountERC20: parseUnits(burnAmountERC20.value, burnToken.value!.decimals),
+        receiveToken: receiveToken.value!,
+        estimatedReceiveAmount: parseUnits(estimatedTokenOut.value, receiveToken.value!.decimals),
+      });
     } catch (e) {
       console.error('onStart', e);
       //TODO error state
@@ -130,7 +136,7 @@ export default function WormholeRestComponent(props: {
 
   return (
     <div className="flex flex-col gap-3 ">
-      <AmountTokenSelector typeName="send" amountState={burnAmount} tokenSelectionState={burnToken} />
+      <AmountTokenSelector typeName="send" amountState={burnAmountERC20} tokenSelectionState={burnToken} />
 
       {/* arrow */}
       <div className="-mt-7 -mb-7 flex flex-row">
@@ -177,6 +183,12 @@ export default function WormholeRestComponent(props: {
 
 export type WormholeRestComponentResult = {
   burnAddress: BurnAddressContent;
+
+  burnToken: ListedToken;
+  burnAmountERC20: bigint;
+
+  receiveToken: ListedToken;
+  estimatedReceiveAmount: bigint;
 };
 
 export type RelayConfig = {
