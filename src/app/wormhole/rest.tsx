@@ -11,7 +11,7 @@ import { BETHToETHContract } from '@/lib/core/contracts/beth-to-eth';
 import { proof_get } from '@/lib/core/miner-api/proof-get';
 import { relay_get } from '@/lib/core/miner-api/relay-get';
 import { LISTED_TOKENS } from '@/lib/core/tokens-config';
-import { calculateMintAmount } from '@/lib/core/utils/beth-amount-calculator';
+import { calculateMintAmount, POOL_SHARE_INV } from '@/lib/core/utils/beth-amount-calculator';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
 import { estimatePrivateSwap } from '@/lib/utils/estimate-private-swap';
 import { newSavableRecoverData } from '@/lib/utils/recover-data';
@@ -21,6 +21,7 @@ import { formatEther, formatUnits, hexToBytes, parseEther, parseUnits } from 'vi
 import { useClient } from 'wagmi';
 import { DEFAULT_ENDPOINT } from '../tools/burn-eth/mint-beth';
 import { AmountTokenSelector } from './amount-token-selector';
+import WormholeCostDetailsComponent from './cost-details';
 
 export default function WormholeRestComponent(props: {
   onRecoverClick: () => void;
@@ -149,6 +150,14 @@ export default function WormholeRestComponent(props: {
         hint="0xf3...fd23"
         state={receiverAddress}
         info="This address will get ETH with no link to the burner! The burner account will perform zero smart-contract interactions!"
+      />
+
+      <div className="my-3 border-t border-gray-800"></div>
+
+      <WormholeCostDetailsComponent
+        broadcasterFee={relayConfig?.broadcasterFee}
+        proverFee={relayConfig?.proverFee}
+        protocolFee={burnAmountETH / POOL_SHARE_INV}
       />
 
       <button onClick={onStartClick} className={`mt-3 w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black`}>
