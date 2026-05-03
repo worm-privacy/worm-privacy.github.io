@@ -35,7 +35,7 @@ export const estimatePrivateSwap = async (
   const tokenOutReceiveAmount = await UniswapV3Quoter.quoteExactInput(client, pathFromWETH, ethReceiveAmount);
   console.log('tokenOutReceiveAmount ', tokenOutReceiveAmount);
 
-  return tokenOutReceiveAmount;
+  return { tokenOut: tokenOutReceiveAmount, burnAmountETH: burnAmount };
 };
 
 export const INPUT_AMOUNT_NOT_ENOUGH = 'Input amount not enough';
