@@ -34,6 +34,8 @@ export default function Wormhole() {
   const [burnTrx, setBurnTrx] = useState<`0x${string}` | null>(null);
   const [mintTrx, setMintTrx] = useState<`0x${string}` | null>(null);
 
+  const topBarVisible = wormholeState === 'Rest' || wormholeState === 'ReadyToSend';
+
   const onStart = (result: WormholeRestComponentResult) => {
     console.log('result', result);
     setRestResult(result);
@@ -107,17 +109,19 @@ export default function Wormhole() {
       <div className="flex h-svh grow flex-col overflow-y-scroll">
         <TopBar />
         <WalletNotConnectedContainer>
-          <div>
-            <div className="m-auto mt-5 flex max-w-[500px] flex-row items-center">
-              <Icons.back width="15" className="m-4" />
-              <div className="text-[24px] font-bold text-white">Wormhole</div>
+          {topBarVisible && (
+            <div>
+              <div className="m-auto mt-5 flex max-w-[500px] flex-row items-center">
+                <Icons.back width="15" className="m-4" />
+                <div className="text-[24px] font-bold text-white">Wormhole</div>
+              </div>
+              <div className="m-auto  flex max-w-[500px] text-white">
+                Privacy-first swap, Send and receive anonymously!
+              </div>
             </div>
-            <div className="m-auto  flex max-w-[500px] text-white">
-              Privacy-first swap, Send and receive anonymously!
-            </div>
-            <div className="m-auto mt-5 flex max-w-[500px] flex-col rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
-              {switchInnerComponent()}
-            </div>
+          )}
+          <div className="m-auto mt-5 flex max-w-[500px] flex-col rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
+            {switchInnerComponent()}
           </div>
         </WalletNotConnectedContainer>
         <div className="min-h-12 grow" />
