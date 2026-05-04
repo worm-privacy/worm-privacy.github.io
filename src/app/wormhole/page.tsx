@@ -26,7 +26,7 @@ import WormholeRestComponent, { WormholeRestComponentResult } from './rest';
 
 export default function Wormhole() {
   // state
-  const [wormholeState, setWormholeState] = useState<WormholeState>('Finished');
+  const [wormholeState, setWormholeState] = useState<WormholeState>('Rest');
 
   const [restResult, setRestResult] = useState<WormholeRestComponentResult | null>(null);
 
@@ -92,7 +92,7 @@ export default function Wormhole() {
       case 'ReadyToSend':
         return <WormholeReadyToSendComponent restResult={restResult!} />;
       case 'Loading':
-        return <WormholeLoadingComponent />;
+        return <WormholeLoadingComponent restResult={restResult!} />;
       case 'Error':
         return <WormholeErrorComponent onRecoverClick={onRecoverClick} />;
       case 'Finished':
