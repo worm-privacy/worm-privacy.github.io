@@ -36,6 +36,18 @@ export default function Wormhole() {
 
   const topBarVisible = wormholeState === 'Rest' || wormholeState === 'ReadyToSend';
 
+  const onBackClick = () => {
+    switch (wormholeState) {
+      case 'Rest':
+        window.location.href = '/';
+        break;
+      case 'ReadyToSend':
+        // safer way to back to 'Rest' state making sure we are wiping everything
+        window.location.reload();
+        break;
+    }
+  };
+
   const onStart = (result: WormholeRestComponentResult) => {
     console.log('result', result);
     setRestResult(result);
@@ -112,7 +124,9 @@ export default function Wormhole() {
           {topBarVisible && (
             <div>
               <div className="m-auto mt-5 flex max-w-[500px] flex-row items-center">
-                <Icons.back width="15" className="m-4" />
+                <button onClick={onBackClick}>
+                  <Icons.back width="15" className="m-4" />
+                </button>
                 <div className="text-[24px] font-bold text-white">Wormhole</div>
               </div>
               <div className="m-auto  flex max-w-[500px] text-white">
