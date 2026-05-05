@@ -11,7 +11,7 @@ import { proof_get } from '@/lib/core/miner-api/proof-get';
 import { proof_get_by_nullifier, RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
 import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-post';
 import { relay_post } from '@/lib/core/miner-api/relay_post';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Client, toHex } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useClient, usePublicClient, useWalletClient } from 'wagmi';
@@ -21,6 +21,8 @@ import { WormholeRestComponentResult } from './rest';
 export default function WormholeLoadingComponent(props: {
   restResult: WormholeRestComponentResult;
   onError: () => void;
+  setBurnTrx: Dispatch<SetStateAction<`0x${string}` | null>>;
+  setMintTrx: Dispatch<SetStateAction<`0x${string}` | null>>;
 }) {
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -49,13 +51,15 @@ export default function WormholeLoadingComponent(props: {
         // generating proof
         setCurrentStep(1);
 
-        await generateAndSubmit(
+        const mintTrxHash = await generateAndSubmit(
           client!,
           props.restResult.burnAddress,
           publicClient,
           network,
           props.restResult.relayConfig.proverAddress
         );
+        props.setBurnTrx(burnTxHash);
+        props.setMintTrx(mintTrxHash);
       } catch (e) {
         console.error('StartOperation', e);
         props.onError();
@@ -173,6 +177,7 @@ const generateAndSubmit = async (
     const exists = await BETHContract.checkNullifier(client!, nullifier);
     if (!exists) throw 'nullifier is not on contract';
   }
+  return trxHash;
 };
 
 const STATUS_STEPS = ['Sending to burn address', 'Generating proof', 'Submitting proof'];

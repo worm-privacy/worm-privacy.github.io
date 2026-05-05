@@ -90,6 +90,7 @@ export const burnAnyERC20ExactOut = async (
   console.log('trxHash', trxHash);
   let receipt = await waitForTransactionReceipt(publicClient!, { hash: trxHash });
   console.log('got receipt:', receipt);
+  return trxHash;
 };
 
 const UNIVERSAL_ROUTER_ABI = parseAbi([

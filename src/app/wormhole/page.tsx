@@ -76,7 +76,14 @@ export default function Wormhole() {
       case 'ReadyToSend':
         return <WormholeReadyToSendComponent restResult={restResult!} />;
       case 'Loading':
-        return <WormholeLoadingComponent restResult={restResult!} onError={onError} />;
+        return (
+          <WormholeLoadingComponent
+            restResult={restResult!}
+            onError={onError}
+            setBurnTrx={setBurnTrx}
+            setMintTrx={setMintTrx}
+          />
+        );
       case 'Error':
         return <WormholeErrorComponent onRecoverClick={onRecoverClick} />;
       case 'Finished':
