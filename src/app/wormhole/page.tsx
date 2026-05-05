@@ -111,7 +111,7 @@ export default function Wormhole() {
               </div>
             </div>
           )}
-          <div className="m-auto mt-5 flex max-w-[500px] flex-col rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
+          <div className="m-auto mt-5 flex w-[500px] flex-col rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
             {switchInnerComponent()}
           </div>
         </WalletNotConnectedContainer>

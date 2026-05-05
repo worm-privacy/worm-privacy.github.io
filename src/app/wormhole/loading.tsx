@@ -48,14 +48,12 @@ export default function WormholeLoadingComponent(props: {
           props.restResult.burnAddress.burnAddress as `0x${string}`
         );
 
-        // generating proof
-        setCurrentStep(1);
-
         const mintTrxHash = await generateAndSubmit(
           client!,
           props.restResult.burnAddress,
           publicClient,
           network,
+          setCurrentStep,
           props.restResult.relayConfig.proverAddress
         );
         props.setBurnTrx(burnTxHash);
@@ -112,8 +110,11 @@ const generateAndSubmit = async (
   burnAddress: BurnAddressContent,
   publicClient: any, // pass whatever usePublicClient() returns
   network: WormNetwork,
+  setCurrentStep: Dispatch<SetStateAction<number>>,
   proverAddress?: `0x${string}`
 ) => {
+  setCurrentStep(1); // start generating  proof
+
   let blockNumber = (await publicClient!.getBlock()).number;
   let accountProof = await publicClient?.getProof({
     address: burnAddress.burnAddress as `0x${string}`,
@@ -144,6 +145,8 @@ const generateAndSubmit = async (
     await new Promise((resolve) => setTimeout(resolve, GET_PROOF_RESULT_POLLING_INTERVAL));
   }
   console.log('rapidsnarkProof:', rapidsnarkProof);
+
+  setCurrentStep(2); // start submitting proof
 
   const remainingCoin = calculateRemainingCoinHash(
     burnAddress.burnKey,

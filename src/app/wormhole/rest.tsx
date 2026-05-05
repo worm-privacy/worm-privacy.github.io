@@ -96,6 +96,7 @@ export default function WormholeRestComponent(props: {
       return burnAmountERC20.setError('Burn amount is too low');
 
     if (burnAmountETH > parseEther('10')) return burnAmountERC20.setError('You can not burn more then 10 ETH');
+    if (burnAmountETH < parseEther('0')) return burnAmountERC20.setError('Burn Amount is less then zero');
 
     if (relayConfig === null) return;
 
