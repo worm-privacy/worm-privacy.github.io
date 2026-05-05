@@ -224,7 +224,7 @@ const MainLayout = (props: {
           onClick={props.onRecoverClicked}
           className="mt-2 flex w-full flex-row items-center justify-center py-3 text-sm font-medium text-brand"
         >
-          <Icons.recover className="mr-2" />
+          <Icons.recover className="mr-2" fill="var(--brand)" />
           Recover
         </button>
 

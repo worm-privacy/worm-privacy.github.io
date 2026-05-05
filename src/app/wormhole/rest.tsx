@@ -125,6 +125,7 @@ export default function WormholeRestComponent(props: {
         burnAmountERC20: parseUnits(burnAmountERC20.value, burnToken.value!.decimals),
         receiveToken: receiveToken.value!,
         estimatedReceiveAmount: parseUnits(estimatedTokenOut.value, receiveToken.value!.decimals),
+        relayConfig: relayConfig,
       });
     } catch (e) {
       console.error('onStart', e);
@@ -175,7 +176,7 @@ export default function WormholeRestComponent(props: {
         onClick={props.onRecoverClick}
         className="flex w-full flex-row items-center justify-center py-3 text-sm font-medium text-brand"
       >
-        <Icons.recover className="mr-2" />
+        <Icons.recover className="mr-2" fill="var(--brand)" />
         Recover
       </button>
     </div>
@@ -190,6 +191,8 @@ export type WormholeRestComponentResult = {
 
   receiveToken: ListedToken;
   estimatedReceiveAmount: bigint;
+
+  relayConfig: RelayConfig;
 };
 
 export type RelayConfig = {
