@@ -35,7 +35,10 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="/press-kit" className={buttonVariants({ variant: 'link', className: 'px-3! py-2.5!' })}>
+              <Link
+                href="/assets/WORM-Press-kit.zip"
+                className={buttonVariants({ variant: 'link', className: 'px-3! py-2.5!' })}
+              >
                 Press kit
               </Link>
             </li>
