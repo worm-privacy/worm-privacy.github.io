@@ -7,6 +7,8 @@ export default function WormholeFinishedComponent(props: {
   senderTx: `0x${string}` | null;
   receiverTx: `0x${string}` | null;
 }) {
+  const onStartOverClicked = () => window.location.reload();
+
   return (
     <div className="flex flex-col">
       <Icons.cheers fill="white" className="mb-4" />
@@ -18,7 +20,7 @@ export default function WormholeFinishedComponent(props: {
       <div className="flex flex-row">
         <Link
           href={`https://etherscan.io/tx/${props.senderTx}`}
-          className="mt-3 flex w-full flex-row items-center justify-center rounded-lg border border-[rgba(var(--brand-rgb),0.24)] px-4 py-2 font-bold text-brand"
+          className="mt-3 flex w-full flex-row items-center justify-center rounded-[8px] border border-[rgba(var(--brand-rgb),0.24)] px-4 py-2 font-bold text-brand"
         >
           <Icons.link className="mr-2" fill="var(--brand)" width={16} height={16} />
           Sender tx
@@ -29,12 +31,16 @@ export default function WormholeFinishedComponent(props: {
         <Link
           href={`https://etherscan.io/tx/${props.receiverTx}`}
           target="_blank"
-          className="mt-3 flex w-full flex-row items-center justify-center rounded-lg border border-[rgba(var(--brand-rgb),0.24)] px-4 py-2 font-bold text-brand"
+          className="mt-3 flex w-full flex-row items-center justify-center rounded-[8px] border border-[rgba(var(--brand-rgb),0.24)] px-4 py-2 font-bold text-brand"
         >
           <Icons.link className="mr-2" fill="var(--brand)" width={16} height={16} />
           Receiver tx
         </Link>
       </div>
+
+      <button className="mt-4 rounded-[8px] bg-[#1F2533] px-4 py-2 text-white" onClick={onStartOverClicked}>
+        Start over
+      </button>
     </div>
   );
 }
