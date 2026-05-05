@@ -7,9 +7,10 @@ export default function WormholeCostDetailsComponent(props: {
   proverFee?: bigint;
   broadcasterFee?: bigint;
   protocolFee?: bigint;
+  isExpanded: boolean;
   // TODO add swap fee
 }) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(props.isExpanded);
 
   const proverFee = props.proverFee ? roundEther(props.proverFee) : '...';
   const broadcasterFee = props.broadcasterFee ? roundEther(props.broadcasterFee) : '...';

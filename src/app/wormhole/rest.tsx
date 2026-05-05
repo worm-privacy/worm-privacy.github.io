@@ -164,6 +164,7 @@ export default function WormholeRestComponent(props: {
         broadcasterFee={relayConfig?.broadcasterFee}
         proverFee={relayConfig?.proverFee}
         protocolFee={burnAmountETH / POOL_SHARE_INV}
+        isExpanded={false}
       />
 
       <button onClick={onStartClick} className={`mt-3 w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black`}>
