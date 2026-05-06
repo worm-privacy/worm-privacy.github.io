@@ -5,7 +5,10 @@ import { roundUnits } from '@/lib/core/utils/round-ether';
 import WormholeCostDetailsComponent from './cost-details';
 import { WormholeRestComponentResult } from './rest';
 
-export default function WormholeReadyToSendComponent(props: { restResult: WormholeRestComponentResult }) {
+export default function WormholeReadyToSendComponent(props: {
+  restResult: WormholeRestComponentResult;
+  onSend: () => void;
+}) {
   const burnAmount = roundUnits(props.restResult.burnAmountERC20, props.restResult.burnToken.decimals);
   const burnToken = props.restResult.burnToken.symbol;
 
@@ -45,7 +48,9 @@ export default function WormholeReadyToSendComponent(props: { restResult: Wormho
         isExpanded={true}
       />
 
-      <button className={`mt-3 w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black`}>Send</button>
+      <button onClick={props.onSend} className={`mt-3 w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black`}>
+        Send
+      </button>
     </div>
   );
 }

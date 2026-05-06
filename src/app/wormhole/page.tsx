@@ -41,6 +41,8 @@ export default function Wormhole() {
     setWormholeState('ReadyToSend');
   };
 
+  const onSend = () => setWormholeState('Loading');
+
   const onError = () => setWormholeState('Error');
 
   const onRecoverClick = async () => {
@@ -73,7 +75,7 @@ export default function Wormhole() {
       case 'Rest':
         return <WormholeRestComponent onRecoverClick={onRecoverClick} onStart={onStart} />;
       case 'ReadyToSend':
-        return <WormholeReadyToSendComponent restResult={restResult!} />;
+        return <WormholeReadyToSendComponent restResult={restResult!} onSend={onSend} />;
       case 'Loading':
         return (
           <WormholeLoadingComponent
