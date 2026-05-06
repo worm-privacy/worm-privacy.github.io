@@ -1,6 +1,7 @@
 import { encodeAbiParameters, encodeFunctionData, parseAbiParameters } from 'viem';
 
-const BETHToERC20ContractAddress = ''; // TODO set this after deploy
+// mainnet address
+const BETHToERC20ContractAddress = '0xa769B7B5A899132170d8237D45D0Bd6aCeDDD053';
 
 export namespace BETHToERC20Contract {
   export const createSwapHook = (bethAmountIn: bigint, path: `0x${string}`, recipient: `0x${string}`) => {
