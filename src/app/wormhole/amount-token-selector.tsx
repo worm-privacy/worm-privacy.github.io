@@ -37,7 +37,9 @@ export const AmountTokenSelector = (props: InputComponentProps) => {
   );
 
   return (
-    <div className="flex h-25 flex-row items-center rounded-lg bg-[rgba(var(--neutral-low-rgb),0.12)] px-3 hover:bg-[rgba(var(--neutral-low-rgb),0.24)]">
+    <div
+      className={`flex h-25 flex-row items-center rounded-lg bg-[rgba(var(--neutral-low-rgb),0.12)] px-3 hover:bg-[rgba(var(--neutral-low-rgb),0.24)] ${props.amountState.error !== undefined ? 'border border-red-500' : ''}`}
+    >
       <div className="flex flex-col gap-1 pl-3">
         <div className="text-[14px] font-medium text-white">{'You ' + props.typeName}</div>
         <input

@@ -18,7 +18,6 @@ export default function Wormhole() {
 
   const [restResult, setRestResult] = useState<WormholeRestComponentResult | null>(null);
 
-  //TODO set these two hashes
   const [burnTrx, setBurnTrx] = useState<`0x${string}` | null>(null);
   const [mintTrx, setMintTrx] = useState<`0x${string}` | null>(null);
 

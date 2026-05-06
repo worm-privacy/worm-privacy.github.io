@@ -15,7 +15,7 @@ import { LISTED_TOKENS, ListedToken } from '@/lib/core/tokens-config';
 import { calculateMintAmount, POOL_SHARE_INV } from '@/lib/core/utils/beth-amount-calculator';
 import { encodeV3QuoterPath } from '@/lib/core/utils/swap-path-utils';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
-import { estimatePrivateSwap } from '@/lib/utils/estimate-private-swap';
+import { estimatePrivateSwap, INPUT_AMOUNT_NOT_ENOUGH } from '@/lib/utils/estimate-private-swap';
 import { newSavableRecoverData } from '@/lib/utils/recover-data';
 import { saveJson } from '@/lib/utils/save-json';
 import { useEffect, useState } from 'react';
@@ -29,16 +29,15 @@ export default function WormholeRestComponent(props: {
   onRecoverClick: () => void;
   onStart: (result: WormholeRestComponentResult) => void;
 }) {
-  const burnAmountERC20 = useInput('', validateETHAmount); // TODO handle error state
+  const burnAmountERC20 = useInput('', validateETHAmount);
   const burnToken = useTokenSelection(LISTED_TOKENS[0]);
 
-  const receiverAddress = useInput('', validateAddress); // TODO handle error state
+  const receiverAddress = useInput('', validateAddress);
   const receiveToken = useTokenSelection(null);
 
   const [relayConfig, setRelayConfig] = useState<RelayConfig | null>(null); // null means not loaded yet
 
   const [isCalculating, setIsCalculating] = useState<boolean>(false);
-  //TODO error state
 
   const client = useClient();
 
@@ -57,7 +56,7 @@ export default function WormholeRestComponent(props: {
           proverAddress: p.prover_address,
         });
       } catch (e) {
-        //TODO handle loading config error
+        console.error('error while loading relay configs', e);
       }
     })();
   }, []);
@@ -79,7 +78,7 @@ export default function WormholeRestComponent(props: {
         setBurnAmountETH(estimatedAmount.burnAmountETH);
       } catch (e) {
         console.error(e);
-        // if (e === INPUT_AMOUNT_NOT_ENOUGH) setError(e); // TODO handle error
+        if (e === INPUT_AMOUNT_NOT_ENOUGH) burnAmountERC20.setError(INPUT_AMOUNT_NOT_ENOUGH);
         estimatedTokenOut.update('');
         setBurnAmountETH(0n);
       }
@@ -92,7 +91,8 @@ export default function WormholeRestComponent(props: {
     // validation
     if (!validateAll(burnAmountERC20, receiverAddress)) return;
     if (receiveToken.value === null) {
-      //TODO error "Receive token is not selected"
+      estimatedTokenOut.setError('Receive token is not selected');
+      return;
     }
     if (parseUnits(estimatedTokenOut.value, receiveToken.value!.decimals) < 0n)
       return burnAmountERC20.setError('Burn amount is too low');
@@ -145,7 +145,7 @@ export default function WormholeRestComponent(props: {
       });
     } catch (e) {
       console.error('onStart', e);
-      //TODO error state
+      setIsCalculating(false);
     }
   };
 
@@ -168,6 +168,21 @@ export default function WormholeRestComponent(props: {
         amountState={estimatedTokenOut}
         tokenSelectionState={receiveToken}
       />
+
+      {burnAmountERC20.error && (
+        <div className="ml-1 flex flex-row items-center gap-3">
+          <Icons.alert />
+          <div className="text-[14px] text-(--err) ">{burnAmountERC20.error}</div>
+        </div>
+      )}
+
+      {estimatedTokenOut.error && (
+        <div className="ml-1 flex flex-row items-center gap-3">
+          <Icons.alert />
+          <div className="text-[14px] text-(--err) ">{estimatedTokenOut.error}</div>
+        </div>
+      )}
+
       <InputComponent
         label="Receiver address"
         hint="0xf3...fd23"
