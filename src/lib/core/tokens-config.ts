@@ -3,6 +3,7 @@ import { WETHContractAddress } from './contracts/weth';
 export type CommonToken = {
   name: string;
   symbol: string; // this should be unique
+  icon: string;
   decimals: number;
 
   // this is only for dollar estimate and not a real swap
@@ -37,6 +38,7 @@ export const LISTED_TOKENS: ListedToken[] = [
     address: DAI,
     pathToWETH: [DAI, 3000, WETHContractAddress],
     pathToTether: [],
+    icon: '/token-logos/dai.svg',
   },
   {
     type: 'erc20',
@@ -46,6 +48,7 @@ export const LISTED_TOKENS: ListedToken[] = [
     address: USDT,
     pathToWETH: [USDT, 100, WETHContractAddress],
     pathToTether: [],
+    icon: '/token-logos/usdt.svg',
   },
   {
     type: 'erc20',
@@ -55,6 +58,7 @@ export const LISTED_TOKENS: ListedToken[] = [
     address: USDC,
     pathToWETH: [USDC, 500, WETHContractAddress],
     pathToTether: [],
+    icon: '/token-logos/usdc.svg',
   },
   {
     type: 'erc20',
@@ -64,6 +68,7 @@ export const LISTED_TOKENS: ListedToken[] = [
     address: WBTC,
     pathToWETH: [WBTC, 500, WETHContractAddress],
     pathToTether: [WBTC, 500, USDT],
+    icon: '/token-logos/wbtc.svg',
   },
   {
     type: 'native',
@@ -71,6 +76,7 @@ export const LISTED_TOKENS: ListedToken[] = [
     symbol: 'ETH',
     decimals: 18,
     pathToTether: [WETHContractAddress, 100, USDT],
+    icon: '/token-logos/eth.svg',
   },
 ] as const;
 

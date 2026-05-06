@@ -47,7 +47,7 @@ export const SelectTokenDialog = (props: { inner: InputComponentProps }) => {
         </div>
       </DialogTrigger>
 
-      <DialogContent className="max-w-150 pb-5">
+      <DialogContent className="w-120 pb-5">
         <DialogClose asChild>
           <Button variant="ghost" className="absolute top-6 right-8 z-10 w-max">
             <Icons.close />
@@ -72,15 +72,16 @@ export const SelectTokenDialog = (props: { inner: InputComponentProps }) => {
           />
         </div>
         {filteredTokens.length === 0 ? <div className="m-5 text-center text-white">Can't find token</div> : undefined}
-        <div className="flex flex-col">
+        <div className="mt-4 flex flex-col">
           {filteredTokens.map((token) => {
             return (
               <div
                 key={token.symbol}
                 onClick={(_) => onSelect(token.symbol)}
-                className="ml-16 cursor-pointer py-5 text-white"
+                className="ml-8 flex cursor-pointer flex-row items-center  text-white"
               >
-                {token.symbol} - <span className="opacity-60">{token.name}</span>
+                <img src={token.icon} className="my-3 mr-3 w-8" />
+                {token.symbol} -<span className="ml-1 opacity-60">{token.name}</span>
               </div>
             );
           })}
