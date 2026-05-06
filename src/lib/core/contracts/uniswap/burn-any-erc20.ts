@@ -2,7 +2,7 @@ import { AllowanceTransfer, PERMIT2_ADDRESS, PermitSingle } from '@uniswap/permi
 import { CommandType, RoutePlanner } from '@uniswap/universal-router-sdk';
 import { Address, encodeFunctionData, parseAbi, PublicClient, WalletClient } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
-import { ListedToken } from '../../tokens-config';
+import { ERC20 } from '../../tokens-config';
 import { encodeV3ExactOutPath } from '../../utils/swap-path-utils';
 import { approveTokenForPermit2 } from './permit2';
 
@@ -11,7 +11,7 @@ const UNIVERSAL_ROUTER = '0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD' as Address
 export const burnAnyERC20ExactOut = async (
   walletClient: WalletClient,
   publicClient: PublicClient,
-  tokenIn: ListedToken,
+  tokenIn: ERC20,
   amountOut: bigint,
   amountIn: bigint, // in ERC20 input token
   burnAddress: `0x${string}`

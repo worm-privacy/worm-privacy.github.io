@@ -18,8 +18,8 @@ export const SelectTokenDialog = (props: { inner: InputComponentProps }) => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
 
-  const onSelect = (tokenAddress: `0x${string}`) => {
-    props.inner.tokenSelectionState.onSelect(LISTED_TOKENS.find((e) => e.address === tokenAddress)!);
+  const onSelect = (symbol: string) => {
+    props.inner.tokenSelectionState.onSelect(LISTED_TOKENS.find((e) => e.symbol === symbol)!);
     setOpen(false);
   };
 
@@ -76,8 +76,8 @@ export const SelectTokenDialog = (props: { inner: InputComponentProps }) => {
           {filteredTokens.map((token) => {
             return (
               <div
-                key={token.address}
-                onClick={(_) => onSelect(token.address)}
+                key={token.symbol}
+                onClick={(_) => onSelect(token.symbol)}
                 className="ml-16 cursor-pointer py-5 text-white"
               >
                 {token.symbol} - <span className="opacity-60">{token.name}</span>

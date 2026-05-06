@@ -16,26 +16,36 @@ export const estimatePrivateSwap = async (
   proverFee: bigint,
   broadcasterFee: bigint
 ) => {
-  console.log('amountIn', amountIn);
-
-  const burnAmount = await UniswapV3Quoter.quoteExactInput(client, tokenIn.pathToWETH, amountIn);
-  console.log('burnAmount', burnAmount);
+  let burnAmount: bigint;
+  switch (tokenIn.type) {
+    case 'native':
+      burnAmount = amountIn; // ETH to ETH is 1:1
+      break;
+    case 'erc20':
+      burnAmount = await UniswapV3Quoter.quoteExactInput(client, tokenIn.pathToWETH, amountIn);
+      break;
+  }
 
   const mintAmount = calculateMintAmount(burnAmount, 0n, proverFee, broadcasterFee);
-  console.log('mintAmount', mintAmount);
-  if (mintAmount <= 0) throw 'INPUT_AMOUNT_NOT_ENOUGH';
+  if (mintAmount <= 0) throw INPUT_AMOUNT_NOT_ENOUGH;
 
   const ethReceiveAmount = await CypherETHQuoterContract.estimateBethEtherSwap(client, mintAmount);
-  console.log('ethReceiveAmount', ethReceiveAmount);
 
-  const pathFromWETH = tokenOut.pathToWETH.toReversed();
-  console.log('tokenOut.pathToWETH', tokenOut.pathToWETH);
-  console.log('pathFromWETH', pathFromWETH);
-
-  const tokenOutReceiveAmount = await UniswapV3Quoter.quoteExactInput(client, pathFromWETH, ethReceiveAmount);
-  console.log('tokenOutReceiveAmount ', tokenOutReceiveAmount);
+  let tokenOutReceiveAmount: bigint;
+  switch (tokenOut.type) {
+    case 'native':
+      tokenOutReceiveAmount = ethReceiveAmount; // when tokenOut is ETH this is 1:1
+      break;
+    case 'erc20':
+      tokenOutReceiveAmount = await UniswapV3Quoter.quoteExactInput(
+        client,
+        tokenOut.pathToWETH.toReversed(),
+        ethReceiveAmount
+      );
+      break;
+  }
 
   return { tokenOut: tokenOutReceiveAmount, burnAmountETH: burnAmount };
 };
 
-export const INPUT_AMOUNT_NOT_ENOUGH = 'Input amount not enough';
+export const INPUT_AMOUNT_NOT_ENOUGH = 'Input amount not enough' as const;

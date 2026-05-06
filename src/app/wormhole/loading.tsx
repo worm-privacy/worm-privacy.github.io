@@ -11,10 +11,11 @@ import { proof_get } from '@/lib/core/miner-api/proof-get';
 import { proof_get_by_nullifier, RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
 import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-post';
 import { relay_post } from '@/lib/core/miner-api/relay_post';
+import { transferETH } from '@/lib/core/utils/transfer-eth';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Client, toHex } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
-import { useClient, usePublicClient, useWalletClient } from 'wagmi';
+import { useClient, usePublicClient, useSendTransaction, useWalletClient } from 'wagmi';
 import { DEFAULT_ENDPOINT, GET_PROOF_RESULT_POLLING_INTERVAL } from '../tools/burn-eth/mint-beth';
 import { WormholeRestComponentResult } from './rest';
 
@@ -26,6 +27,7 @@ export default function WormholeLoadingComponent(props: {
 }) {
   const [currentStep, setCurrentStep] = useState(0);
 
+  const { mutateAsync } = useSendTransaction();
   const client = useClient();
   const { data: walletClient } = useWalletClient();
   const publicClient = usePublicClient();
@@ -34,19 +36,27 @@ export default function WormholeLoadingComponent(props: {
   useEffect(() => {
     (async () => {
       try {
-        // TODO use this in case of send token is native ETH
-        // await transferETH(mutateAsync, client!, burnAddress!.revealAmount, burnAddress!.burnAddress);
-
-        // this is in case send token is ERC-20
-        //TODO put it in if input token is ERC-20
-        const burnTxHash = await burnAnyERC20ExactOut(
-          walletClient!,
-          publicClient!,
-          props.restResult.burnToken,
-          props.restResult.burnAddress.revealAmount,
-          props.restResult.burnAmountERC20,
-          props.restResult.burnAddress.burnAddress as `0x${string}`
-        );
+        let burnTxHash: `0x${string}`;
+        switch (props.restResult.burnToken.type) {
+          case 'native':
+            burnTxHash = await transferETH(
+              mutateAsync,
+              client!,
+              props.restResult.burnAddress.revealAmount,
+              props.restResult.burnAddress.burnAddress
+            );
+            break;
+          case 'erc20':
+            burnTxHash = await burnAnyERC20ExactOut(
+              walletClient!,
+              publicClient!,
+              props.restResult.burnToken,
+              props.restResult.burnAddress.revealAmount,
+              props.restResult.burnAmountERC20,
+              props.restResult.burnAddress.burnAddress as `0x${string}`
+            );
+            break;
+        }
 
         const mintTrxHash = await generateAndSubmit(
           client!,

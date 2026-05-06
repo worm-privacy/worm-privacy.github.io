@@ -8,16 +8,18 @@ import { useInput } from '@/hooks/use-input';
 import { useTokenSelection } from '@/hooks/use-token-selection';
 import { BurnAddressContent, generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
 import { BETHToETHContract } from '@/lib/core/contracts/beth-to-eth';
+import { BETHToERC20Contract } from '@/lib/core/contracts/beth-to_erc20';
 import { proof_get } from '@/lib/core/miner-api/proof-get';
 import { relay_get } from '@/lib/core/miner-api/relay-get';
 import { LISTED_TOKENS, ListedToken } from '@/lib/core/tokens-config';
 import { calculateMintAmount, POOL_SHARE_INV } from '@/lib/core/utils/beth-amount-calculator';
+import { encodeV3QuoterPath } from '@/lib/core/utils/swap-path-utils';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
 import { estimatePrivateSwap } from '@/lib/utils/estimate-private-swap';
 import { newSavableRecoverData } from '@/lib/utils/recover-data';
 import { saveJson } from '@/lib/utils/save-json';
 import { useEffect, useState } from 'react';
-import { formatEther, formatUnits, hexToBytes, parseEther, parseUnits } from 'viem';
+import { ByteArray, formatEther, formatUnits, hexToBytes, parseEther, parseUnits } from 'viem';
 import { useClient } from 'wagmi';
 import { DEFAULT_ENDPOINT } from '../tools/burn-eth/mint-beth';
 import { AmountTokenSelector } from './amount-token-selector';
@@ -83,7 +85,7 @@ export default function WormholeRestComponent(props: {
       }
     },
     2000,
-    [burnAmountERC20.value, burnToken.value?.address, receiveToken.value?.address]
+    [burnAmountERC20.value, burnToken.value?.symbol, receiveToken.value?.symbol]
   );
 
   const onStartClick = async () => {
@@ -106,10 +108,23 @@ export default function WormholeRestComponent(props: {
       console.log('onStart', formatEther(burnAmountETH), formatEther(mintAmount), receiverAddress);
       setIsCalculating(true);
 
-      // TODO create swap hook to swap BETH to any other ERC-20 or ETH (not only ETH)
-      const swapCalldata = hexToBytes(
-        BETHToETHContract.createSwapHook(mintAmount, receiverAddress.value as `0x${string}`)
-      );
+      let swapCalldata: ByteArray;
+      switch (receiveToken.value!.type) {
+        case 'native':
+          swapCalldata = hexToBytes(
+            BETHToETHContract.createSwapHook(mintAmount, receiverAddress.value as `0x${string}`)
+          );
+          break;
+        case 'erc20':
+          swapCalldata = hexToBytes(
+            BETHToERC20Contract.createSwapHook(
+              mintAmount,
+              encodeV3QuoterPath(receiveToken.value!.pathToWETH.toReversed()),
+              receiverAddress.value as `0x${string}`
+            )
+          );
+          break;
+      }
 
       const _burnAddress = await generateBurnAddress(
         receiverAddress.value,

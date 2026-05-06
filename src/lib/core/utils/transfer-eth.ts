@@ -15,4 +15,5 @@ export const transferETH = async (
   const r = await waitForTransactionReceipt(client, { hash: trxHash });
   if (r.status == 'reverted') throw 'transferETH reverted';
   console.log('got approve receipt');
+  return trxHash;
 };

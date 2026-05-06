@@ -1,14 +1,25 @@
 import { WETHContractAddress } from './contracts/weth';
 
-export type ListedToken = {
+export type CommonToken = {
   name: string;
-  symbol: string;
+  symbol: string; // this should be unique
   decimals: number;
-  address: `0x${string}`;
-  // address, fee, address, fee, address...
-  pathToWETH: SwapPathType;
+
+  // this is only for dollar estimate and not a real swap
   pathToTether: SwapPathType; // empty array if token is dollar stablecoin
 };
+
+export type ERC20 = CommonToken & {
+  type: 'erc20';
+  address: `0x${string}`;
+  pathToWETH: SwapPathType; // address, fee, address, fee, address...
+};
+
+export type NativeToken = CommonToken & {
+  type: 'native';
+};
+
+export type ListedToken = NativeToken | ERC20;
 
 export type SwapPathType = (number | `0x${string}`)[];
 
@@ -19,6 +30,7 @@ export const WBTC = '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599' as const;
 
 export const LISTED_TOKENS: ListedToken[] = [
   {
+    type: 'erc20',
     name: 'Dai Stablecoin',
     symbol: 'DAI',
     decimals: 18,
@@ -27,6 +39,7 @@ export const LISTED_TOKENS: ListedToken[] = [
     pathToTether: [],
   },
   {
+    type: 'erc20',
     name: 'USD Tether',
     symbol: 'USDT',
     decimals: 6,
@@ -35,6 +48,7 @@ export const LISTED_TOKENS: ListedToken[] = [
     pathToTether: [],
   },
   {
+    type: 'erc20',
     name: 'USD Coin',
     symbol: 'USDC',
     decimals: 6,
@@ -43,6 +57,7 @@ export const LISTED_TOKENS: ListedToken[] = [
     pathToTether: [],
   },
   {
+    type: 'erc20',
     name: 'Wrapped Bitcoin',
     symbol: 'WBTC',
     decimals: 8,
@@ -50,8 +65,13 @@ export const LISTED_TOKENS: ListedToken[] = [
     pathToWETH: [WBTC, 500, WETHContractAddress],
     pathToTether: [WBTC, 500, USDT],
   },
-];
+  {
+    type: 'native',
+    name: 'Ethereum',
+    symbol: 'ETH',
+    decimals: 18,
+    pathToTether: [WETHContractAddress, 100, USDT],
+  },
+] as const;
 
-export const getListedTokenConfig = (address: `0x${string}`) => {
-  return LISTED_TOKENS.find((e) => e.address === address);
-};
+export const getListedTokenConfig = (symbol: string) => LISTED_TOKENS.find((e) => e.symbol === symbol);

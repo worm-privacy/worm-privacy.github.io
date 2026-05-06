@@ -1,6 +1,6 @@
 import { useDebounceEffect } from '@/hooks/use-debounce-effect';
 import { UniswapV3Quoter } from '@/lib/core/contracts/uniswap/v3qouter';
-import { getListedTokenConfig, USDT } from '@/lib/core/tokens-config';
+import { getListedTokenConfig } from '@/lib/core/tokens-config';
 import { useState } from 'react';
 import { formatUnits, parseUnits } from 'viem';
 import { useClient } from 'wagmi';
@@ -26,7 +26,7 @@ export const AmountTokenSelector = (props: InputComponentProps) => {
           path,
           parseUnits(props.amountState.value, props.tokenSelectionState.value!.decimals)
         );
-        setDollarValue(formatUnits(estimatedAmount, getListedTokenConfig(USDT)!.decimals));
+        setDollarValue(formatUnits(estimatedAmount, getListedTokenConfig('USDT')!.decimals));
       } catch (e) {
         console.error(e);
         setDollarValue('?');
