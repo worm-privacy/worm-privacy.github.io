@@ -5,6 +5,7 @@ import TopBar from '@/components/tools/topbar';
 import { WalletNotConnectedContainer } from '@/components/tools/wallet-not-connected';
 import { Icons } from '@/components/ui/icons';
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
+import { EtherscanLink } from '@/lib/core/utils/etherscan-link';
 import { useState } from 'react';
 import WormholeErrorComponent from './error';
 import WormholeFinishedComponent from './finished';
@@ -18,8 +19,8 @@ export default function Wormhole() {
 
   const [restResult, setRestResult] = useState<WormholeRestComponentResult | null>(null);
 
-  const [burnTrx, setBurnTrx] = useState<`0x${string}` | null>(null);
-  const [mintTrx, setMintTrx] = useState<`0x${string}` | null>(null);
+  const [burnLink, setBurnLink] = useState<EtherscanLink | null>(null);
+  const [mintLink, setMintLink] = useState<EtherscanLink | null>(null);
 
   const topBarVisible = wormholeState === 'Rest' || wormholeState === 'ReadyToSend';
 
@@ -43,38 +44,18 @@ export default function Wormhole() {
 
   const onSendClicked = () => setWormholeState('Loading');
 
-  const onProcessFinished = (burnTxHash: `0x${string}`, mintTrxHash: `0x${string}`) => {
+  const onProcessFinished = (burnTxHash: EtherscanLink, mintTrxHash: EtherscanLink) => {
     console.log(`onFinished ${burnTxHash} ${mintTrxHash}`);
-    setBurnTrx(burnTxHash);
-    setMintTrx(mintTrxHash);
+    setBurnLink(burnTxHash);
+    setMintLink(mintTrxHash);
     setWormholeState('Finished');
   };
 
   const onError = () => setWormholeState('Error');
 
   const onRecoverClick = async () => {
-    // TODO check for burn address balance to see if transfer happened successfully and continue the process
-    // TODO prepare loading layout data and start loading state
-    //
-    // const recoverData = recoverDataFromJson(await loadJson());
-    // console.log('onRecover', recoverData);
-    // burnAmount.update(formatEther(recoverData.burn.revealAmount));
-    // receiverAddress.update(recoverData.burn.receiverAddr);
-    // try {
-    //   await generateAndSubmit(
-    //     client!,
-    //     recoverData.burn,
-    //     setWormholeState,
-    //     publicClient,
-    //     recoverData.burn.revealAmount,
-    //     network,
-    //     undefined
-    //   );
-    //   resetStates();
-    // } catch (e) {
-    //   console.error('onRecover', e);
-    //   setError('Error happened');
-    // }
+    setRestResult(null);
+    setWormholeState('ReadyToSend');
   };
 
   const switchInnerComponent = () => {
@@ -84,11 +65,17 @@ export default function Wormhole() {
       case 'ReadyToSend':
         return <WormholeReadyToSendComponent restResult={restResult!} onSend={onSendClicked} />;
       case 'Loading':
-        return <WormholeLoadingComponent restResult={restResult!} onError={onError} onFinished={onProcessFinished} />;
+        return (
+          <WormholeLoadingComponent
+            data={restResult ?? 'recover-mode'}
+            onError={onError}
+            onFinished={onProcessFinished}
+          />
+        );
       case 'Error':
         return <WormholeErrorComponent onRecoverClick={onRecoverClick} />;
       case 'Finished':
-        return <WormholeFinishedComponent senderTx={burnTrx} receiverTx={mintTrx} />;
+        return <WormholeFinishedComponent senderLink={burnLink!} receiverLink={mintLink!} />;
       default:
         throw 'state not supported';
     }

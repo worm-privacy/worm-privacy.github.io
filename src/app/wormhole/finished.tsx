@@ -1,12 +1,10 @@
 'use client';
 
 import { Icons } from '@/components/ui/icons';
+import { EtherscanLink } from '@/lib/core/utils/etherscan-link';
 import Link from 'next/link';
 
-export default function WormholeFinishedComponent(props: {
-  senderTx: `0x${string}` | null;
-  receiverTx: `0x${string}` | null;
-}) {
+export default function WormholeFinishedComponent(props: { senderLink: EtherscanLink; receiverLink: EtherscanLink }) {
   const onStartOverClicked = () => window.location.reload();
 
   return (
@@ -19,7 +17,7 @@ export default function WormholeFinishedComponent(props: {
 
       <div className="flex flex-row">
         <Link
-          href={`https://etherscan.io/tx/${props.senderTx}`}
+          href={props.senderLink}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-3 flex w-full flex-row items-center justify-center rounded-[8px] border border-[rgba(var(--brand-rgb),0.24)] px-4 py-2 font-bold text-brand"
@@ -31,7 +29,7 @@ export default function WormholeFinishedComponent(props: {
         <div className="w-10" />
 
         <Link
-          href={`https://etherscan.io/tx/${props.receiverTx}`}
+          href={props.receiverLink}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-3 flex w-full flex-row items-center justify-center rounded-[8px] border border-[rgba(var(--brand-rgb),0.24)] px-4 py-2 font-bold text-brand"
