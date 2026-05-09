@@ -11,18 +11,22 @@ import { proof_get } from '@/lib/core/miner-api/proof-get';
 import { proof_get_by_nullifier, RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
 import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-post';
 import { relay_post } from '@/lib/core/miner-api/relay_post';
+import { EtherscanLink, etherscanLinkFromAddress, etherscanLinkFromTX } from '@/lib/core/utils/etherscan-link';
 import { transferETH } from '@/lib/core/utils/transfer-eth';
+import { loadJson } from '@/lib/utils/load-json';
+import { recoverDataFromJson } from '@/lib/utils/recover-data';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { PublicClient, toHex } from 'viem';
+import { PublicClient, toHex, WalletClient } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
-import { usePublicClient, useSendTransaction, useWalletClient } from 'wagmi';
+import { Config, usePublicClient, useSendTransaction, useWalletClient } from 'wagmi';
+import { SendTransactionMutateAsync } from 'wagmi/query';
 import { DEFAULT_ENDPOINT, GET_PROOF_RESULT_POLLING_INTERVAL } from '../tools/burn-eth/mint-beth';
 import { WormholeRestComponentResult } from './rest';
 
 export default function WormholeLoadingComponent(props: {
-  restResult: WormholeRestComponentResult;
+  data: WormholeRestComponentResult | 'recover-mode';
   onError: () => void;
-  onFinished: (burnTxHash: `0x${string}`, mintTrxHash: `0x${string}`) => void;
+  onFinished: (burnTxHash: EtherscanLink, mintTrxHash: EtherscanLink) => void;
 }) {
   const [currentStep, setCurrentStep] = useState(0);
   const hasExecuted = useRef(false);
@@ -39,37 +43,28 @@ export default function WormholeLoadingComponent(props: {
         console.log('walletClient', walletClient);
         if (hasExecuted.current) return;
         hasExecuted.current = true;
-        let burnTxHash: `0x${string}`;
-        switch (props.restResult.burnToken.type) {
-          case 'native':
-            burnTxHash = await transferETH(
-              mutateAsync,
-              publicClient!,
-              props.restResult.burnAddress.revealAmount,
-              props.restResult.burnAddress.burnAddress
-            );
-            break;
-          case 'erc20':
-            burnTxHash = await burnAnyERC20ExactOut(
-              walletClient!,
-              publicClient!,
-              props.restResult.burnToken,
-              props.restResult.burnAddress.revealAmount,
-              props.restResult.burnAmountERC20,
-              props.restResult.burnAddress.burnAddress as `0x${string}`
-            );
-            break;
-        }
 
-        const mintTrxHash = await generateAndSubmit(
-          publicClient!,
-          props.restResult.burnAddress,
-          publicClient,
-          network,
-          setCurrentStep,
-          props.restResult.relayConfig.proverAddress
-        );
-        props.onFinished(burnTxHash, mintTrxHash);
+        if (props.data === 'recover-mode') {
+          const recoverData = recoverDataFromJson(await loadJson());
+          // TODO check receiver address balance
+          // TODO check nullifier exists on contract
+          // we skip transfer because its already done
+          const mintTrxHash = await generateAndSubmit(publicClient!, recoverData.burn, network, setCurrentStep);
+          props.onFinished(
+            etherscanLinkFromAddress(recoverData.burn.burnAddress as `0x${string}`),
+            etherscanLinkFromTX(mintTrxHash)
+          ); // we can no know transaction hash
+        } else {
+          const burnTxHash = await transferToBurnAddress(props.data, mutateAsync, walletClient, publicClient);
+          const mintTrxHash = await generateAndSubmit(
+            publicClient!,
+            props.data.burnAddress,
+            network,
+            setCurrentStep,
+            props.data.relayConfig.proverAddress
+          );
+          props.onFinished(etherscanLinkFromTX(burnTxHash), etherscanLinkFromTX(mintTrxHash));
+        }
       } catch (e) {
         console.error('StartOperation', e);
         props.onError();
@@ -117,18 +112,44 @@ export default function WormholeLoadingComponent(props: {
   );
 }
 
+// returns burn transaction hash
+const transferToBurnAddress = async (
+  restResult: WormholeRestComponentResult,
+  mutateAsync: SendTransactionMutateAsync<Config, unknown>,
+  walletClient: WalletClient,
+  publicClient: PublicClient
+): Promise<`0x${string}`> => {
+  switch (restResult.burnToken.type) {
+    case 'native':
+      return await transferETH(
+        mutateAsync,
+        publicClient!,
+        restResult.burnAddress.revealAmount,
+        restResult.burnAddress.burnAddress
+      );
+    case 'erc20':
+      return await burnAnyERC20ExactOut(
+        walletClient!,
+        publicClient!,
+        restResult.burnToken,
+        restResult.burnAddress.revealAmount,
+        restResult.burnAmountERC20,
+        restResult.burnAddress.burnAddress as `0x${string}`
+      );
+  }
+};
+
 const generateAndSubmit = async (
   client: PublicClient,
   burnAddress: BurnAddressContent,
-  publicClient: any, // pass whatever usePublicClient() returns
   network: WormNetwork,
   setCurrentStep: Dispatch<SetStateAction<number>>,
-  proverAddress?: `0x${string}`
+  proverAddress?: `0x${string}` // undefined means it will call DEFAULT_ENDPOINT and get it
 ) => {
   setCurrentStep(1); // start generating  proof
 
-  let blockNumber = (await publicClient!.getBlock()).number;
-  let accountProof = await publicClient?.getProof({
+  let blockNumber = (await client!.getBlock()).number;
+  let accountProof = await client.getProof({
     address: burnAddress.burnAddress as `0x${string}`,
     storageKeys: [],
     blockNumber: blockNumber,
