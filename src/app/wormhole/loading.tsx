@@ -22,8 +22,7 @@ import { WormholeRestComponentResult } from './rest';
 export default function WormholeLoadingComponent(props: {
   restResult: WormholeRestComponentResult;
   onError: () => void;
-  setBurnTrx: Dispatch<SetStateAction<`0x${string}` | null>>;
-  setMintTrx: Dispatch<SetStateAction<`0x${string}` | null>>;
+  onFinished: (burnTxHash: `0x${string}`, mintTrxHash: `0x${string}`) => void;
 }) {
   const [currentStep, setCurrentStep] = useState(0);
   const hasExecuted = useRef(false);
@@ -70,8 +69,7 @@ export default function WormholeLoadingComponent(props: {
           setCurrentStep,
           props.restResult.relayConfig.proverAddress
         );
-        props.setBurnTrx(burnTxHash);
-        props.setMintTrx(mintTrxHash);
+        props.onFinished(burnTxHash, mintTrxHash);
       } catch (e) {
         console.error('StartOperation', e);
         props.onError();

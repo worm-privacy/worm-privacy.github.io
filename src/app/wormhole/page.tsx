@@ -35,13 +35,20 @@ export default function Wormhole() {
     }
   };
 
-  const onStart = (result: WormholeRestComponentResult) => {
-    console.log('result', result);
+  const onStartClicked = (result: WormholeRestComponentResult) => {
+    console.log('onStart', result);
     setRestResult(result);
     setWormholeState('ReadyToSend');
   };
 
-  const onSend = () => setWormholeState('Loading');
+  const onSendClicked = () => setWormholeState('Loading');
+
+  const onProcessFinished = (burnTxHash: `0x${string}`, mintTrxHash: `0x${string}`) => {
+    console.log(`onFinished ${burnTxHash} ${mintTrxHash}`);
+    setBurnTrx(burnTxHash);
+    setMintTrx(mintTrxHash);
+    setWormholeState('Finished');
+  };
 
   const onError = () => setWormholeState('Error');
 
@@ -73,18 +80,11 @@ export default function Wormhole() {
   const switchInnerComponent = () => {
     switch (wormholeState) {
       case 'Rest':
-        return <WormholeRestComponent onRecoverClick={onRecoverClick} onStart={onStart} />;
+        return <WormholeRestComponent onRecoverClick={onRecoverClick} onStart={onStartClicked} />;
       case 'ReadyToSend':
-        return <WormholeReadyToSendComponent restResult={restResult!} onSend={onSend} />;
+        return <WormholeReadyToSendComponent restResult={restResult!} onSend={onSendClicked} />;
       case 'Loading':
-        return (
-          <WormholeLoadingComponent
-            restResult={restResult!}
-            onError={onError}
-            setBurnTrx={setBurnTrx}
-            setMintTrx={setMintTrx}
-          />
-        );
+        return <WormholeLoadingComponent restResult={restResult!} onError={onError} onFinished={onProcessFinished} />;
       case 'Error':
         return <WormholeErrorComponent onRecoverClick={onRecoverClick} />;
       case 'Finished':
