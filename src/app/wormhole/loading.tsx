@@ -12,7 +12,7 @@ import { proof_get_by_nullifier, RapidsnarkOutput } from '@/lib/core/miner-api/p
 import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-post';
 import { relay_post } from '@/lib/core/miner-api/relay_post';
 import { transferETH } from '@/lib/core/utils/transfer-eth';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { Client, toHex } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useClient, usePublicClient, useSendTransaction, useWalletClient } from 'wagmi';
@@ -26,6 +26,7 @@ export default function WormholeLoadingComponent(props: {
   setMintTrx: Dispatch<SetStateAction<`0x${string}` | null>>;
 }) {
   const [currentStep, setCurrentStep] = useState(0);
+  const hasExecuted = useRef(false);
 
   const { mutateAsync } = useSendTransaction();
   const client = useClient();
@@ -36,6 +37,8 @@ export default function WormholeLoadingComponent(props: {
   useEffect(() => {
     (async () => {
       try {
+        if (hasExecuted.current) return;
+        hasExecuted.current = true;
         let burnTxHash: `0x${string}`;
         switch (props.restResult.burnToken.type) {
           case 'native':
