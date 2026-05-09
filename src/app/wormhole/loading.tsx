@@ -13,9 +13,9 @@ import { createProofPostRequest, proof_post } from '@/lib/core/miner-api/proof-p
 import { relay_post } from '@/lib/core/miner-api/relay_post';
 import { transferETH } from '@/lib/core/utils/transfer-eth';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { Client, toHex } from 'viem';
+import { PublicClient, toHex } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
-import { useClient, usePublicClient, useSendTransaction, useWalletClient } from 'wagmi';
+import { usePublicClient, useSendTransaction, useWalletClient } from 'wagmi';
 import { DEFAULT_ENDPOINT, GET_PROOF_RESULT_POLLING_INTERVAL } from '../tools/burn-eth/mint-beth';
 import { WormholeRestComponentResult } from './rest';
 
@@ -29,14 +29,15 @@ export default function WormholeLoadingComponent(props: {
   const hasExecuted = useRef(false);
 
   const { mutateAsync } = useSendTransaction();
-  const client = useClient();
   const { data: walletClient } = useWalletClient();
   const publicClient = usePublicClient();
   const network = useNetwork();
 
   useEffect(() => {
+    if (walletClient === undefined || publicClient === undefined) return;
     (async () => {
       try {
+        console.log('walletClient', walletClient);
         if (hasExecuted.current) return;
         hasExecuted.current = true;
         let burnTxHash: `0x${string}`;
@@ -44,7 +45,7 @@ export default function WormholeLoadingComponent(props: {
           case 'native':
             burnTxHash = await transferETH(
               mutateAsync,
-              client!,
+              publicClient!,
               props.restResult.burnAddress.revealAmount,
               props.restResult.burnAddress.burnAddress
             );
@@ -62,7 +63,7 @@ export default function WormholeLoadingComponent(props: {
         }
 
         const mintTrxHash = await generateAndSubmit(
-          client!,
+          publicClient!,
           props.restResult.burnAddress,
           publicClient,
           network,
@@ -76,7 +77,7 @@ export default function WormholeLoadingComponent(props: {
         props.onError();
       }
     })();
-  }, []);
+  }, [walletClient, publicClient]);
 
   return (
     <div
@@ -119,7 +120,7 @@ export default function WormholeLoadingComponent(props: {
 }
 
 const generateAndSubmit = async (
-  client: Client,
+  client: PublicClient,
   burnAddress: BurnAddressContent,
   publicClient: any, // pass whatever usePublicClient() returns
   network: WormNetwork,

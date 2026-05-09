@@ -1,11 +1,11 @@
-import { Client } from 'viem';
+import { PublicClient } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { Config } from 'wagmi';
 import { SendTransactionMutateAsync } from 'wagmi/query';
 
 export const transferETH = async (
   mutateAsync: SendTransactionMutateAsync<Config, unknown>,
-  client: Client,
+  client: PublicClient,
   amount: bigint,
   to: string
 ) => {
