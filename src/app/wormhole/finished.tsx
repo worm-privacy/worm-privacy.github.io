@@ -20,6 +20,8 @@ export default function WormholeFinishedComponent(props: {
       <div className="flex flex-row">
         <Link
           href={`https://etherscan.io/tx/${props.senderTx}`}
+          target="_blank"
+          rel="noopener noreferrer"
           className="mt-3 flex w-full flex-row items-center justify-center rounded-[8px] border border-[rgba(var(--brand-rgb),0.24)] px-4 py-2 font-bold text-brand"
         >
           <Icons.link className="mr-2" fill="var(--brand)" width={16} height={16} />
@@ -31,6 +33,7 @@ export default function WormholeFinishedComponent(props: {
         <Link
           href={`https://etherscan.io/tx/${props.receiverTx}`}
           target="_blank"
+          rel="noopener noreferrer"
           className="mt-3 flex w-full flex-row items-center justify-center rounded-[8px] border border-[rgba(var(--brand-rgb),0.24)] px-4 py-2 font-bold text-brand"
         >
           <Icons.link className="mr-2" fill="var(--brand)" width={16} height={16} />
