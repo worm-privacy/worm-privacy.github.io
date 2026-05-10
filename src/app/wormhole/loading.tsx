@@ -21,11 +21,12 @@ import { waitForTransactionReceipt } from 'viem/actions';
 import { Config, usePublicClient, useSendTransaction, useWalletClient } from 'wagmi';
 import { SendTransactionMutateAsync } from 'wagmi/query';
 import { DEFAULT_ENDPOINT, GET_PROOF_RESULT_POLLING_INTERVAL } from '../tools/burn-eth/mint-beth';
+import { WormholeError, WormholeErrors } from './error';
 import { WormholeRestComponentResult } from './rest';
 
 export default function WormholeLoadingComponent(props: {
   data: WormholeRestComponentResult | 'recover-mode';
-  onError: () => void;
+  onError: (error: WormholeError) => void;
   onFinished: (burnTxHash: EtherscanLink, mintTrxHash: EtherscanLink) => void;
 }) {
   const [currentStep, setCurrentStep] = useState(0);
@@ -45,17 +46,30 @@ export default function WormholeLoadingComponent(props: {
         hasExecuted.current = true;
 
         if (props.data === 'recover-mode') {
+          setCurrentStep(1); // skipping transfer step
           const recoverData = recoverDataFromJson(await loadJson());
-          // TODO check receiver address balance
-          // TODO check nullifier exists on contract
-          // we skip transfer because its already done
+
+          const balance = await publicClient.getBalance({
+            address: recoverData.burn.burnAddress as `0x${string}`,
+          });
+          if (balance === 0n) return props.onError(WormholeErrors.RECOVER_BURN_ADDRESS_BALANCE);
+
+          if (await BETHContract.checkNullifier(publicClient, calculateNullifier(recoverData.burn.burnKey)))
+            return props.onError(WormholeErrors.RECOVER_BURN_ADDRESS_BALANCE);
+
           const mintTrxHash = await generateAndSubmit(publicClient!, recoverData.burn, network, setCurrentStep);
           props.onFinished(
             etherscanLinkFromAddress(recoverData.burn.burnAddress as `0x${string}`),
             etherscanLinkFromTX(mintTrxHash)
           ); // we can no know transaction hash
         } else {
-          const burnTxHash = await transferToBurnAddress(props.data, mutateAsync, walletClient, publicClient);
+          let burnTxHash;
+          try {
+            // this extra inner try catch is for better error detection (TRANSFER_FAILED or PROOF_FAILED)
+            burnTxHash = await transferToBurnAddress(props.data, mutateAsync, walletClient, publicClient);
+          } catch (e) {
+            return props.onError(WormholeErrors.PROCESS_TRANSFER_FAILED);
+          }
           const mintTrxHash = await generateAndSubmit(
             publicClient!,
             props.data.burnAddress,
@@ -67,16 +81,13 @@ export default function WormholeLoadingComponent(props: {
         }
       } catch (e) {
         console.error('StartOperation', e);
-        props.onError();
+        props.onError(WormholeErrors.PROCESS_PROOF_FAILED);
       }
     })();
   }, [walletClient, publicClient]);
 
   return (
-    <div
-      className="flex flex-col  bg-[#0d0f17]"
-      style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}
-    >
+    <div className="flex flex-col" style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif' }}>
       <div className="mb-5 flex items-center gap-3">
         <Icons.spiral fill="white" />
         <h2 className="text-lg font-semibold tracking-wide text-white">Worming the hole, Just a few moments</h2>
