@@ -69,6 +69,6 @@ export namespace WormholeErrors {
     description:
       "The transaction could not be finalized. Don't worry; you can safely resume it later using your backup file via the Recover option below.",
     icon: 'brokenLink',
-    action: 'recover',
+    action: 'start-over',
   } as const;
 }
