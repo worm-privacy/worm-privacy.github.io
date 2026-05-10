@@ -7,13 +7,13 @@ import { newSavableRecoverData } from '@/lib/utils/recover-data';
 import { saveJson } from '@/lib/utils/save-json';
 import { formatEther } from 'ethers';
 import { useState } from 'react';
-import { UseBalanceReturnType, useClient, useSendTransaction } from 'wagmi';
+import { UseBalanceReturnType, usePublicClient, useSendTransaction } from 'wagmi';
 
 export const BurnETHLayout = (props: { burnAddress: BurnAddressContent; onBurnComplete: () => void }) => {
   const { mutateAsync } = useSendTransaction();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const client = useClient();
+  const publicClient = usePublicClient();
 
   const onBackupClick = () =>
     saveJson(newSavableRecoverData(props.burnAddress), `burn_${props.burnAddress.burnAddress}_backup.json`);
@@ -22,7 +22,7 @@ export const BurnETHLayout = (props: { burnAddress: BurnAddressContent; onBurnCo
     try {
       setLoading(true);
       setError(null);
-      await transferETH(mutateAsync, client!, props.burnAddress.revealAmount, props.burnAddress.burnAddress);
+      await transferETH(mutateAsync, publicClient!, props.burnAddress.revealAmount, props.burnAddress.burnAddress);
       props.onBurnComplete();
       setLoading(false);
     } catch (e) {

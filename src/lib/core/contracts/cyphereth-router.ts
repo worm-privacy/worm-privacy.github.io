@@ -1,8 +1,48 @@
+import { solidityPacked } from 'ethers';
+import { encodeFunctionData } from 'viem';
+import { BETHContractAddress } from './beth';
+import { DEPLOYER } from './cyphereth-quoter';
+
 // mainnet address 0x20C5893f69F635f55b0367C519F3f95e59c0b0Ab
 // sepolia address 0x3Ec0a18671878080D8Fa798c491005Ad038DbC08
 export const CypherETHRouterContractAddress = '0x20C5893f69F635f55b0367C519F3f95e59c0b0Ab';
 
-export namespace CypherETHRouterContract {}
+export namespace CypherETHRouterContract {
+  export const createSwapCalldata = (
+    tokenIn: `0x${string}`,
+    tokenOut: `0x${string}`,
+    deployer: `0x${string}`,
+    recipient: `0x${string}`,
+    deadline: bigint,
+    amountIn: bigint,
+    amountOutMinimum: bigint,
+    limitSqrtPrice: bigint
+  ): `0x${string}` => {
+    const calldata = encodeFunctionData({
+      abi: CypherETHRouterContractABI,
+      functionName: 'exactInputSingle',
+      args: [{ tokenIn, tokenOut, deployer, recipient, deadline, amountIn, amountOutMinimum, limitSqrtPrice }],
+    });
+
+    return solidityPacked(
+      ['address', 'uint256', 'bytes'],
+      [CypherETHRouterContractAddress, amountIn, calldata]
+    ) as `0x${string}`;
+  };
+
+  export const createBethSwapToAnyCalldata = (amountIn: bigint, tokenOut: `0x${string}`, recipient: `0x${string}`) => {
+    CypherETHRouterContract.createSwapCalldata(
+      BETHContractAddress,
+      tokenOut,
+      DEPLOYER,
+      recipient,
+      BigInt(Math.floor(Date.now() / 1000)) * 2n, // twice as pass time!
+      amountIn,
+      0n,
+      0n
+    );
+  };
+}
 
 // copied from https://etherscan.io/address/0x20C5893f69F635f55b0367C519F3f95e59c0b0Ab#code
 export const CypherETHRouterContractABI = [
