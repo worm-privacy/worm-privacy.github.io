@@ -7,7 +7,7 @@ import { Icons } from '@/components/ui/icons';
 import { SmoothScroll } from '@/components/ui/smoth-scroll';
 import { EtherscanLink } from '@/lib/core/utils/etherscan-link';
 import { useState } from 'react';
-import WormholeErrorComponent from './error';
+import WormholeErrorComponent, { WormholeError } from './error';
 import WormholeFinishedComponent from './finished';
 import WormholeLoadingComponent from './loading';
 import WormholeReadyToSendComponent from './ready-to-send';
@@ -22,6 +22,7 @@ export default function Wormhole() {
   const [burnLink, setBurnLink] = useState<EtherscanLink | null>(null);
   const [mintLink, setMintLink] = useState<EtherscanLink | null>(null);
 
+  const [error, setError] = useState<WormholeError | null>(null);
   const topBarVisible = wormholeState === 'Rest' || wormholeState === 'ReadyToSend';
 
   const onBackClick = () => {
@@ -51,11 +52,15 @@ export default function Wormhole() {
     setWormholeState('Finished');
   };
 
-  const onError = () => setWormholeState('Error');
+  const onError = (error: WormholeError) => {
+    setError(error);
+    setWormholeState('Error');
+  };
 
   const onRecoverClick = async () => {
     setRestResult(null);
-    setWormholeState('ReadyToSend');
+    setError(null);
+    setWormholeState('Loading');
   };
 
   const switchInnerComponent = () => {
@@ -73,7 +78,7 @@ export default function Wormhole() {
           />
         );
       case 'Error':
-        return <WormholeErrorComponent onRecoverClick={onRecoverClick} />;
+        return <WormholeErrorComponent onRecoverClick={onRecoverClick} error={error!} />;
       case 'Finished':
         return <WormholeFinishedComponent senderLink={burnLink!} receiverLink={mintLink!} />;
       default:
