@@ -1,0 +1,47 @@
+'use client';
+
+import { Icons } from '@/components/ui/icons';
+import { EtherscanLink } from '@/lib/core/utils/etherscan-link';
+import Link from 'next/link';
+
+export default function WormholeFinishedComponent(props: { senderLink: EtherscanLink; receiverLink: EtherscanLink }) {
+  const onStartOverClicked = () => window.location.reload();
+
+  return (
+    <div className="flex flex-col">
+      <Icons.cheers fill="white" className="mb-4" />
+
+      <div className="text-[18px] font-bold text-white">Successfully Wormed!</div>
+
+      <div className="my-6 text-[15px] text-white">Receiver gets asset from wormhole successfully, & anonymously</div>
+
+      <div className="flex flex-row">
+        <Link
+          href={props.senderLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 flex w-full flex-row items-center justify-center rounded-[8px] border border-[rgba(var(--brand-rgb),0.24)] px-4 py-2 font-bold text-brand"
+        >
+          <Icons.link className="mr-2" fill="var(--brand)" width={16} height={16} />
+          Sender tx
+        </Link>
+
+        <div className="w-10" />
+
+        <Link
+          href={props.receiverLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 flex w-full flex-row items-center justify-center rounded-[8px] border border-[rgba(var(--brand-rgb),0.24)] px-4 py-2 font-bold text-brand"
+        >
+          <Icons.link className="mr-2" fill="var(--brand)" width={16} height={16} />
+          Receiver tx
+        </Link>
+      </div>
+
+      <button className="mt-4 rounded-[8px] bg-[#1F2533] px-4 py-2 text-white" onClick={onStartOverClicked}>
+        Start over
+      </button>
+    </div>
+  );
+}

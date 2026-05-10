@@ -9,5 +9,5 @@ export function useDebounceEffect(callback: () => void, delay: number, dependenc
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [...dependencies, delay, callback]);
+  }, dependencies);
 }
