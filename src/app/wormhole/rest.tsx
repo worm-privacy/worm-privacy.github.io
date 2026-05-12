@@ -200,7 +200,7 @@ export default function WormholeRestComponent(props: {
         isExpanded={false}
       />
 
-      <button onClick={onStartClick} className={`mt-3 w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black`}>
+      <button onClick={onStartClick} className={`mt-3 w-full rounded-lg bg-brand px-4 py-3 text-black`}>
         Start swap
       </button>
 
