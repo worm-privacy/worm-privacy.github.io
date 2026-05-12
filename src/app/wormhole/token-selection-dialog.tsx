@@ -4,7 +4,7 @@ import { Icons } from '@/components/ui/icons';
 import { UserInputState } from '@/hooks/use-input';
 import { TokenSelectionState } from '@/hooks/use-token-selection';
 import { LISTED_TOKENS } from '@/lib/core/tokens-config';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export type InputComponentProps = {
   amountState: UserInputState;
@@ -22,6 +22,8 @@ export const SelectTokenDialog = (props: { inner: InputComponentProps }) => {
     props.inner.tokenSelectionState.onSelect(LISTED_TOKENS.find((e) => e.symbol === symbol)!);
     setOpen(false);
   };
+
+  useEffect(() => setSearch(''), [open]); // this resets search value on dialog close and open
 
   const filteredTokens = LISTED_TOKENS.filter(
     (e) =>
@@ -47,7 +49,7 @@ export const SelectTokenDialog = (props: { inner: InputComponentProps }) => {
         </div>
       </DialogTrigger>
 
-      <DialogContent className="w-120 pb-5">
+      <DialogContent className="h-110 w-120">
         <DialogClose asChild>
           <Button variant="ghost" className="absolute top-6 right-8 z-10 w-max">
             <Icons.close />
@@ -71,8 +73,10 @@ export const SelectTokenDialog = (props: { inner: InputComponentProps }) => {
             placeholder="Search token"
           />
         </div>
-        {filteredTokens.length === 0 ? <div className="m-5 text-center text-white">Can't find token</div> : undefined}
-        <div className="mt-4 flex flex-col">
+        {filteredTokens.length === 0 ? (
+          <div className="m-5 h-[244px] grow text-center text-white">Can't find token</div>
+        ) : undefined}
+        <div className="scrollbar-hide mt-4 flex h-[244px] grow flex-col overflow-y-scroll">
           {filteredTokens.map((token) => {
             return (
               <div
