@@ -64,7 +64,7 @@ export default function WormholeRestComponent(props: {
   useDebounceEffect(
     async () => {
       try {
-        estimatedTokenOut.update('');
+        estimatedTokenOut.update('...');
         setBurnAmountETH(0n);
         const estimatedAmount = await estimatePrivateSwap(
           client!,
@@ -79,11 +79,11 @@ export default function WormholeRestComponent(props: {
       } catch (e) {
         console.error(e);
         if (e === INPUT_AMOUNT_NOT_ENOUGH) burnAmountERC20.setError(INPUT_AMOUNT_NOT_ENOUGH);
-        estimatedTokenOut.update('');
+        estimatedTokenOut.update('?');
         setBurnAmountETH(0n);
       }
     },
-    2000,
+    1000,
     [burnAmountERC20.value, burnToken.value?.symbol, receiveToken.value?.symbol]
   );
 
@@ -187,7 +187,7 @@ export default function WormholeRestComponent(props: {
         label="Receiver address"
         hint="0xf3...fd23"
         state={receiverAddress}
-        info="This address will get ETH with no link to the burner! The burner account will perform zero smart-contract interactions!"
+        info="This address will get token with no link to the burner! The burner account will perform zero smart-contract interactions!"
       />
 
       <div className="my-3 border-t border-gray-800"></div>

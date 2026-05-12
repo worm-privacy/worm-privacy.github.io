@@ -43,7 +43,7 @@ export const AmountTokenSelector = (props: InputComponentProps) => {
       <div className="flex flex-col gap-1 pl-3">
         <div className="text-[14px] font-medium text-white">{'You ' + props.typeName}</div>
         <input
-          type="number"
+          type={props.typeName === 'receive' ? 'text' : 'number'}
           disabled={props.disabled}
           onWheel={(e) => (e.target as any).blur()}
           value={props.amountState.value}
