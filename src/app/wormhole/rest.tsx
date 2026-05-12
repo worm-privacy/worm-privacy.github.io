@@ -13,13 +13,14 @@ import { proof_get } from '@/lib/core/miner-api/proof-get';
 import { relay_get } from '@/lib/core/miner-api/relay-get';
 import { LISTED_TOKENS, ListedToken } from '@/lib/core/tokens-config';
 import { calculateMintAmount, POOL_SHARE_INV } from '@/lib/core/utils/beth-amount-calculator';
+import { roundUnits } from '@/lib/core/utils/round-ether';
 import { encodeV3QuoterPath } from '@/lib/core/utils/swap-path-utils';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
 import { estimatePrivateSwap, INPUT_AMOUNT_NOT_ENOUGH } from '@/lib/utils/estimate-private-swap';
 import { newSavableRecoverData } from '@/lib/utils/recover-data';
 import { saveJson } from '@/lib/utils/save-json';
 import { useEffect, useState } from 'react';
-import { ByteArray, formatEther, formatUnits, hexToBytes, parseEther, parseUnits } from 'viem';
+import { ByteArray, formatEther, hexToBytes, parseEther, parseUnits } from 'viem';
 import { useClient } from 'wagmi';
 import { DEFAULT_ENDPOINT } from '../tools/burn-eth/mint-beth';
 import { AmountTokenSelector } from './amount-token-selector';
@@ -74,7 +75,7 @@ export default function WormholeRestComponent(props: {
           relayConfig!.proverFee,
           relayConfig!.broadcasterFee
         );
-        estimatedTokenOut.update(formatUnits(estimatedAmount.tokenOut, receiveToken.value!.decimals));
+        estimatedTokenOut.update(roundUnits(estimatedAmount.tokenOut, receiveToken.value!.decimals));
         setBurnAmountETH(estimatedAmount.burnAmountETH);
       } catch (e) {
         console.error(e);
