@@ -1,7 +1,6 @@
 'use client';
 
 import InputComponent from '@/components/tools/input-text';
-import LoadingComponent from '@/components/tools/loading';
 import { Icons } from '@/components/ui/icons';
 import { useDebounceEffect } from '@/hooks/use-debounce-effect';
 import { useInput } from '@/hooks/use-input';
@@ -108,6 +107,7 @@ export default function WormholeRestComponent(props: {
       const mintAmount = calculateMintAmount(burnAmountETH, 0n, relayConfig.proverFee, relayConfig.broadcasterFee);
       console.log('onStart', formatEther(burnAmountETH), formatEther(mintAmount), receiverAddress);
       setIsCalculating(true);
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // at least 2 second of delay, so user can read loading message
 
       let swapCalldata: ByteArray;
       switch (receiveToken.value!.type) {
@@ -149,8 +149,6 @@ export default function WormholeRestComponent(props: {
       setIsCalculating(false);
     }
   };
-
-  if (isCalculating) return <LoadingComponent />;
 
   return (
     <div className="flex flex-col gap-3 ">
@@ -200,15 +198,25 @@ export default function WormholeRestComponent(props: {
         isExpanded={false}
       />
 
-      <button onClick={onStartClick} className={`mt-3 w-full rounded-lg bg-brand px-4 py-3 text-black`}>
-        Start swap
-      </button>
+      {!isCalculating && (
+        <button onClick={onStartClick} className={`mt-3 w-full rounded-lg bg-brand px-4 py-3 text-black`}>
+          Start swap
+        </button>
+      )}
+
+      {isCalculating && (
+        <button className="mt-3 flex w-full flex-row items-center justify-center rounded-lg bg-[rgba(var(--neutral-low-rgb),0.12)] px-4 py-3 text-[#94A3B8]">
+          <Icons.spinner fill="#94A3B8" className="mr-1 animate-spin" />
+          Preparing recover file...
+        </button>
+      )}
 
       <button
         onClick={props.onRecoverClick}
-        className="flex w-full flex-row items-center justify-center py-3 text-sm font-medium text-brand"
+        disabled={isCalculating}
+        className={`flex w-full flex-row items-center justify-center py-3 text-sm font-medium ${isCalculating ? 'text-[#94A3B8]' : 'text-brand'}`}
       >
-        <Icons.recover className="mr-2" fill="var(--brand)" />
+        <Icons.recover className="mr-2" fill={isCalculating ? '#94A3B8' : 'var(--brand)'} />
         Recover
       </button>
     </div>
