@@ -53,7 +53,7 @@ export default function WormholeCostDetailsComponent(props: {
         </svg>
       </button>
       <div
-        className={`text-[#93A2B7] transition-all duration-300 ${isExpanded ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'}`}
+        className={`text-[#93A2B7] transition-all duration-300 ${isExpanded ? 'max-h-64 opacity-100' : 'max-h-0 overflow-hidden opacity-0'}`}
       >
         <div className="flex flex-row py-1">
           <span className="mr-[-4] text-sm">Prover fee</span>
