@@ -46,6 +46,8 @@ export default function WormholeReadyToSendComponent(props: {
         proverFee={props.restResult.burnAddress.proverFee}
         protocolFee={props.restResult.burnAddress.revealAmount / POOL_SHARE_INV}
         isExpanded={true}
+        burnToken={props.restResult.burnToken}
+        receiveToken={props.restResult.receiveToken}
       />
 
       <button onClick={props.onSend} className={`mt-3 w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black`}>

@@ -36,7 +36,7 @@ export const LISTED_TOKENS: ListedToken[] = [
     symbol: 'DAI',
     decimals: 18,
     address: DAI,
-    pathToWETH: [DAI, 3000, WETHContractAddress],
+    pathToWETH: [DAI, 3000, WETHContractAddress], // 0.3%
     pathToTether: [],
     icon: '/token-logos/dai.svg',
   },
@@ -46,7 +46,7 @@ export const LISTED_TOKENS: ListedToken[] = [
     symbol: 'USDT',
     decimals: 6,
     address: USDT,
-    pathToWETH: [USDT, 100, WETHContractAddress],
+    pathToWETH: [USDT, 100, WETHContractAddress], // 0.01%
     pathToTether: [],
     icon: '/token-logos/usdt.svg',
   },
@@ -56,7 +56,7 @@ export const LISTED_TOKENS: ListedToken[] = [
     symbol: 'USDC',
     decimals: 6,
     address: USDC,
-    pathToWETH: [USDC, 500, WETHContractAddress],
+    pathToWETH: [USDC, 500, WETHContractAddress], // 0.05
     pathToTether: [],
     icon: '/token-logos/usdc.svg',
   },
@@ -66,8 +66,8 @@ export const LISTED_TOKENS: ListedToken[] = [
     symbol: 'WBTC',
     decimals: 8,
     address: WBTC,
-    pathToWETH: [WBTC, 500, WETHContractAddress],
-    pathToTether: [WBTC, 500, USDT],
+    pathToWETH: [WBTC, 500, WETHContractAddress], // 0.05
+    pathToTether: [WBTC, 500, USDT], // 0.05
     icon: '/token-logos/wbtc.svg',
   },
   {
@@ -75,7 +75,7 @@ export const LISTED_TOKENS: ListedToken[] = [
     name: 'Ethereum',
     symbol: 'ETH',
     decimals: 18,
-    pathToTether: [WETHContractAddress, 100, USDT],
+    pathToTether: [WETHContractAddress, 100, USDT], // 0.01
     icon: '/token-logos/eth.svg',
   },
 ] as const;

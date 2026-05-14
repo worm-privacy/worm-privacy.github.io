@@ -196,6 +196,8 @@ export default function WormholeRestComponent(props: {
         proverFee={relayConfig?.proverFee}
         protocolFee={burnAmountETH / POOL_SHARE_INV}
         isExpanded={false}
+        burnToken={burnToken.value}
+        receiveToken={receiveToken.value}
       />
 
       {!isCalculating && (
