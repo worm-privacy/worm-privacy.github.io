@@ -1,8 +1,9 @@
 import { useDebounceEffect } from '@/hooks/use-debounce-effect';
 import { UniswapV3Quoter } from '@/lib/core/contracts/uniswap/v3qouter';
 import { getListedTokenConfig } from '@/lib/core/tokens-config';
+import { roundUnits } from '@/lib/core/utils/round-ether';
 import { useState } from 'react';
-import { formatUnits, parseUnits } from 'viem';
+import { parseUnits } from 'viem';
 import { useClient } from 'wagmi';
 import { InputComponentProps, SelectTokenDialog } from './token-selection-dialog';
 
@@ -26,7 +27,7 @@ export const AmountTokenSelector = (props: InputComponentProps) => {
           path,
           parseUnits(props.amountState.value, props.tokenSelectionState.value!.decimals)
         );
-        setDollarValue(formatUnits(estimatedAmount, getListedTokenConfig('USDT')!.decimals));
+        setDollarValue(roundUnits(estimatedAmount, getListedTokenConfig('USDT')!.decimals));
       } catch (e) {
         console.error(e);
         setDollarValue('?');
@@ -43,7 +44,7 @@ export const AmountTokenSelector = (props: InputComponentProps) => {
       <div className="flex flex-col gap-1 pl-3">
         <div className="text-[14px] font-medium text-white">{'You ' + props.typeName}</div>
         <input
-          type="number"
+          type={props.typeName === 'receive' ? 'text' : 'number'}
           disabled={props.disabled}
           onWheel={(e) => (e.target as any).blur()}
           value={props.amountState.value}

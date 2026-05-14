@@ -102,7 +102,7 @@ export default function WormholeLoadingComponent(props: {
             <div className="shrink-0">
               {index < currentStep && <Icons.checkboxChecked fill="white" />}
               {index === currentStep && <Icons.spinner fill="white" className="animate-spin" />}
-              {index > currentStep && <Icons.checkbox fill="white" />}
+              {index > currentStep && <Icons.checkbox fill="var(--gray-500)" />}
             </div>
 
             <span

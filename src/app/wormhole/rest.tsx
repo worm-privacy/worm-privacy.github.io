@@ -1,7 +1,6 @@
 'use client';
 
 import InputComponent from '@/components/tools/input-text';
-import LoadingComponent from '@/components/tools/loading';
 import { Icons } from '@/components/ui/icons';
 import { useDebounceEffect } from '@/hooks/use-debounce-effect';
 import { useInput } from '@/hooks/use-input';
@@ -13,13 +12,14 @@ import { proof_get } from '@/lib/core/miner-api/proof-get';
 import { relay_get } from '@/lib/core/miner-api/relay-get';
 import { LISTED_TOKENS, ListedToken } from '@/lib/core/tokens-config';
 import { calculateMintAmount, POOL_SHARE_INV } from '@/lib/core/utils/beth-amount-calculator';
+import { roundUnits } from '@/lib/core/utils/round-ether';
 import { encodeV3QuoterPath } from '@/lib/core/utils/swap-path-utils';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
 import { estimatePrivateSwap, INPUT_AMOUNT_NOT_ENOUGH } from '@/lib/utils/estimate-private-swap';
 import { newSavableRecoverData } from '@/lib/utils/recover-data';
 import { saveJson } from '@/lib/utils/save-json';
 import { useEffect, useState } from 'react';
-import { ByteArray, formatEther, formatUnits, hexToBytes, parseEther, parseUnits } from 'viem';
+import { ByteArray, formatEther, hexToBytes, parseEther, parseUnits } from 'viem';
 import { useClient } from 'wagmi';
 import { DEFAULT_ENDPOINT } from '../tools/burn-eth/mint-beth';
 import { AmountTokenSelector } from './amount-token-selector';
@@ -64,7 +64,7 @@ export default function WormholeRestComponent(props: {
   useDebounceEffect(
     async () => {
       try {
-        estimatedTokenOut.update('');
+        estimatedTokenOut.update('...');
         setBurnAmountETH(0n);
         const estimatedAmount = await estimatePrivateSwap(
           client!,
@@ -74,16 +74,16 @@ export default function WormholeRestComponent(props: {
           relayConfig!.proverFee,
           relayConfig!.broadcasterFee
         );
-        estimatedTokenOut.update(formatUnits(estimatedAmount.tokenOut, receiveToken.value!.decimals));
+        estimatedTokenOut.update(roundUnits(estimatedAmount.tokenOut, receiveToken.value!.decimals));
         setBurnAmountETH(estimatedAmount.burnAmountETH);
       } catch (e) {
         console.error(e);
         if (e === INPUT_AMOUNT_NOT_ENOUGH) burnAmountERC20.setError(INPUT_AMOUNT_NOT_ENOUGH);
-        estimatedTokenOut.update('');
+        estimatedTokenOut.update('?');
         setBurnAmountETH(0n);
       }
     },
-    2000,
+    1000,
     [burnAmountERC20.value, burnToken.value?.symbol, receiveToken.value?.symbol]
   );
 
@@ -107,6 +107,7 @@ export default function WormholeRestComponent(props: {
       const mintAmount = calculateMintAmount(burnAmountETH, 0n, relayConfig.proverFee, relayConfig.broadcasterFee);
       console.log('onStart', formatEther(burnAmountETH), formatEther(mintAmount), receiverAddress);
       setIsCalculating(true);
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // at least 2 second of delay, so user can read loading message
 
       let swapCalldata: ByteArray;
       switch (receiveToken.value!.type) {
@@ -149,8 +150,6 @@ export default function WormholeRestComponent(props: {
     }
   };
 
-  if (isCalculating) return <LoadingComponent />;
-
   return (
     <div className="flex flex-col gap-3 ">
       <AmountTokenSelector typeName="send" amountState={burnAmountERC20} tokenSelectionState={burnToken} />
@@ -187,7 +186,7 @@ export default function WormholeRestComponent(props: {
         label="Receiver address"
         hint="0xf3...fd23"
         state={receiverAddress}
-        info="This address will get ETH with no link to the burner! The burner account will perform zero smart-contract interactions!"
+        info="This address will get token with no link to the burner! The burner account will perform zero smart-contract interactions!"
       />
 
       <div className="my-3 border-t border-gray-800"></div>
@@ -197,17 +196,29 @@ export default function WormholeRestComponent(props: {
         proverFee={relayConfig?.proverFee}
         protocolFee={burnAmountETH / POOL_SHARE_INV}
         isExpanded={false}
+        burnToken={burnToken.value}
+        receiveToken={receiveToken.value}
       />
 
-      <button onClick={onStartClick} className={`mt-3 w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black`}>
-        Start swap
-      </button>
+      {!isCalculating && (
+        <button onClick={onStartClick} className={`mt-3 w-full rounded-lg bg-brand px-4 py-3 text-black`}>
+          Start swap
+        </button>
+      )}
+
+      {isCalculating && (
+        <button className="mt-3 flex w-full flex-row items-center justify-center rounded-lg bg-[rgba(var(--neutral-low-rgb),0.12)] px-4 py-3 text-[#94A3B8]">
+          <Icons.spinner fill="#94A3B8" className="mr-1 animate-spin" />
+          Preparing recover file...
+        </button>
+      )}
 
       <button
         onClick={props.onRecoverClick}
-        className="flex w-full flex-row items-center justify-center py-3 text-sm font-medium text-brand"
+        disabled={isCalculating}
+        className={`flex w-full flex-row items-center justify-center py-3 text-sm font-medium ${isCalculating ? 'text-[#94A3B8]' : 'text-brand'}`}
       >
-        <Icons.recover className="mr-2" fill="var(--brand)" />
+        <Icons.recover className="mr-2" fill={isCalculating ? '#94A3B8' : 'var(--brand)'} />
         Recover
       </button>
     </div>

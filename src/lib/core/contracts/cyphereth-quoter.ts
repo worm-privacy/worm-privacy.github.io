@@ -1,4 +1,4 @@
-import { Client } from 'viem';
+import { Client, parseEther } from 'viem';
 import { simulateContract } from 'viem/actions';
 import { BETHContractAddress } from './beth';
 import { WETHContractAddress } from './weth';
@@ -41,6 +41,15 @@ export namespace CypherETHQuoterContract {
         0n
       )
     ).result[0]; // extract amountOut
+  };
+
+  let ratioCache: number | undefined = undefined;
+  export const getBETHEtherRatio = async (client: Client) => {
+    if (ratioCache) return ratioCache;
+    const beth = parseEther('1');
+    const eth = await CypherETHQuoterContract.estimateBethEtherSwap(client, beth);
+    ratioCache = Number(eth) / Number(beth);
+    return ratioCache;
   };
 }
 
