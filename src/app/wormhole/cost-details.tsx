@@ -64,21 +64,21 @@ export default function WormholeCostDetailsComponent(props: {
       >
         <div className="flex flex-row py-1">
           <span className="mr-[-4] text-sm">Prover fee</span>
-          <InfoIconTooltip content="Worm server fee to generate a zero knowledge proof of burn for you" />
+          <InfoIconTooltip content="A fee for generating the cryptographic proof that your transaction is valid" />
           <span className="ml-1 text-sm">:</span>
           <div className="grow" />
           <span className="text-sm ">{proverFee} BETH</span>
         </div>
         <div className="flex items-center justify-between py-1">
           <span className="mr-[-4] text-sm">Broadcaster fee</span>
-          <InfoIconTooltip content="Worm server fee to submit your proof to chain" />
+          <InfoIconTooltip content="A fee for submitting your transaction to the blockchain" />
           <span className="ml-1 text-sm">:</span>
           <div className="grow" />
           <span className="text-sm">{broadcasterFee} BETH</span>
         </div>
         <div className="flex items-center justify-between py-1">
           <span className="mr-[-4] text-sm">Protocol fee</span>
-          <InfoIconTooltip content="0.5% fee which goes to Worm token stakers" />
+          <InfoIconTooltip content="A 0.5% fee distributed to token stakers" />
           <span className="ml-1 text-sm">:</span>
           <div className="grow" />
           <span className="text-sm">{protocolFee} BETH</span>
@@ -86,7 +86,7 @@ export default function WormholeCostDetailsComponent(props: {
         {swapFees && (
           <div className="flex items-center justify-between py-1">
             <span className="mr-[-4] text-sm">Swap fees</span>
-            <InfoIconTooltip content="Sum of Uniswap fees" />
+            <InfoIconTooltip content="The combined fees from the swap transactions processed on your behalf." />
             <span className="ml-1 text-sm">:</span>
             <div className="grow" />
             <span className="text-sm">{swapFees}</span>
@@ -94,14 +94,14 @@ export default function WormholeCostDetailsComponent(props: {
         )}
         <div className="flex items-center justify-between py-1">
           <span className="mr-[-4] text-sm">BETH to ETH ratio</span>
-          <InfoIconTooltip content="We swap Burned Ether to Ether for you and that's the ratio" />
+          <InfoIconTooltip content="The rate at which your BETH is converted to ETH during the transaction" />
           <span className="ml-1 text-sm">:</span>
           <div className="grow" />
           <span className="text-sm">{ratio}</span>
         </div>
         <div className="flex items-center justify-between py-1">
           <span className="mr-[-4] text-sm">Slippage tolerance</span>
-          <InfoIconTooltip content="Slippage tolerance protects you from unexpected price changes while swapping" />
+          <InfoIconTooltip content="The maximum price change you're willing to accept during the swap" />
           <span className="ml-1 text-sm">:</span>
           <div className="grow" />
           <span className="text-sm">5%</span>
