@@ -3,6 +3,7 @@
 import InfoIconTooltip from '@/components/tools/info-icon-tooltip';
 import { CypherETHQuoterContract } from '@/lib/core/contracts/cyphereth-quoter';
 import { ListedToken } from '@/lib/core/tokens-config';
+import { calculateMintAmount, POOL_SHARE_INV } from '@/lib/core/utils/beth-amount-calculator';
 import { roundEther } from '@/lib/core/utils/round-ether';
 import { useEffect, useState } from 'react';
 import { useClient } from 'wagmi';
@@ -10,16 +11,16 @@ import { useClient } from 'wagmi';
 export default function WormholeCostDetailsComponent(props: {
   proverFee?: bigint;
   broadcasterFee?: bigint;
-  protocolFee?: bigint;
   isExpanded: boolean;
   burnToken: ListedToken | null; // used for swap fee calculation
   receiveToken: ListedToken | null; // used for swap fee calculation
+  burnAmountETH: bigint;
 }) {
   const [isExpanded, setIsExpanded] = useState(props.isExpanded);
 
   const proverFee = props.proverFee ? roundEther(props.proverFee) : '...';
   const broadcasterFee = props.broadcasterFee ? roundEther(props.broadcasterFee) : '...';
-  const protocolFee = props.protocolFee ? roundEther(props.protocolFee) : '...';
+  const protocolFee = props.burnAmountETH / POOL_SHARE_INV;
 
   const swapFees =
     props.burnToken === null || props.receiveToken === null
@@ -31,10 +32,11 @@ export default function WormholeCostDetailsComponent(props: {
 
   useEffect(() => {
     if (client === undefined) return;
-    CypherETHQuoterContract.getBETHEtherRatio(client).then((ratio) => {
+    const mintAmount = calculateMintAmount(props.burnAmountETH, 0n, props.proverFee ?? 0n, props.broadcasterFee ?? 0n);
+    CypherETHQuoterContract.getBETHEtherRatio(client, mintAmount).then((ratio) => {
       setRatio(ratio.toFixed(2));
     });
-  }, [client]);
+  }, [client, props.burnAmountETH]);
 
   return (
     <>
