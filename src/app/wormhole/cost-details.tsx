@@ -20,7 +20,7 @@ export default function WormholeCostDetailsComponent(props: {
 
   const proverFee = props.proverFee ? roundEther(props.proverFee) : '...';
   const broadcasterFee = props.broadcasterFee ? roundEther(props.broadcasterFee) : '...';
-  const protocolFee = props.burnAmountETH / POOL_SHARE_INV;
+  const protocolFee = roundEther(props.burnAmountETH / POOL_SHARE_INV);
 
   const swapFees =
     props.burnToken === null || props.receiveToken === null
