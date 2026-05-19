@@ -51,7 +51,8 @@ export default function WormholeRestComponent(props: {
         let r = await relay_get(DEFAULT_ENDPOINT.url);
         let p = await proof_get(DEFAULT_ENDPOINT.url);
         setRelayConfig({
-          proverFee: p.min_prover_fee,
+          proverFeeShareInv: BigInt(p.prover_fee_share_inv),
+          minProverFee: p.min_prover_fee,
           broadcasterFee: r.min_broadcaster_fee,
           proverAddress: p.prover_address,
         });
@@ -71,7 +72,7 @@ export default function WormholeRestComponent(props: {
           burnToken.value!,
           receiveToken.value!,
           parseUnits(burnAmountERC20.value, burnToken.value!.decimals),
-          relayConfig!.proverFee,
+          calculateProverFee(burnAmountETH, relayConfig!.minProverFee, relayConfig!.proverFeeShareInv),
           relayConfig!.broadcasterFee
         );
         estimatedTokenOut.update(roundUnits(estimatedAmount.tokenOut, receiveToken.value!.decimals));
@@ -102,9 +103,11 @@ export default function WormholeRestComponent(props: {
 
     if (relayConfig === null) return;
 
+    const proverFee = calculateProverFee(burnAmountETH, relayConfig!.minProverFee, relayConfig!.proverFeeShareInv);
+
     try {
       // `swapAmount` sets 0n because we want to swap all of it anyway
-      const mintAmount = calculateMintAmount(burnAmountETH, 0n, relayConfig.proverFee, relayConfig.broadcasterFee);
+      const mintAmount = calculateMintAmount(burnAmountETH, 0n, proverFee, relayConfig.broadcasterFee);
       console.log('onStart', formatEther(burnAmountETH), formatEther(mintAmount), receiverAddress);
       setIsCalculating(true);
       await new Promise((resolve) => setTimeout(resolve, 2000)); // at least 2 second of delay, so user can read loading message
@@ -129,7 +132,7 @@ export default function WormholeRestComponent(props: {
 
       const _burnAddress = await generateBurnAddress(
         receiverAddress.value,
-        relayConfig.proverFee,
+        proverFee,
         relayConfig.broadcasterFee,
         burnAmountETH,
         swapCalldata
@@ -193,7 +196,11 @@ export default function WormholeRestComponent(props: {
 
       <WormholeCostDetailsComponent
         broadcasterFee={relayConfig?.broadcasterFee}
-        proverFee={relayConfig?.proverFee}
+        proverFee={
+          relayConfig === null
+            ? undefined
+            : calculateProverFee(burnAmountETH, relayConfig.minProverFee, relayConfig.proverFeeShareInv)
+        }
         isExpanded={false}
         burnToken={burnToken.value}
         receiveToken={receiveToken.value}
@@ -238,7 +245,13 @@ export type WormholeRestComponentResult = {
 };
 
 export type RelayConfig = {
-  proverFee: bigint;
+  proverFeeShareInv: bigint;
+  minProverFee: bigint;
   broadcasterFee: bigint;
   proverAddress: `0x${string}`;
 };
+
+const bigIntMax = (a: bigint, b: bigint) => (a > b ? a : b);
+
+const calculateProverFee = (burnAmount: bigint, minProverFee: bigint, proverFeeShareInv: bigint) =>
+  bigIntMax(minProverFee, burnAmount / proverFeeShareInv);
