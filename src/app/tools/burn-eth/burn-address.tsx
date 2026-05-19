@@ -29,7 +29,7 @@ export const BurnAddressGeneratorLayout = (props: {
   const receiverAddress = useInput('', validateAddress);
 
   // Advanced inputs
-  const proverFee = useInput('0.0001', validateETHAmount);
+  const proverFee = useInput('0.001', validateETHAmount);
   const broadcasterFee = useInput('0', validateETHAmount);
   const swapAmount = useInput('0.0005', validateETHAmount);
 
