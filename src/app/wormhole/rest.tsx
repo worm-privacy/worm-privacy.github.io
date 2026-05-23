@@ -12,6 +12,7 @@ import { proof_get } from '@/lib/core/miner-api/proof-get';
 import { relay_get } from '@/lib/core/miner-api/relay-get';
 import { LISTED_TOKENS, ListedToken } from '@/lib/core/tokens-config';
 import { calculateMintAmount } from '@/lib/core/utils/beth-amount-calculator';
+import { calculateProverFee, RelayConfig } from '@/lib/core/utils/relay-config';
 import { roundUnits } from '@/lib/core/utils/round-ether';
 import { encodeV3QuoterPath } from '@/lib/core/utils/swap-path-utils';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
@@ -243,15 +244,3 @@ export type WormholeRestComponentResult = {
 
   relayConfig: RelayConfig;
 };
-
-export type RelayConfig = {
-  proverFeeShareInv: bigint;
-  minProverFee: bigint;
-  broadcasterFee: bigint;
-  proverAddress: `0x${string}`;
-};
-
-const bigIntMax = (a: bigint, b: bigint) => (a > b ? a : b);
-
-const calculateProverFee = (burnAmount: bigint, minProverFee: bigint, proverFeeShareInv: bigint) =>
-  bigIntMax(minProverFee, burnAmount / proverFeeShareInv);

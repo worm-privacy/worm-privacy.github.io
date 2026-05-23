@@ -1,6 +1,7 @@
 'use client';
 
 import { Footer } from '@/components/landing';
+import LoadingComponent from '@/components/tools/loading';
 import StepsComponent, { StepItem } from '@/components/tools/steps';
 import TabBar from '@/components/tools/tabbar';
 import TopBar from '@/components/tools/topbar';
@@ -11,7 +12,6 @@ import { RapidsnarkOutput } from '@/lib/core/miner-api/proof-get-by-nullifier';
 import { calculateMintAmount } from '@/lib/core/utils/beth-amount-calculator';
 import { newSavableRecoverData, RecoverData } from '@/lib/utils/recover-data';
 import { saveJson } from '@/lib/utils/save-json';
-import Link from 'next/link';
 import { useState } from 'react';
 import { formatEther } from 'viem';
 import { BurnAddressGeneratorLayout } from './burn-address';
@@ -100,20 +100,7 @@ export default function BurnETHRoot() {
               <div className="rounded-xl border border-[rgba(var(--neutral-low-rgb),0.24)] bg-[#090C15] p-8 shadow-2xl">
                 <div className="flex flex-row gap-6">
                   <StepsComponent steps={BURN_ETH_STEPS} selected={currentStep} />
-                  {/* {isLoading ? <LoadingComponent /> : <LayoutMapping index={currentStep} />} */}
-                  <div className="flex w-full flex-col text-white">
-                    <div className="mb-5 text-[24px] font-bold">This feature is temporarily unavailable</div>
-                    <div>Our team is working on it.</div>
-                    <div>
-                      In the meantime, you can use <b>Wormhole</b> to get the same result.
-                    </div>
-                    <div className="grow" />
-                    <Link href="/wormhole">
-                      <button className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-black">
-                        Go to Wormhole
-                      </button>
-                    </Link>
-                  </div>
+                  {isLoading ? <LoadingComponent /> : <LayoutMapping index={currentStep} />}
                 </div>
               </div>
             </div>

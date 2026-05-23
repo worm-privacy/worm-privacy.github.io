@@ -5,14 +5,19 @@ import { useInput, UserInputState } from '@/hooks/use-input';
 import { BurnAddressContent, generateBurnAddress } from '@/lib/core/burn-address/burn-address-generator';
 import { BETHToETHContract } from '@/lib/core/contracts/beth-to-eth';
 import { CypherETHQuoterContract } from '@/lib/core/contracts/cyphereth-quoter';
+import { proof_get } from '@/lib/core/miner-api/proof-get';
+import { relay_get } from '@/lib/core/miner-api/relay-get';
 import { calculateMintAmountStr, calculateProtocolFee } from '@/lib/core/utils/beth-amount-calculator';
+import { calculateProverFee, RelayConfig } from '@/lib/core/utils/relay-config';
+import { roundEther } from '@/lib/core/utils/round-ether';
 import { validateAddress, validateAll, validateETHAmount } from '@/lib/core/utils/validator';
 import { loadJson } from '@/lib/utils/load-json';
 import { RecoverData, recoverDataFromJson } from '@/lib/utils/recover-data';
 import { parseEther } from 'ethers';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { formatUnits, hexToBytes } from 'viem';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { formatEther, formatUnits, hexToBytes } from 'viem';
 import { useClient } from 'wagmi';
+import { DEFAULT_ENDPOINT } from './mint-beth';
 
 export const BurnAddressGeneratorLayout = (props: {
   onBurnAddressGenerated: (burnAddress: BurnAddressContent, mintAmount: string) => void;
@@ -29,9 +34,25 @@ export const BurnAddressGeneratorLayout = (props: {
   const receiverAddress = useInput('', validateAddress);
 
   // Advanced inputs
-  const proverFee = useInput('0.001', validateETHAmount);
-  const broadcasterFee = useInput('0', validateETHAmount);
   const swapAmount = useInput('0.0005', validateETHAmount);
+
+  const [relayConfig, setRelayConfig] = useState<RelayConfig | null>(null); // null means not loaded yet
+  useEffect(() => {
+    (async () => {
+      try {
+        let r = await relay_get(DEFAULT_ENDPOINT.url);
+        let p = await proof_get(DEFAULT_ENDPOINT.url);
+        setRelayConfig({
+          proverFeeShareInv: BigInt(p.prover_fee_share_inv),
+          minProverFee: p.min_prover_fee,
+          broadcasterFee: r.min_broadcaster_fee,
+          proverAddress: p.prover_address,
+        });
+      } catch (e) {
+        console.error('error while loading relay configs', e);
+      }
+    })();
+  }, []);
 
   const [estimatedETH, setEstimatedETH] = useState('N/A');
   useDebounceEffect(
@@ -50,11 +71,22 @@ export const BurnAddressGeneratorLayout = (props: {
     [swapAmount]
   );
 
+  const proverFee =
+    relayConfig === null
+      ? 0n
+      : calculateProverFee(
+          parseEther(burnAmount.value === '' ? '0' : burnAmount.value),
+          relayConfig.minProverFee,
+          relayConfig.proverFeeShareInv
+        );
+
+  const broadcasterFee = relayConfig === null ? 0n : relayConfig.broadcasterFee;
+
   const calculatedMintAmount = calculateMintAmountStr(
     burnAmount.value,
     swapAmount.value,
-    proverFee.value,
-    broadcasterFee.value
+    formatEther(proverFee),
+    formatEther(broadcasterFee)
   );
 
   const onGenerateAddressClicked = async () => {
@@ -80,8 +112,8 @@ export const BurnAddressGeneratorLayout = (props: {
       );
       let burnAddress = await generateBurnAddress(
         receiverAddress.value,
-        parseEther(proverFee.value),
-        parseEther(broadcasterFee.value),
+        proverFee,
+        broadcasterFee,
         parseEther(burnAmount.value),
         hexToBytes(swapCalldata)
       );
@@ -95,7 +127,7 @@ export const BurnAddressGeneratorLayout = (props: {
 
   const onApplyClicked = () => {
     // Don't let user come back from advanced options page without validation
-    if (!validateAll(proverFee, broadcasterFee, swapAmount)) return;
+    if (!validateAll(swapAmount)) return;
     setIsAdvancedOpen(false);
   };
 
@@ -104,20 +136,13 @@ export const BurnAddressGeneratorLayout = (props: {
   return (
     <div className="w-full">
       {isAdvancedOpen ? (
-        <AdvancedLayout
-          estimatedETH={estimatedETH}
-          broadcasterFee={broadcasterFee}
-          proverFee={proverFee}
-          swapAmount={swapAmount}
-          onApplyClicked={onApplyClicked}
-        />
+        <AdvancedLayout estimatedETH={estimatedETH} swapAmount={swapAmount} onApplyClicked={onApplyClicked} />
       ) : (
         <MainLayout
           estimatedETH={estimatedETH}
           burnAmount={burnAmount}
           receiverAddress={receiverAddress}
-          proverFee={proverFee.value}
-          broadcasterFee={broadcasterFee.value}
+          relayConfig={relayConfig}
           swapAmount={swapAmount.value}
           onGenerateBurnAddressClicked={onGenerateAddressClicked}
           onRecoverClicked={onRecoverClicked}
@@ -133,8 +158,7 @@ const MainLayout = (props: {
   burnAmount: UserInputState;
   receiverAddress: UserInputState;
   calculatedBeth: string;
-  proverFee: string;
-  broadcasterFee: string;
+  relayConfig: RelayConfig | null;
   swapAmount: string;
   estimatedETH: string;
   setIsAdvancedOpen: Dispatch<SetStateAction<boolean>>;
@@ -142,6 +166,16 @@ const MainLayout = (props: {
   onRecoverClicked: () => void;
 }) => {
   const protocolFee = calculateProtocolFee(props.burnAmount.value);
+  let proverFee: string = '?';
+  try {
+    proverFee = roundEther(
+      calculateProverFee(
+        parseEther(props.burnAmount.value),
+        props.relayConfig!.minProverFee,
+        props.relayConfig!.proverFeeShareInv
+      )
+    );
+  } catch {}
 
   return (
     <div className="flex h-full flex-col">
@@ -161,11 +195,13 @@ const MainLayout = (props: {
       <div className="mb-4 space-y-1">
         <div className="flex justify-between text-[16px]">
           <span className="text-[#94A3B8]">Prover fee</span>
-          <span className="text-[#94A3B8]">{props.proverFee} BETH</span>
+          <span className="text-[#94A3B8]">{proverFee} BETH</span>
         </div>
         <div className="flex justify-between text-[16px]">
           <span className="text-[#94A3B8]">Broadcaster fee</span>
-          <span className="text-[#94A3B8]">{props.broadcasterFee} BETH</span>
+          <span className="text-[#94A3B8]">
+            {props.relayConfig === null ? '?' : roundEther(props.relayConfig.broadcasterFee)} BETH
+          </span>
         </div>
         <div className="flex justify-between text-[16px]">
           <span className="text-[#94A3B8]">Protocol fee</span>
@@ -240,25 +276,10 @@ const MainLayout = (props: {
   );
 };
 
-const AdvancedLayout = (props: {
-  broadcasterFee: UserInputState;
-  proverFee: UserInputState;
-  swapAmount: UserInputState;
-  estimatedETH: string;
-  onApplyClicked: () => void;
-}) => {
+const AdvancedLayout = (props: { swapAmount: UserInputState; estimatedETH: string; onApplyClicked: () => void }) => {
   return (
     <div className="flex h-full flex-col gap-4">
       <div className="text-[18px] text-white">Advanced</div>
-      <InputComponent label="Prover fee" hint="0.2" state={props.proverFee} inputKind="BETH" inputType="number" />
-      <InputComponent
-        label="Broadcaster fee"
-        hint="0.2"
-        state={props.broadcasterFee}
-        inputKind="BETH"
-        inputType="number"
-        disabled={false}
-      />
       <InputComponent
         label="Sell BETH for ETH "
         hint="0.2"

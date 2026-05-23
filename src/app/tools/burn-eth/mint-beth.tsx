@@ -33,7 +33,7 @@ export const MintBETHLayout = (props: {
 
   // skip endpoint selection flow if proof is already provided (by recover mechanism)
   let [flowState, setFlowState] = useState<FlowState>(props.proof == null ? FlowState.EndPoint : FlowState.Generated);
-  const [endPoint, setEndPoint] = useState(ENDPOINTS[0].url);
+  const [endPoint, setEndPoint] = useState(DEFAULT_ENDPOINT.url);
   const [inQueue, setInQueue] = useState<number | null>(null);
   let network = useNetwork();
 
@@ -275,8 +275,8 @@ const EndPointSelection = (props: {
       <div className="mb-6 text-[18px] font-normal">{props.mintAmount} BETH is going to be minted for address</div>
       <div className="mb-6 text-[18px] font-bold">{props.burnAddress.receiverAddr}</div>
 
-      <div className="mb-2 text-[14px] font-normal">Proving Endpoint</div>
-      <select
+      {/* <div className="mb-2 text-[14px] font-normal">Proving Endpoint</div> */}
+      {/* <select
         id="pet-select"
         className="h-10 appearance-none rounded-lg bg-[rgba(var(--neutral-low-rgb),0.36)] px-3 text-[14px] outline-none"
         value={props.endPoint}
@@ -289,7 +289,7 @@ const EndPointSelection = (props: {
             {item.name} - {item.url}
           </option>
         ))}
-      </select>
+      </select> */}
 
       <div className="grow" />
 
