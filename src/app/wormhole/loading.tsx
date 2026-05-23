@@ -192,11 +192,7 @@ const generateAndSubmit = async (
 
   setCurrentStep(2); // start submitting proof
 
-  const remainingCoin = calculateRemainingCoinHash(
-    burnAddress.burnKey,
-    burnAddress.revealAmount,
-    burnAddress.revealAmount
-  );
+  const remainingCoin = calculateRemainingCoinHash(burnAddress.burnKey, accountProof.balance, burnAddress.revealAmount);
 
   const trxHash = await relay_post(DEFAULT_ENDPOINT.url, {
     network: network,
