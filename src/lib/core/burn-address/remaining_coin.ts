@@ -3,6 +3,10 @@ import { toHex } from '../utils/to-hex';
 
 const REMAINING_COIN_PREFIX = BigInt('0xba44186ee7876b8007d2482cd46cec2d115b780980a6b46f0363f983d892f80');
 
+// in case of burn address balance is bigger then burn amount (someone transfer more ETH to that burn address)
+//     balance    -> amount
+//     burnAmount -> spend
+// note: by balance I mean account proof balance
 export const calculateRemainingCoinHash = (burnKey: bigint, amount: bigint, spend: bigint): bigint => {
   try {
     if (spend > amount) {

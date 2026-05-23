@@ -38,6 +38,7 @@ export const MintBETHLayout = (props: {
   let network = useNetwork();
 
   const client = useClient();
+  const publicClient = usePublicClient();
   const { mutateAsync } = useWriteContract();
 
   let nullifier = useMemo(() => calculateNullifier(props.burnAddress.burnKey), []);
@@ -66,9 +67,10 @@ export const MintBETHLayout = (props: {
     );
 
   const onSubmitClick = async (kind: 'relay' | 'wallet') => {
+    const balance = await publicClient!.getBalance({ address: props.burnAddress.burnAddress as `0x${string}` });
     const remaining_coin = calculateRemainingCoinHash(
       props.burnAddress.burnKey,
-      props.burnAddress.revealAmount,
+      balance,
       props.burnAddress.revealAmount
     );
 
