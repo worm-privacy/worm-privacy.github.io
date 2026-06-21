@@ -361,7 +361,7 @@ enum FlowState {
 }
 
 export const ENDPOINTS = [
-  { name: 'WORM public prover #1', url: 'https://prover-1.worm.cx' },
+  { name: 'WORM public prover #1', url: 'https://prover-2.worm.cx' },
   { name: 'Local machine', url: 'http://localhost:8080' },
 ];
 export const DEFAULT_ENDPOINT = ENDPOINTS[0];
