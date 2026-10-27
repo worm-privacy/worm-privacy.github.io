@@ -23,23 +23,6 @@ export const TEAM: TeamMemberInfo[] = [
   },
   {
     id: 2,
-    fullName: 'Artem Svietlieishyi',
-    positions: ['Community Lead'],
-    avatar: {
-      src: '/assets/img/artem.png',
-      size: 47.75,
-      position: {
-        left: 43.5,
-        top: 0,
-      },
-    },
-    socials: [
-      { link: 'https://x.com/Artem82581916', logo: Icons.x, label: '' },
-      { link: 'https://github.com/LightFromHeaven007', logo: Icons.github, label: 'GitHub' },
-    ],
-  },
-  {
-    id: 3,
     fullName: 'Ali Ghahremani',
     positions: ['Developer'],
     avatar: {
@@ -56,7 +39,7 @@ export const TEAM: TeamMemberInfo[] = [
     ],
   },
   {
-    id: 4,
+    id: 3,
     fullName: 'Ali Zeynali',
     positions: ['Product Designer'],
     avatar: {
