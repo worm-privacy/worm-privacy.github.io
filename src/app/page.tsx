@@ -30,21 +30,22 @@ export default function Home() {
     };
   }, []);
 
-  return !loaded ? (
-    <Preloader setLoaded={setLoaded} />
-  ) : (
-    <SmoothScroll slideUpOnLoad={true} clientOnly={false}>
-      <main className="flex size-full flex-col items-center justify-center gap-2.5 md:pt-22 lg:px-40">
-        <HeroSection />
-        <SloganSection />
-        <HowItWorks />
-        <WormVSBethSection />
-        <NetworkStats />
-        <TokenomicsSection />
-        <RoadmapSection />
-        <TeamSection />
-      </main>
-      <Footer />
-    </SmoothScroll>
+  return (
+    <>
+      <SmoothScroll slideUpOnLoad={true} clientOnly={false} start={loaded}>
+        <main className="flex size-full flex-col items-center justify-center gap-2.5 md:pt-22 lg:px-40">
+          <HeroSection />
+          <SloganSection />
+          <HowItWorks />
+          <WormVSBethSection />
+          <NetworkStats />
+          <TokenomicsSection />
+          <RoadmapSection />
+          <TeamSection />
+        </main>
+        <Footer />
+      </SmoothScroll>
+      {!loaded && <Preloader setLoaded={setLoaded} />}
+    </>
   );
 }

@@ -8,6 +8,7 @@ import { Icons } from '../ui/icons';
 export function HeroSection() {
   return (
     <section className="flex w-full max-w-230 flex-col items-center justify-center gap-10 px-4 py-10 md:gap-10 md:px-0 md:pt-0 md:pb-25 lg:grid-cols-[1fr_calc(var(--spacing)*89.25)]">
+      <h1 className="sr-only">WORM — Plausibly deniable privacy on Ethereum</h1>
       <LogoSet />
       <div className="corner-only relative w-full items-center justify-center overflow-clip rounded-base border-2 border-brand/70 bg-surface text-gray-400  md:justify-self-center lg:justify-self-auto">
         <Icons.gridPattern className="absolute size-full scale-170" />
@@ -57,7 +58,8 @@ const Privacy2 = () => {
   return (
     <div className="flex size-full flex-col items-center gap-10 px-8 pt-19.5 md:px-25 md:pt-20">
       {isSafari ? (
-        <h1
+        <div
+          aria-hidden="true"
           className="mx-auto flex w-full items-center-safe justify-center text-center font-orbitron text-[3rem] font-bold text-brand sm:text-[4rem] md:text-[5.625rem]"
           style={{
             textShadow:
@@ -65,9 +67,9 @@ const Privacy2 = () => {
           }}
         >
           Privacy<sup className="fill-brand font-orbitron text-xl md:text-4xl">2</sup>
-        </h1>
+        </div>
       ) : (
-        <svg className="h-17 w-full md:h-30">
+        <svg aria-hidden="true" className="h-17 w-full md:h-30">
           <filter id="f">
             <feGaussianBlur stdDeviation="10 10" result="glow" fillOpacity="0.5" />
             <feMerge>
