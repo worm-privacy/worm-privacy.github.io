@@ -10,7 +10,8 @@ function SmoothScroll({
   children,
   slideUpOnLoad = false,
   clientOnly = true,
-}: PropsWithChildren & { slideUpOnLoad?: boolean; clientOnly?: boolean }) {
+  start = true,
+}: PropsWithChildren & { slideUpOnLoad?: boolean; clientOnly?: boolean; start?: boolean }) {
   const scrollRef = useRef(null);
   const isMobile = useIsMobile();
 
@@ -36,7 +37,7 @@ function SmoothScroll({
   return isMobile ? (
     <motion.div
       initial={{ opacity: 0, y: slideUpOnLoad ? '100vh' : 0 }}
-      animate={{ opacity: 1, y: 0 }}
+      animate={start ? { opacity: 1, y: 0 } : undefined}
       transition={{
         type: 'spring',
         stiffness: 100,
@@ -52,7 +53,7 @@ function SmoothScroll({
       <motion.div
         ref={scrollRef}
         initial={{ top: slideUpOnLoad ? '100%' : '0%', opacity: 0 }}
-        animate={{ top: '0%', opacity: 1 }}
+        animate={start ? { top: '0%', opacity: 1 } : undefined}
         transition={{
           type: 'spring',
           stiffness: 100,
